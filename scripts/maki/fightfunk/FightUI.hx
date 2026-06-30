@@ -158,7 +158,9 @@ class FightUI extends Module
 		arrowBox.cameras = [camStrum];
 		game.playerStrumline.cameras = [camStrum];
 
-		game.playerStrumline.setNoteSpacing(1.2);
+		#if !mobile
+		game.playerStrumline.setNoteSpacing(((FlxG.height / FlxG.width) * 2.8) * ((FlxG.width / FlxG.height) / (FlxG.initialWidth / FlxG.initialHeight)));
+		#end
 
 		var i = 0;
 		for (strumlineNote in game.playerStrumline.strumlineNotes)
