@@ -78,6 +78,10 @@ class FightUI extends Module
 	var dadWireframe:WireframeShader;
 	var damselWireframe:WireframeShader;
 
+	var noteColors = [0xFFC24B99, 0xFF00FFFF, 0xFF12FA05, 0xFFF9393F];
+	var strumNoteWireframes:Array<WireframeShader> = [];
+	var noteWireframes:Array<WireframeShader> = [];
+
 	function initFightUI()
 	{
 		clearObjects();
@@ -151,18 +155,24 @@ class FightUI extends Module
 
 		game.playerStrumline.setNoteSpacing(1.2);
 
-		var colors = [0xFFC24B99, 0xFF00FFFF, 0xFF12FA05, 0xFFF9393F];
-
 		var i = 0;
 		for (strumlineNote in game.playerStrumline.strumlineNotes)
 		{
 			var strumNoteWireframe = new WireframeShader();
-			strumNoteWireframe.setOutlineColor(colors[i]);
+			strumNoteWireframe.setOutlineColor(noteColors[i]);
 			strumNoteWireframe.setFillingColor(0xFFFFFFFF);
+
+			var noteWireframe = new WireframeShader();
+			noteWireframe.setOutlineColor(noteColors[i]);
+			noteWireframe.setFillingColor(noteColors[i]);
+
+			strumNoteWireframes.push(strumNoteWireframe);
+			noteWireframes.push(noteWireframe);
+
 			strumlineNote.shader = strumNoteWireframe;
 			i++;
 		}
-
+		
 		stat1 = makeExtraUIText(stat1);
 		game.add(stat1);
 
@@ -212,8 +222,7 @@ class FightUI extends Module
 			game.currentStage?.getGirlfriend(),
 		])
 		{
-			if (char?._data.renderType?.contains('atlas'))
-				char?.useRenderTexture = true;
+			if (char?._data.renderType?.contains('atlas')) char?.useRenderTexture = true;
 		}
 
 		game.refresh();
@@ -305,6 +314,7 @@ class FightUI extends Module
 				object = null;
 			}
 		}
+		noteWireframes = [];
 	}
 
 	function updateFightUI()
@@ -338,8 +348,7 @@ class FightUI extends Module
 
 		for (name => prop in game.currentStage?.namedProps)
 		{
-			if (fightUI_visiblePropName.contains(name))
-				prop.active = prop.visible = true;
+			if (fightUI_visiblePropName.contains(name)) prop.active = prop.visible = true;
 		}
 
 		if (!middleScroll)
@@ -347,6 +356,17 @@ class FightUI extends Module
 			middleScroll = true;
 			hideOpponentStrumline();
 			centerPlayerStrumline();
+		}
+
+		for (noteGroup in [
+			game.playerStrumline.notes,
+			game.playerStrumline.holdNotes,
+			// game.playerStrumline.noteSplashes,
+			game.playerStrumline.noteHoldCovers,
+		])
+		{
+			for (note in noteGroup)
+				note.shader = noteWireframes[note.noteDirection ?? note.direction];
 		}
 
 		stat1.text = ((game.currentStage?.getBoyfriend()?.characterName ?? 'Victim').split('(')[0]).toUpperCase();
