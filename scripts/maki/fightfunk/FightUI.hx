@@ -160,27 +160,27 @@ class FightUI extends Module
 			i++;
 		}
 
-		healthText = makeExtraUIText(healthText);
-		game.add(healthText);
+		characterText = makeExtraUIText(characterText);
+		game.add(characterText);
 
-		healthText.x = 10;
-		healthText.y = (isDownscroll) ? statBox.height + 10 : FlxG.height - healthText.height - 10;
-		healthText.zIndex = statBox.zIndex + 1;
+		characterText.x = 10;
+		characterText.y = statBox.y + 10;
+		characterText.zIndex = statBox.zIndex + 1;
 
 		comboText = makeExtraUIText(comboText);
 		game.add(comboText);
 
-		comboText.x = healthText.x;
-		comboText.y = healthText.y - healthText.height - 10;
-		comboText.zIndex = healthText.zIndex + 1;
+		comboText.x = characterText.x;
+		comboText.y = characterText.y + characterText.height + 10;
+		comboText.zIndex = characterText.zIndex + 1;
 
 		final b = game.healthBar;
 
-		hpBar = new FlxBar(healthText.x, healthText.y, null, 100, 25, game, 'healthLerp', b.min, b.max, false);
-		hpBar.zIndex = healthText.zIndex * 2;
-		hpBar.screenCenter();
+		hpBar = new FlxBar(characterText.x, statBox.y + statBox.height - 40, null, Math.floor(statBox.width * 0.9), 25, game, 'healthLerp', b.min, b.max, false);
+		hpBar.zIndex = characterText.zIndex * 2;
+		hpBar.screenCenter(0x01);
 		hpBar.createFilledBar(0xFF1B0101, 0xFFFFAA00);
-		hpBar.cameras = healthText.cameras;
+		hpBar.cameras = characterText.cameras;
 		hpBar.scrollFactor.set();
 		game.add(hpBar);
 
@@ -209,7 +209,7 @@ class FightUI extends Module
 		game.refresh();
 	}
 
-	var healthText:FlxBitmapText;
+	var characterText:FlxBitmapText;
 	var comboText:FlxBitmapText;
 
 	// base: https://github.com/bopel-maki-macohi/funk_mondays_vslice/blob/develop/scripts/mondays/util/MondayUI.hx#L96C1-L121C3
@@ -225,14 +225,14 @@ class FightUI extends Module
 		}
 
 		newText = new FlxBitmapText(0, 0, '', FlxBitmapFont.fromAngelCode(Paths.font("vcr-bmp.png"), Paths.font("vcr-bmp.fnt")));
-		newText.alignment = PlayState.instance.scoreText.alignment;
-		newText.borderStyle = PlayState.instance.scoreText.borderStyle;
-		newText.borderColor = PlayState.instance.scoreText.borderColor;
-		newText.letterSpacing = PlayState.instance.scoreText.letterSpacing;
-		newText.scrollFactor = PlayState.instance.scoreText.scrollFactor;
+		newText.alignment = game.scoreText.alignment;
+		newText.borderStyle = game.scoreText.borderStyle;
+		newText.borderColor = game.scoreText.borderColor;
+		newText.letterSpacing = game.scoreText.letterSpacing;
+		newText.scrollFactor = game.scoreText.scrollFactor;
 		newText.scale.set(2, 2);
-		newText.cameras = PlayState.instance.scoreText.cameras;
-		newText.wordWrap = PlayState.instance.scoreText.wordWrap;
+		newText.cameras = game.scoreText.cameras;
+		newText.wordWrap = game.scoreText.wordWrap;
 		newText.antialiasing = false;
 
 		return newText;
@@ -289,7 +289,7 @@ class FightUI extends Module
 
 	function clearObjects()
 	{
-		for (object in [boxBGPlayer, boxBGOpponent, arrowBox, statBox, healthText, hpBar])
+		for (object in [boxBGPlayer, boxBGOpponent, arrowBox, statBox, characterText, hpBar])
 		{
 			if (object != null)
 			{
@@ -332,9 +332,7 @@ class FightUI extends Module
 		for (name => prop in game.currentStage?.namedProps)
 		{
 			if (fightUI_visiblePropName.contains(name))
-			{
 				prop.active = prop.visible = true;
-			}
 		}
 
 		if (!middleScroll)
@@ -344,12 +342,7 @@ class FightUI extends Module
 			centerPlayerStrumline();
 		}
 
-		healthText.text = 'HP : ${Math.floor((game.healthBar.value / 2) * 100)} / 100'.toUpperCase();
-		healthText.updateHitbox();
-
-		hpBar.x = (healthText.x * 2) + healthText.width;
-		hpBar.y = healthText.getGraphicMidpoint().y - hpBar.height / 2;
-
+		characterText.text = 'Boyfriend';
 		comboText.text = 'Combo : ${Highscore.tallies.combo} (Max: ${Highscore.tallies.maxCombo})'.toUpperCase();
 	}
 }
