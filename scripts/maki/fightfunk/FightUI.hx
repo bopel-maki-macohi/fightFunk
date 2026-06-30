@@ -2,12 +2,15 @@ package funkin.maki.fightfunk;
 
 import funkin.modding.module.Module;
 import funkin.play.PlayState;
+import funkin.mobile.input.ControlsHandler;
 
 class FightUI extends Module
 {
 	override public function new()
 	{
 		super('FightUI');
+
+		middleScroll = false;
 	}
 
 	var fightSongs = ['dadbattle-erect'];
@@ -44,6 +47,50 @@ class FightUI extends Module
 	function initFightUI()
 	{
 		fightUIEnabled = true;
+
+		game.remove(game.comboPopUps);
+
+		game.refresh();
+	}
+
+	function hideOpponentStrumline()
+	{
+		var opponentStrumline:FlxSprite = game.opponentStrumline;
+		if (opponentStrumline != null)
+		{
+			for (arrow in opponentStrumline.members)
+			{
+				arrow.visible = false;
+			}
+		}
+	}
+
+	function centerPlayerStrumline()
+	{
+		// This is a song gimmick we are never making middlescroll an option.
+
+		if (Preferences.controlsScheme == "Arrows" && !ControlsHandler.usingExternalInputDevice) return;
+
+		var playerStrumline:FlxSprite = game.playerStrumline;
+		if (playerStrumline != null)
+		{
+			playerStrumline.x = FlxG.width / 2 - playerStrumline.width / 2;
+		}
+	}
+
+	var middleScroll = false;
+
+	function onCreate(event:ScriptEvent):Void
+	{
+		super.onCreate(event);
+
+		middleScroll = false;
+	}
+
+	function onDestroy(event:ScriptEvent):Void
+	{
+		super.onDestroy(event);
+		middleScroll = false;
 	}
 
 	function updateFightUI()
@@ -69,6 +116,13 @@ class FightUI extends Module
 					prop.active = false;
 					prop.visible = false;
 				}
+			}
+
+			if (!middleScroll)
+			{
+				middleScroll = true;
+				hideOpponentStrumline();
+				centerPlayerStrumline();
 			}
 		}
 	}
