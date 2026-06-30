@@ -1,5 +1,6 @@
 package funkin.maki.fightfunk;
 
+import funkin.maki.fightfunk.WireframeShader;
 import funkin.modding.module.Module;
 import funkin.play.PlayState;
 import funkin.play.components.HealthIcon;
@@ -8,6 +9,8 @@ import flixel.math.FlxMath;
 import flixel.addons.display.FlxBackdrop;
 import funkin.graphics.FunkinSprite;
 import funkin.graphics.FunkinCamera;
+import flixel.text.FlxBitmapText;
+import flixel.text.FlxBitmapFont;
 
 class FightUI extends Module
 {
@@ -62,6 +65,10 @@ class FightUI extends Module
 
 	var camStrum:FunkinCamera;
 	var camStrumYOffsets:Float = -25;
+
+	var healthText:FlxBitmapText;
+
+	var noteWireframe:WireframeShader;
 
 	function initFightUI()
 	{
@@ -152,7 +159,51 @@ class FightUI extends Module
 		arrowBox.cameras = [camStrum];
 		game.playerStrumline.cameras = [camStrum];
 
+		game.playerStrumline.setNoteSpacing(1.2);
+
+		var strumNoteWireframe = new WireframeShader();
+		strumNoteWireframe.setThreshold((1 / 10));
+
+		noteWireframe = new WireframeShader();
+		noteWireframe.setThreshold(1);
+
+		for (strumlineNote in game.playerStrumline.strumlineNotes)
+			strumlineNote.shader = strumNoteWireframe;
+
+		healthText = makeExtraUIText(healthText);
+		game.add(healthText);
+
+		healthText.x = 10;
+		healthText.y = statBox.y + 10;
+		healthText.zIndex = statBox.zIndex + 1;
+
 		game.refresh();
+	}
+
+	// base: https://github.com/bopel-maki-macohi/funk_mondays_vslice/blob/develop/scripts/mondays/util/MondayUI.hx#L96C1-L121C3
+	function makeExtraUIText(baseText:FlxBitmapText)
+	{
+		var newText = baseText;
+
+		if (newText != null)
+		{
+			game.remove(newText);
+			newText.destroy();
+			newText = null;
+		}
+
+		newText = new FlxBitmapText(0, 0, '', FlxBitmapFont.fromAngelCode(Paths.font("vcr-bmp.png"), Paths.font("vcr-bmp.fnt")));
+		newText.alignment = PlayState.instance.scoreText.alignment;
+		newText.borderStyle = PlayState.instance.scoreText.borderStyle;
+		newText.borderColor = PlayState.instance.scoreText.borderColor;
+		newText.letterSpacing = PlayState.instance.scoreText.letterSpacing;
+		newText.scrollFactor = PlayState.instance.scoreText.scrollFactor;
+		newText.scale.set(2, 2);
+		newText.cameras = PlayState.instance.scoreText.cameras;
+		newText.wordWrap = PlayState.instance.scoreText.wordWrap;
+		newText.antialiasing = false;
+
+		return newText;
 	}
 
 	function hideOpponentStrumline()
@@ -199,7 +250,7 @@ class FightUI extends Module
 
 	function clearObjects()
 	{
-		for (object in [boxBGPlayer, boxBGOpponent, arrowBox, statBox])
+		for (object in [boxBGPlayer, boxBGOpponent, arrowBox, statBox, healthText])
 		{
 			if (object != null)
 			{
@@ -258,6 +309,20 @@ class FightUI extends Module
 				hideOpponentStrumline();
 				centerPlayerStrumline();
 			}
+
+			// for (note in game.playerStrumline.notes)
+			// 	note.shader = noteWireframe;
+
+			// for (holdNote in game.playerStrumline.holdNotes)
+			// 	holdNote.shader = noteWireframe;
+
+			// for (noteSplash in game.playerStrumline.noteSplashes)
+			// 	noteSplash.shader = noteWireframe;
+
+			// for (noteHoldCover in game.playerStrumline.noteHoldCovers)
+			// 	noteHoldCover.shader = noteWireframe;
+
+			healthText.text = 'Health: ${Math.floor((game.healthBar.value / 2) * 100)} / 100'.toUpperCase();
 		}
 	}
 }
