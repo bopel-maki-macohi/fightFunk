@@ -55,7 +55,7 @@ class FightUI extends Module
 
 		elapsedTotal += event.elapsed;
 
-		if (fightUIEnabled && game != null) updateFightUI();
+		if (!game?.isInCutscene && fightUIEnabled && game != null) updateFightUI();
 	}
 
 	var boxBGPlayer:FlxBackdrop;
@@ -67,8 +67,6 @@ class FightUI extends Module
 	var camStrum:FunkinCamera;
 	var camStrumYOffsets:Float = -25;
 
-	var noteWireframe:WireframeShader;
-
 	function initFightUI()
 	{
 		final isDownscroll:Bool = #if mobile (Preferences.controlsScheme == FunkinHitboxControlSchemes.Arrows
@@ -79,23 +77,10 @@ class FightUI extends Module
 
 		game.remove(game.scoreText);
 		game.remove(game.comboPopUps);
-
-		var healthBarY = game.healthBarBG.y;
-
-		for (HBP in [game.healthBarBG, game.healthBar,])
-		{
-			HBP.scale.set(1.5, 1);
-			HBP.updateHitbox();
-			HBP.screenCenter();
-
-			HBP.zIndex *= 4;
-			HBP.visible = false;
-		}
-
-		game.healthBarBG.y = healthBarY;
-
-		game.healthBar.x = game.healthBarBG.x + 4;
-		game.healthBar.y = game.healthBarBG.y + 4;
+		game.remove(game.healthBarBG);
+		game.healthBar.visible = false;
+		game.remove(game.iconP1);
+		game.remove(game.iconP2);
 
 		boxBGPlayer = new FlxBackdrop(Paths.image('ui/fight/box'));
 		boxBGPlayer.zIndex = 10;
@@ -124,7 +109,7 @@ class FightUI extends Module
 		arrowBox.antialiasing = false;
 		arrowBox.scale.set(FlxG.width * 1.1 / arrowBox.width, 3);
 		arrowBox.updateHitbox();
-		arrowBox.zIndex = game.healthBarBG.zIndex * 0.5;
+		arrowBox.zIndex = game.healthBarBG.zIndex * (4 * 0.5);
 		arrowBox.cameras = [game.camHUD];
 		arrowBox.screenCenter(0x01);
 		arrowBox.y = (isDownscroll) ? FlxG.height - arrowBox.height + 10 + camStrumYOffsets : -10 - camStrumYOffsets;
@@ -134,7 +119,7 @@ class FightUI extends Module
 		statBox.antialiasing = false;
 		statBox.scale.set(FlxG.width * 1.1 / statBox.width, 3);
 		statBox.updateHitbox();
-		statBox.zIndex = game.healthBarBG.zIndex * 0.75;
+		statBox.zIndex = game.healthBarBG.zIndex * (4 * 0.75);
 		statBox.cameras = [game.camHUD];
 		statBox.screenCenter(0x01);
 		statBox.y = (isDownscroll) ? -10 : FlxG.height - statBox.height + 10;
@@ -142,13 +127,6 @@ class FightUI extends Module
 
 		game.playerStrumline.zIndex = arrowBox.zIndex + 100;
 		game.playerStrumline.background.visible = false;
-
-		for (icon in [game.iconP1, game.iconP2,])
-		{
-			icon?.bopEvery = 0;
-			icon?.zIndex *= 4;
-			icon.visible = false;
-		}
 
 		camStrum = new FunkinCamera('playStateCamStrum');
 		camStrum.bgColor = game.camHUD.bgColor;
@@ -163,9 +141,6 @@ class FightUI extends Module
 		var strumNoteWireframe = new WireframeShader();
 		strumNoteWireframe.setThreshold((1 / 10));
 
-		noteWireframe = new WireframeShader();
-		noteWireframe.setThreshold(1);
-
 		for (strumlineNote in game.playerStrumline.strumlineNotes)
 			strumlineNote.shader = strumNoteWireframe;
 
@@ -173,14 +148,14 @@ class FightUI extends Module
 		game.add(healthText);
 
 		healthText.x = 10;
-		healthText.y = statBox.y + 10;
+		healthText.y = (isDownscroll) ? statBox.height + 10 : FlxG.height - healthText.height - 10;
 		healthText.zIndex = statBox.zIndex + 1;
 
 		comboText = makeExtraUIText(comboText);
 		game.add(comboText);
 
 		comboText.x = healthText.x;
-		comboText.y = healthText.y + healthText.height + 10;
+		comboText.y = healthText.y - healthText.height - 10;
 		comboText.zIndex = healthText.zIndex + 1;
 
 		game.refresh();
@@ -272,56 +247,48 @@ class FightUI extends Module
 
 	function updateFightUI()
 	{
-		if (!game.isInCutscene)
+		boxBGPlayer.velocity.x = 40 * (Math.cos(elapsedTotal) * (14 * 0.25));
+		boxBGPlayer.velocity.y = 40 * (Math.sin(elapsedTotal) * (25 * 0.25));
+
+		boxBGOpponent.velocity.x = -40 * (Math.sin(elapsedTotal) * (5 * 0.25));
+		boxBGOpponent.velocity.y = -40 * (Math.cos(elapsedTotal) * (7 * 0.25));
+
+		boxBGPlayer.alpha = (game.healthBar.value / 2);
+		boxBGOpponent.alpha = 1 - boxBGPlayer.alpha;
+
+		boxBGPlayer.alpha = boxBGPlayer.alpha * .25;
+		boxBGOpponent.alpha = boxBGOpponent.alpha * .25;
+
+		game.currentCameraZoom = 0.5;
+		game.defaultHUDCameraZoom = 1;
+		game.hudCameraZoomIntensity = 0;
+
+		game.camHUD.zoom = game.defaultHUDCameraZoom;
+
+		for (bopper in game.currentStage?.boppers)
 		{
-			// if (game.isBotPlayMode)
-			// 	game.healthLerp = Constants.HEALTH_MAX;
-			// else
-			// 	game.healthLerp = FlxMath.lerp(game.healthLerp, game.health, 0.000000015);
-
-			boxBGPlayer.velocity.x = 40 * (Math.cos(elapsedTotal) * (14 * 0.25));
-			boxBGPlayer.velocity.y = 40 * (Math.sin(elapsedTotal) * (25 * 0.25));
-
-			boxBGOpponent.velocity.x = -40 * (Math.sin(elapsedTotal) * (5 * 0.25));
-			boxBGOpponent.velocity.y = -40 * (Math.cos(elapsedTotal) * (7 * 0.25));
-
-			boxBGPlayer.alpha = (game.healthBar.value / 2);
-			boxBGOpponent.alpha = 1 - boxBGPlayer.alpha;
-
-			boxBGPlayer.alpha = boxBGPlayer.alpha * .25;
-			boxBGOpponent.alpha = boxBGOpponent.alpha * .25;
-
-			game.currentCameraZoom = 0.5;
-			game.defaultHUDCameraZoom = 1;
-			game.hudCameraZoomIntensity = 0;
-
-			game.camHUD.zoom = game.defaultHUDCameraZoom;
-
-			for (bopper in game.currentStage?.boppers)
-			{
-				bopper.active = false;
-				bopper.visible = false;
-			}
-
-			for (name => prop in game.currentStage?.namedProps)
-			{
-				if (!fightUI_visiblePropName.contains(name))
-				{
-					prop.active = false;
-					prop.visible = false;
-				}
-			}
-
-			if (!middleScroll)
-			{
-				middleScroll = true;
-				hideOpponentStrumline();
-				centerPlayerStrumline();
-			}
-
-			healthText.text = 'HP : ${Math.floor((game.healthBar.value / 2) * 100)} / 100'.toUpperCase();
-
-			comboText.text = 'Combo : ${Highscore.tallies.combo} (Max: ${Highscore.tallies.maxCombo})'.toUpperCase();
+			bopper.active = false;
+			bopper.visible = false;
 		}
+
+		for (name => prop in game.currentStage?.namedProps)
+		{
+			if (!fightUI_visiblePropName.contains(name))
+			{
+				prop.active = false;
+				prop.visible = false;
+			}
+		}
+
+		if (!middleScroll)
+		{
+			middleScroll = true;
+			hideOpponentStrumline();
+			centerPlayerStrumline();
+		}
+
+		healthText.text = 'HP : ${Math.floor((game.healthBar.value / 2) * 100)} / 100'.toUpperCase();
+
+		comboText.text = 'Combo : ${Highscore.tallies.combo} (Max: ${Highscore.tallies.maxCombo})'.toUpperCase();
 	}
 }
