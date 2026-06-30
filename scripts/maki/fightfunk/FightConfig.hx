@@ -13,14 +13,36 @@ class FightConfig
 
 		trace('songCode: $songCode');
 
+		var iterations = 10;
+
+		while (iterations > 0)
+		{
+			event.events = cleanseCamStuffs(event.events);
+			iterations--;
+		}
+
+		event = songStuff(songCode, event);
+
 		trace(event.events.length);
 
-		event.events = cleanseCamStuffs(event.events);
-		event.events = cleanseCamStuffs(event.events);
+		return event;
+	}
 
-		event.events = loadEvents(songCode, event.events);
+	static function songStuff(songCode:String, event)
+	{
+		var game = PlayState.instance;
 
-		trace(event.events.length);
+		if (game == null || game.isMinimalMode)
+		{
+			return event;
+		}
+
+		var gf = game.currentStage?.getGirlfriend();
+
+		if (gf != null && gf.cameraFocusPoint != null)
+		{
+			game.cameraFollowPoint.setPosition(gf.cameraFocusPoint.x, gf.cameraFocusPoint.y);
+		}
 
 		return event;
 	}
@@ -38,33 +60,5 @@ class FightConfig
 		}
 
 		return events;
-	}
-
-	static function loadEvents(songCode:String, events)
-	{
-		switch (songCode)
-		{
-			case 'dadbattle-erect':
-				events.push(focusCamera(FightTimeUtil.s_to_ms(-1), 0));
-		}
-
-		return events;
-	}
-
-	static function focusCamera(ms = 0.0, char = -1, x = 0.0, y = 0.0, duration = 4, ease = 'CLASSIC', easeDir = 'In')
-	{
-		return {
-			t: ms,
-			e: 'FocusCamera',
-			v:
-				{
-					char: char,
-					x: x,
-					y: y,
-					duration: duration,
-					ease: ease,
-					easeDir: easeDir,
-				}
-		}
 	}
 }
