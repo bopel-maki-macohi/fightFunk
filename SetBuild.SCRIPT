@@ -11,9 +11,14 @@ class SetBuild
 
 		var meta = Json.parse(File.getContent('_polymod_meta.json'));
 
-		var mod_version:String = meta.mod_version;
-		mod_version = mod_version.substr(0, mod_version.length - 1);
-		mod_version += '$build';
+		var mod_versionARRAY:Array<String> = meta.mod_version.split('.');
+
+		while (mod_versionARRAY.length < 3)
+			mod_versionARRAY.push('0');
+
+		mod_versionARRAY[2] = '$build';
+
+		var mod_version:String = mod_versionARRAY.join('.');
 
 		trace('mod_version: $mod_version');
 
