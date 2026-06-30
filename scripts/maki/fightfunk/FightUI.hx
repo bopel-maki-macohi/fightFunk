@@ -74,7 +74,9 @@ class FightUI extends Module
 
 	var stat1:FlxBitmapText;
 	var stat2:FlxBitmapText;
-	var stat3:FlxBitmapText;
+
+	var statCenter:FlxBitmapText;
+
 	var hpBar:FlxBar;
 
 	var bfWireframe:WireframeShader;
@@ -190,12 +192,13 @@ class FightUI extends Module
 		stat2.y = stat1.y + stat1.height + 10;
 		stat2.zIndex = stat1.zIndex + 1;
 
-		stat3 = makeExtraUIText(stat3);
-		game.add(stat3);
+		statCenter = makeExtraUIText(statCenter);
+		game.add(statCenter);
 
-		stat3.x = stat2.x;
-		stat3.y = stat2.y + stat2.height + 10;
-		stat3.zIndex = stat2.zIndex + 1;
+		statCenter.screenCenter(0x01);
+		statCenter.zIndex = stat2.zIndex + 1;
+
+		statCenter.visible = false;
 
 		final b = game.healthBar;
 
@@ -374,6 +377,12 @@ class FightUI extends Module
 
 		stat1.text = ((game.currentStage?.getBoyfriend()?.characterName ?? 'Victim').split('(')[0]).toUpperCase();
 		stat2.text = 'Combo : ${Highscore.tallies.combo} | Max Combo : ${Highscore.tallies.maxCombo}'.toUpperCase();
-		stat3.text = 'HP:'.toUpperCase();
+
+		statCenter.text = 'RANDOM MESSAGE';
+
+		statCenter.screenCenter(0x01);
+		statCenter.y = statBox.getGraphicMidpoint().y - 10 - (statCenter.height / 2);
+
+		stat1.visible = stat2.visible = !statCenter.visible;
 	}
 }
