@@ -11,6 +11,7 @@ import funkin.graphics.FunkinSprite;
 import funkin.graphics.FunkinCamera;
 import flixel.text.FlxBitmapText;
 import flixel.text.FlxBitmapFont;
+import funkin.Highscore;
 
 class FightUI extends Module
 {
@@ -65,8 +66,6 @@ class FightUI extends Module
 
 	var camStrum:FunkinCamera;
 	var camStrumYOffsets:Float = -25;
-
-	var healthText:FlxBitmapText;
 
 	var noteWireframe:WireframeShader;
 
@@ -177,8 +176,18 @@ class FightUI extends Module
 		healthText.y = statBox.y + 10;
 		healthText.zIndex = statBox.zIndex + 1;
 
+		comboText = makeExtraUIText(comboText);
+		game.add(comboText);
+
+		comboText.x = healthText.x;
+		comboText.y = healthText.y + healthText.height + 10;
+		comboText.zIndex = healthText.zIndex + 1;
+
 		game.refresh();
 	}
+
+	var healthText:FlxBitmapText;
+	var comboText:FlxBitmapText;
 
 	// base: https://github.com/bopel-maki-macohi/funk_mondays_vslice/blob/develop/scripts/mondays/util/MondayUI.hx#L96C1-L121C3
 	function makeExtraUIText(baseText:FlxBitmapText)
@@ -310,19 +319,9 @@ class FightUI extends Module
 				centerPlayerStrumline();
 			}
 
-			// for (note in game.playerStrumline.notes)
-			// 	note.shader = noteWireframe;
+			healthText.text = 'HP : ${Math.floor((game.healthBar.value / 2) * 100)} / 100'.toUpperCase();
 
-			// for (holdNote in game.playerStrumline.holdNotes)
-			// 	holdNote.shader = noteWireframe;
-
-			// for (noteSplash in game.playerStrumline.noteSplashes)
-			// 	noteSplash.shader = noteWireframe;
-
-			// for (noteHoldCover in game.playerStrumline.noteHoldCovers)
-			// 	noteHoldCover.shader = noteWireframe;
-
-			healthText.text = 'Health: ${Math.floor((game.healthBar.value / 2) * 100)} / 100'.toUpperCase();
+			comboText.text = 'Combo : ${Highscore.tallies.combo} (Max: ${Highscore.tallies.maxCombo})'.toUpperCase();
 		}
 	}
 }
