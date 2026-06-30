@@ -4,6 +4,7 @@ import funkin.modding.module.Module;
 import funkin.play.PlayState;
 import funkin.mobile.input.ControlsHandler;
 import flixel.math.FlxMath;
+import flixel.addons.display.FlxBackdrop;
 
 class FightUI extends Module
 {
@@ -38,12 +39,19 @@ class FightUI extends Module
 		}
 	}
 
+	var elapsedTotal:Float = 0;
+
 	function onUpdate(event)
 	{
 		super.onUpdate(event);
 
+		elapsedTotal += event.elapsed;
+
 		if (fightUIEnabled && game != null) updateFightUI();
 	}
+
+	var boxBGPlayer:FlxBackdrop;
+	var boxBGOpponent:FlxBackdrop;
 
 	function initFightUI()
 	{
@@ -65,6 +73,29 @@ class FightUI extends Module
 
 		game.healthBar.x = game.healthBarBG.x + 4;
 		game.healthBar.y = game.healthBarBG.y + 4;
+
+		boxBGPlayer = new FlxBackdrop(Paths.image('ui/fight/box'));
+		boxBGPlayer.zIndex = 10;
+		boxBGPlayer.color = 0xff00ff6a;
+		boxBGPlayer.velocity.set(20, -20);
+		boxBGPlayer.scale.set(2, 2);
+		boxBGPlayer.updateHitbox();
+
+		boxBGPlayer.blend = 0;
+
+		game.add(boxBGPlayer);
+
+		boxBGOpponent = new FlxBackdrop(Paths.image('ui/fight/box'));
+		boxBGOpponent.zIndex = 0;
+		boxBGOpponent.color = 0xffff0000;
+		boxBGOpponent.velocity.set(-40, -40);
+		boxBGOpponent.scale.set(2, 2);
+		boxBGOpponent.updateHitbox();
+
+		boxBGOpponent.blend = 0;
+		game.add(boxBGOpponent);
+
+		game.currentStage.zIndex = 300;
 
 		game.refresh();
 	}
@@ -117,6 +148,18 @@ class FightUI extends Module
 			// 	game.healthLerp = Constants.HEALTH_MAX;
 			// else
 			// 	game.healthLerp = FlxMath.lerp(game.healthLerp, game.health, 0.000000015);
+
+			boxBGPlayer.velocity.x = 40 * (Math.cos(elapsedTotal) * (14 * 0.25));
+			boxBGPlayer.velocity.y = 40 * (Math.sin(elapsedTotal) * (25 * 0.25));
+
+			boxBGOpponent.velocity.x = -40 * (Math.sin(elapsedTotal) * (5 * 0.25));
+			boxBGOpponent.velocity.y = -40 * (Math.cos(elapsedTotal) * (7 * 0.25));
+
+			boxBGPlayer.alpha = (game.healthBar.value / 2);
+			boxBGOpponent.alpha = 1 - boxBGPlayer.alpha;
+
+			boxBGPlayer.alpha = boxBGPlayer.alpha * .25;
+			boxBGOpponent.alpha = boxBGOpponent.alpha * .25;
 
 			game.currentCameraZoom = 0.5;
 			game.defaultHUDCameraZoom = 1;
