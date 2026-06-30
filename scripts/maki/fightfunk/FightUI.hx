@@ -82,6 +82,7 @@ class FightUI extends Module
 			HBP.screenCenter();
 
 			HBP.zIndex *= 4;
+			HBP.visible = false;
 		}
 
 		game.healthBarBG.y = healthBarY;
@@ -139,6 +140,7 @@ class FightUI extends Module
 		{
 			icon?.bopEvery = 0;
 			icon?.zIndex *= 4;
+			icon.visible = false;
 		}
 
 		camStrum = new FunkinCamera('playStateCamStrum');
