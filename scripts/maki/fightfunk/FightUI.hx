@@ -331,7 +331,7 @@ class FightUI extends Module
 		boxBGPlayer.alpha = boxBGPlayer.alpha * .25;
 		boxBGOpponent.alpha = boxBGOpponent.alpha * .25;
 
-		// game.currentCameraZoom = 0.5;
+		game.currentCameraZoom = 0.5;
 		game.defaultHUDCameraZoom = 1;
 		game.hudCameraZoomIntensity = 0;
 
