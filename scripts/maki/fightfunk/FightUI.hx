@@ -43,9 +43,12 @@ class FightUI extends Module
 		if (game != null)
 		{
 			var songCode = '${game.currentSong.id}-${game.currentVariation}'.toLowerCase();
-			trace('songCode: $songCode');
 
-			if (fightSongs.contains(songCode) && !game.isMinimalMode) initFightUI();
+			if (fightSongs.contains(songCode) && !game.isMinimalMode)
+			{
+				initFightUI();
+				event = FightConfig.loadConfig(songCode, event);
+			}
 		}
 	}
 
@@ -172,7 +175,7 @@ class FightUI extends Module
 			strumlineNote.shader = strumNoteWireframe;
 			i++;
 		}
-		
+
 		stat1 = makeExtraUIText(stat1);
 		game.add(stat1);
 
@@ -331,7 +334,7 @@ class FightUI extends Module
 		boxBGPlayer.alpha = boxBGPlayer.alpha * .25;
 		boxBGOpponent.alpha = boxBGOpponent.alpha * .25;
 
-		game.currentCameraZoom = 0.5;
+		game.currentCameraZoom = FightConfig.currentCameraZoom;
 		game.defaultHUDCameraZoom = 1;
 		game.hudCameraZoomIntensity = 0;
 
