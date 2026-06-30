@@ -13,6 +13,7 @@ class WireframeShader extends FlxRuntimeShader
 		super(fragText);
 
 		setOutlineColor(0xFFFFFFFF);
+		setFillingColor(0xFF000000);
 		setThreshold(0.1);
 	}
 
@@ -23,6 +24,15 @@ class WireframeShader extends FlxRuntimeShader
 		var blue:Float = (color & 0xff) / 255;
 		var targetColorArray:Float = [red, green, blue];
 		this.setFloatArray('outline', targetColorArray);
+	}
+
+	public function setFillingColor(color:Int):Int
+	{
+		var red:Float = ((color >> 16) & 0xff) / 255;
+		var green:Float = ((color >> 8) & 0xff) / 255;
+		var blue:Float = (color & 0xff) / 255;
+		var targetColorArray:Float = [red, green, blue];
+		this.setFloatArray('filling', targetColorArray);
 	}
 
 	public function setThreshold(threshold:Float):Float

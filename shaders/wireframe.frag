@@ -2,6 +2,7 @@
 
 #pragma header
 
+uniform vec3 filling = vec3(0.0, 0.0, 0.0);
 uniform vec3 outline = vec3(1.0, 1.0, 1.0);
 uniform float threshold = 0.1;
 
@@ -10,6 +11,7 @@ void main()
     vec4 color = texture2D(bitmap, openfl_TextureCoordv);
 
     float average = (color.r + color.g + color.b) / 3.0;
+    float ogA = color.a;
 
     color.rgb = outline;
 
@@ -17,8 +19,12 @@ void main()
         color.a = 0.0;
     }
 
-    if (color.a > 0.0)
-    {
+    if (ogA > 0.0){
+        if (color.a == 0) {
+            color.a = ogA;
+            color.rgb = filling;
+        }
+        
         gl_FragColor = color;
     }
 }

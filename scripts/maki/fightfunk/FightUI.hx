@@ -14,6 +14,8 @@ import flixel.text.FlxBitmapFont;
 import funkin.Highscore;
 import flixel.ui.FlxBar;
 
+using StringTools;
+
 class FightUI extends Module
 {
 	override public function new()
@@ -68,6 +70,10 @@ class FightUI extends Module
 	var camStrumYOffsets:Float = -25;
 
 	var hpBar:FlxBar;
+
+	var bfWireframe:WireframeShader;
+	var dadWireframe:WireframeShader;
+	var damselWireframe:WireframeShader;
 
 	function initFightUI()
 	{
@@ -148,8 +154,8 @@ class FightUI extends Module
 		for (strumlineNote in game.playerStrumline.strumlineNotes)
 		{
 			var strumNoteWireframe = new WireframeShader();
-			strumNoteWireframe.setThreshold((1 / 10));
 			strumNoteWireframe.setOutlineColor(colors[i]);
+			strumNoteWireframe.setFillingColor(0xFFFFFFFF);
 			strumlineNote.shader = strumNoteWireframe;
 			i++;
 		}
@@ -177,6 +183,28 @@ class FightUI extends Module
 		hpBar.cameras = healthText.cameras;
 		hpBar.scrollFactor.set();
 		game.add(hpBar);
+
+		bfWireframe = new WireframeShader();
+		bfWireframe.setOutlineColor(0xFF00FF00);
+		game.currentStage?.getBoyfriend()?.shader = bfWireframe;
+
+		dadWireframe = new WireframeShader();
+		dadWireframe.setOutlineColor(0xFFFF0000);
+		game.currentStage?.getDad()?.shader = dadWireframe;
+
+		damselWireframe = new WireframeShader();
+		damselWireframe.setOutlineColor(0xFFFFFFFF);
+		game.currentStage?.getGirlfriend()?.shader = damselWireframe;
+
+		for (char in [
+			game.currentStage?.getBoyfriend(),
+			game.currentStage?.getDad(),
+			game.currentStage?.getGirlfriend(),
+		])
+		{
+			if (char?._data.renderType?.contains('atlas'))
+				char?.useRenderTexture = true;
+		}
 
 		game.refresh();
 	}
@@ -250,6 +278,13 @@ class FightUI extends Module
 		middleScroll = false;
 
 		clearObjects();
+	}
+
+	function onGameOver(event:ScriptEvent):Void
+	{
+		super.onGameOver(event);
+
+		game.currentStage?.getBoyfriend()?.shader = null;
 	}
 
 	function clearObjects()
