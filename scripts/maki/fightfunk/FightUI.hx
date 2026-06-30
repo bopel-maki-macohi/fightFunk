@@ -2,9 +2,11 @@ package funkin.maki.fightfunk;
 
 import funkin.modding.module.Module;
 import funkin.play.PlayState;
+import funkin.play.components.HealthIcon;
 import funkin.mobile.input.ControlsHandler;
 import flixel.math.FlxMath;
 import flixel.addons.display.FlxBackdrop;
+import funkin.graphics.FunkinSprite;
 
 class FightUI extends Module
 {
@@ -53,8 +55,15 @@ class FightUI extends Module
 	var boxBGPlayer:FlxBackdrop;
 	var boxBGOpponent:FlxBackdrop;
 
+	var arrowBox:FunkinSprite;
+	var statBox:FunkinSprite;
+
 	function initFightUI()
 	{
+		final isDownscroll:Bool = #if mobile (Preferences.controlsScheme == FunkinHitboxControlSchemes.Arrows
+			&& !ControlsHandler.hasExternalInputDevice)
+			|| #end Preferences.downscroll;
+
 		fightUIEnabled = true;
 
 		game.remove(game.scoreText);
@@ -67,6 +76,8 @@ class FightUI extends Module
 			HBP.scale.set(1.5, 1);
 			HBP.updateHitbox();
 			HBP.screenCenter();
+
+			HBP.zIndex *= 4;
 		}
 
 		game.healthBarBG.y = healthBarY;
@@ -96,6 +107,35 @@ class FightUI extends Module
 		game.add(boxBGOpponent);
 
 		game.currentStage.zIndex = 300;
+
+		arrowBox = FunkinSprite.create(0, 0, 'ui/fight/box');
+		arrowBox.antialiasing = false;
+		arrowBox.scale.set(FlxG.width * 1.1 / arrowBox.width, 3);
+		arrowBox.updateHitbox();
+		arrowBox.zIndex = game.healthBarBG.zIndex * 0.5;
+		arrowBox.cameras = [game.camHUD];
+		arrowBox.screenCenter(0x01);
+		arrowBox.y = (isDownscroll) ? FlxG.height - arrowBox.height + 10 : -10;
+		game.add(arrowBox);
+
+		statBox = FunkinSprite.create(0, 0, 'ui/fight/box');
+		statBox.antialiasing = false;
+		statBox.scale.set(FlxG.width * 1.1 / statBox.width, 3);
+		statBox.updateHitbox();
+		statBox.zIndex = game.healthBarBG.zIndex * 0.75;
+		statBox.cameras = [game.camHUD];
+		statBox.screenCenter(0x01);
+		statBox.y = (isDownscroll) ? -10 : FlxG.height - statBox.height + 10;
+		game.add(statBox);
+
+		game.playerStrumline.zIndex = arrowBox.zIndex + 100;
+		game.playerStrumline.background.visible = false;
+
+		for (icon in [game.iconP1, game.iconP2,])
+		{
+			icon?.bopEvery = 0;
+			icon?.zIndex *= 4;
+		}
 
 		game.refresh();
 	}
