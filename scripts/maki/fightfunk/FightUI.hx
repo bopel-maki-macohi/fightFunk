@@ -12,6 +12,7 @@ import funkin.graphics.FunkinCamera;
 import flixel.text.FlxBitmapText;
 import flixel.text.FlxBitmapFont;
 import funkin.Highscore;
+import flixel.ui.FlxBar;
 
 class FightUI extends Module
 {
@@ -43,7 +44,7 @@ class FightUI extends Module
 			trace('songCode: $songCode');
 
 			clearObjects();
-			if (fightSongs.contains(songCode)) initFightUI();
+			if (fightSongs.contains(songCode) && !game.isMinimalMode) initFightUI();
 		}
 	}
 
@@ -66,6 +67,8 @@ class FightUI extends Module
 
 	var camStrum:FunkinCamera;
 	var camStrumYOffsets:Float = -25;
+
+	var hpBar:FlxBar;
 
 	function initFightUI()
 	{
@@ -138,11 +141,17 @@ class FightUI extends Module
 
 		game.playerStrumline.setNoteSpacing(1.2);
 
-		var strumNoteWireframe = new WireframeShader();
-		strumNoteWireframe.setThreshold((1 / 10));
+		var colors = [0xFFC24B99, 0xFF00FFFF, 0xFF12FA05, 0xFFF9393F];
 
+		var i = 0;
 		for (strumlineNote in game.playerStrumline.strumlineNotes)
+		{
+			var strumNoteWireframe = new WireframeShader();
+			strumNoteWireframe.setThreshold((1 / 10));
+			strumNoteWireframe.setOutlineColor(colors[i]);
 			strumlineNote.shader = strumNoteWireframe;
+			i++;
+		}
 
 		healthText = makeExtraUIText(healthText);
 		game.add(healthText);
@@ -157,6 +166,16 @@ class FightUI extends Module
 		comboText.x = healthText.x;
 		comboText.y = healthText.y - healthText.height - 10;
 		comboText.zIndex = healthText.zIndex + 1;
+
+		final b = game.healthBar;
+
+		hpBar = new FlxBar(healthText.x, healthText.y, null, 100, 25, game, 'healthLerp', b.min, b.max, false);
+		hpBar.zIndex = healthText.zIndex * 2;
+		hpBar.screenCenter();
+		hpBar.createFilledBar(0xFF1B0101, 0xFFFFAA00);
+		hpBar.cameras = healthText.cameras;
+		hpBar.scrollFactor.set();
+		game.add(hpBar);
 
 		game.refresh();
 	}
@@ -259,7 +278,7 @@ class FightUI extends Module
 		boxBGPlayer.alpha = boxBGPlayer.alpha * .25;
 		boxBGOpponent.alpha = boxBGOpponent.alpha * .25;
 
-		game.currentCameraZoom = 0.5;
+		// game.currentCameraZoom = 0.5;
 		game.defaultHUDCameraZoom = 1;
 		game.hudCameraZoomIntensity = 0;
 
@@ -288,6 +307,10 @@ class FightUI extends Module
 		}
 
 		healthText.text = 'HP : ${Math.floor((game.healthBar.value / 2) * 100)} / 100'.toUpperCase();
+		healthText.updateHitbox();
+
+		hpBar.x = (healthText.x * 2) + healthText.width;
+		hpBar.y = healthText.getGraphicMidpoint().y - hpBar.height / 2;
 
 		comboText.text = 'Combo : ${Highscore.tallies.combo} (Max: ${Highscore.tallies.maxCombo})'.toUpperCase();
 	}
