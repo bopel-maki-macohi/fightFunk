@@ -1,0 +1,46 @@
+import sys.io.File;
+import haxe.Json;
+
+class SetBuild
+{
+	static function main()
+	{
+		var build = GitShit.getGitCommitNumber();
+
+		trace('build: $build');
+
+		var meta = Json.parse(File.getContent('_polymod_meta.json'));
+
+		var mod_version:String = meta.mod_version;
+		mod_version = mod_version.substr(0, mod_version.length - 1);
+		mod_version += '$build';
+
+		trace('mod_version: $mod_version');
+
+		meta.mod_version = mod_version;
+		File.saveContent('_polymod_meta.json', Json.stringify(meta, '\t'));
+	}
+}
+
+class GitShit
+{
+	public static macro function getGitCommitNumber():haxe.macro.Expr.ExprOf<Int>
+	{
+		#if !display
+		// Get the current line number.
+		var pos = haxe.macro.Context.currentPos();
+
+		var process = new sys.io.Process('git', ['rev-list', 'HEAD', '--count']);
+		if (process.exitCode() != 0)
+		{
+			var message = process.stderr.readAll().toString();
+			haxe.macro.Context.info('[WARN] Could not determine current git commit; is this a proper Git repository?', pos);
+		}
+
+		// Generates a string expression
+		return macro $v{Std.parseInt(process.stdout.readLine())};
+		#else
+		return macro $v{0};
+		#end
+	}
+}

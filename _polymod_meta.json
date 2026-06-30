@@ -1,6 +1,6 @@
 {
-    "id": "maki_fightfunk",
-    "title": "Fight Funk",
-    "mod_version": "0.1.4",
-    "api_version": "0.8.4"
+	"mod_version": "0.1.4",
+	"title": "Fight Funk",
+	"id": "maki_fightfunk",
+	"api_version": "0.8.4"
 }
