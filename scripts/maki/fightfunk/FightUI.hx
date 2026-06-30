@@ -69,6 +69,9 @@ class FightUI extends Module
 	var camStrum:FunkinCamera;
 	var camStrumYOffsets:Float = -25;
 
+	var stat1:FlxBitmapText;
+	var stat2:FlxBitmapText;
+	var stat3:FlxBitmapText;
 	var hpBar:FlxBar;
 
 	var bfWireframe:WireframeShader;
@@ -160,27 +163,34 @@ class FightUI extends Module
 			i++;
 		}
 
-		characterText = makeExtraUIText(characterText);
-		game.add(characterText);
+		stat1 = makeExtraUIText(stat1);
+		game.add(stat1);
 
-		characterText.x = 10;
-		characterText.y = statBox.y + 10;
-		characterText.zIndex = statBox.zIndex + 1;
+		stat1.x = 10;
+		stat1.y = statBox.y + 10;
+		stat1.zIndex = statBox.zIndex + 1;
 
-		comboText = makeExtraUIText(comboText);
-		game.add(comboText);
+		stat2 = makeExtraUIText(stat2);
+		game.add(stat2);
 
-		comboText.x = characterText.x;
-		comboText.y = characterText.y + characterText.height + 10;
-		comboText.zIndex = characterText.zIndex + 1;
+		stat2.x = stat1.x;
+		stat2.y = stat1.y + stat1.height + 10;
+		stat2.zIndex = stat1.zIndex + 1;
+
+		stat3 = makeExtraUIText(stat3);
+		game.add(stat3);
+
+		stat3.x = stat2.x;
+		stat3.y = stat2.y + stat2.height + 10;
+		stat3.zIndex = stat2.zIndex + 1;
 
 		final b = game.healthBar;
 
-		hpBar = new FlxBar(characterText.x, statBox.y + statBox.height - 40, null, Math.floor(statBox.width * 0.9), 25, game, 'healthLerp', b.min, b.max, false);
-		hpBar.zIndex = characterText.zIndex * 2;
+		hpBar = new FlxBar(stat1.x, statBox.y + statBox.height - 40, null, Math.floor(statBox.width * 0.9), 25, game, 'healthLerp', b.min, b.max, false);
+		hpBar.zIndex = stat1.zIndex * 2;
 		hpBar.screenCenter(0x01);
 		hpBar.createFilledBar(0xFF1B0101, 0xFFFFAA00);
-		hpBar.cameras = characterText.cameras;
+		hpBar.cameras = stat1.cameras;
 		hpBar.scrollFactor.set();
 		game.add(hpBar);
 
@@ -208,9 +218,6 @@ class FightUI extends Module
 
 		game.refresh();
 	}
-
-	var characterText:FlxBitmapText;
-	var comboText:FlxBitmapText;
 
 	// base: https://github.com/bopel-maki-macohi/funk_mondays_vslice/blob/develop/scripts/mondays/util/MondayUI.hx#L96C1-L121C3
 	function makeExtraUIText(baseText:FlxBitmapText)
@@ -289,7 +296,7 @@ class FightUI extends Module
 
 	function clearObjects()
 	{
-		for (object in [boxBGPlayer, boxBGOpponent, arrowBox, statBox, characterText, hpBar])
+		for (object in [boxBGPlayer, boxBGOpponent, arrowBox, statBox, stat1, hpBar])
 		{
 			if (object != null)
 			{
@@ -342,7 +349,8 @@ class FightUI extends Module
 			centerPlayerStrumline();
 		}
 
-		characterText.text = 'Boyfriend';
-		comboText.text = 'Combo : ${Highscore.tallies.combo} (Max: ${Highscore.tallies.maxCombo})'.toUpperCase();
+		stat1.text = ((game.currentStage?.getBoyfriend()?.characterName ?? 'Victim').split('(')[0]).toUpperCase();
+		stat2.text = 'Combo : ${Highscore.tallies.combo} | Max Combo : ${Highscore.tallies.maxCombo}'.toUpperCase();
+		stat3.text = 'HP:'.toUpperCase();
 	}
 }
