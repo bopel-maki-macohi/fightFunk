@@ -1,1 +1,1 @@
-run -debug %*
+run "-debug" %*
