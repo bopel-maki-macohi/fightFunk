@@ -5,7 +5,7 @@ class SetBuild
 {
 	static function main()
 	{
-		var build = GitShit.getGitCommitNumber();
+		var build = GitShit.getGitCommitNumber() + 1;
 
 		trace('build: $build');
 
