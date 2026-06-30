@@ -38,6 +38,7 @@ class FightUI extends Module
 			var songCode = '${game.currentSong.id}-${game.currentVariation}'.toLowerCase();
 			trace('songCode: $songCode');
 
+			clearObjects();
 			if (fightSongs.contains(songCode)) initFightUI();
 		}
 	}
@@ -192,6 +193,21 @@ class FightUI extends Module
 	{
 		super.onDestroy(event);
 		middleScroll = false;
+
+		clearObjects();
+	}
+
+	function clearObjects()
+	{
+		for (object in [boxBGPlayer, boxBGOpponent, arrowBox, statBox])
+		{
+			if (object != null)
+			{
+				game.remove(object);
+				object.destroy();
+				object = null;
+			}
+		}
 	}
 
 	function updateFightUI()
