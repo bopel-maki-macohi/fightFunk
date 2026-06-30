@@ -203,7 +203,7 @@ class FightUI extends Module
 		{
 			if (object != null)
 			{
-				game.remove(object);
+				game?.remove(object);
 				object.destroy();
 				object = null;
 			}
