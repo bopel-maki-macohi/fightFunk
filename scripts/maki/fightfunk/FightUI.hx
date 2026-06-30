@@ -12,6 +12,7 @@ class FightUI extends Module
 
 	var fightSongs = ['dadbattle-erect'];
 	var fightUIEnabled:Bool = false;
+	var fightUI_visiblePropName:Array<String> = [];
 
 	public var game(get, never):PlayState;
 
@@ -24,17 +25,20 @@ class FightUI extends Module
 	{
 		super.onSongLoaded(event);
 
-		var songCode = '${game.currentSong.id}-${game.currentVariation}'.toLowerCase();
-		trace('songCode: $songCode');
+		if (game != null)
+		{
+			var songCode = '${game.currentSong.id}-${game.currentVariation}'.toLowerCase();
+			trace('songCode: $songCode');
 
-		if (fightSongs.contains(songCode)) initFightUI();
+			if (fightSongs.contains(songCode)) initFightUI();
+		}
 	}
 
 	function onUpdate(event)
 	{
 		super.onUpdate(event);
 
-		if (fightUIEnabled) updateFightUI();
+		if (fightUIEnabled && game != null) updateFightUI();
 	}
 
 	function initFightUI()
@@ -46,11 +50,26 @@ class FightUI extends Module
 	{
 		if (!game.isInCutscene)
 		{
-			game.currentCameraZoom = 1;
+			game.currentCameraZoom = 0.5;
 			game.defaultHUDCameraZoom = 1;
 			game.hudCameraZoomIntensity = 0;
 
 			game.camHUD.zoom = game.defaultHUDCameraZoom;
+
+			for (bopper in game.currentStage?.boppers)
+			{
+				bopper.active = false;
+				bopper.visible = false;
+			}
+
+			for (name => prop in game.currentStage?.namedProps)
+			{
+				if (!fightUI_visiblePropName.contains(name))
+				{
+					prop.active = false;
+					prop.visible = false;
+				}
+			}
 		}
 	}
 }
