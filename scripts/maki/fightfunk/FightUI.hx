@@ -7,6 +7,7 @@ import funkin.mobile.input.ControlsHandler;
 import flixel.math.FlxMath;
 import flixel.addons.display.FlxBackdrop;
 import funkin.graphics.FunkinSprite;
+import funkin.graphics.FunkinCamera;
 
 class FightUI extends Module
 {
@@ -57,6 +58,9 @@ class FightUI extends Module
 
 	var arrowBox:FunkinSprite;
 	var statBox:FunkinSprite;
+
+	var camStrum:FunkinCamera;
+	var camStrumYOffsets:Float = -25;
 
 	function initFightUI()
 	{
@@ -115,7 +119,7 @@ class FightUI extends Module
 		arrowBox.zIndex = game.healthBarBG.zIndex * 0.5;
 		arrowBox.cameras = [game.camHUD];
 		arrowBox.screenCenter(0x01);
-		arrowBox.y = (isDownscroll) ? FlxG.height - arrowBox.height + 10 : -10;
+		arrowBox.y = (isDownscroll) ? FlxG.height - arrowBox.height + 10 + camStrumYOffsets : -10 - camStrumYOffsets;
 		game.add(arrowBox);
 
 		statBox = FunkinSprite.create(0, 0, 'ui/fight/box');
@@ -136,6 +140,14 @@ class FightUI extends Module
 			icon?.bopEvery = 0;
 			icon?.zIndex *= 4;
 		}
+
+		camStrum = new FunkinCamera('playStateCamStrum');
+		camStrum.bgColor = game.camHUD.bgColor;
+		FlxG.cameras.insert(camStrum, FlxG.cameras.list.indexOf(game.camCutscene) - 1, false);
+		camStrum.y = camStrumYOffsets;
+
+		arrowBox.cameras = [camStrum];
+		game.playerStrumline.cameras = [camStrum];
 
 		game.refresh();
 	}
