@@ -43,7 +43,6 @@ class FightUI extends Module
 			var songCode = '${game.currentSong.id}-${game.currentVariation}'.toLowerCase();
 			trace('songCode: $songCode');
 
-			clearObjects();
 			if (fightSongs.contains(songCode) && !game.isMinimalMode) initFightUI();
 		}
 	}
@@ -72,6 +71,8 @@ class FightUI extends Module
 
 	function initFightUI()
 	{
+		clearObjects();
+
 		final isDownscroll:Bool = #if mobile (Preferences.controlsScheme == FunkinHitboxControlSchemes.Arrows
 			&& !ControlsHandler.hasExternalInputDevice)
 			|| #end Preferences.downscroll;
@@ -253,7 +254,7 @@ class FightUI extends Module
 
 	function clearObjects()
 	{
-		for (object in [boxBGPlayer, boxBGOpponent, arrowBox, statBox, healthText])
+		for (object in [boxBGPlayer, boxBGOpponent, arrowBox, statBox, healthText, hpBar])
 		{
 			if (object != null)
 			{
@@ -284,18 +285,20 @@ class FightUI extends Module
 
 		game.camHUD.zoom = game.defaultHUDCameraZoom;
 
-		for (bopper in game.currentStage?.boppers)
+		for (member in game.currentStage?.members)
 		{
-			bopper.active = false;
-			bopper.visible = false;
+			if (game.currentStage?.getBoyfriend() != member) if (game.currentStage?.getDad() != member) if (game.currentStage?.getGirlfriend() != member)
+			{
+				member.active = false;
+				member.visible = false;
+			}
 		}
 
 		for (name => prop in game.currentStage?.namedProps)
 		{
-			if (!fightUI_visiblePropName.contains(name))
+			if (fightUI_visiblePropName.contains(name))
 			{
-				prop.active = false;
-				prop.visible = false;
+				prop.active = prop.visible = true;
 			}
 		}
 
