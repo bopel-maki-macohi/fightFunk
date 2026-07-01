@@ -105,8 +105,9 @@ class FightUI extends Module
 	public var camStrum:FunkinCamera;
 	public var camStrumYOffsets:Float = -25;
 
-	public var statTexts:Array<String> = ['', '', '',];
+	public var statTexts:Array<String> = [];
 	public var statLines:Array<FlxBitmapText> = [];
+	public var statTextsCount:Int = 3;
 
 	public var statCenter:FlxBitmapText;
 
@@ -174,7 +175,7 @@ class FightUI extends Module
 
 		arrowBox.cameras = [camStrum];
 
-		var i = statTexts.length;
+		var i = statTextsCount;
 
 		while (i > 0)
 		{
