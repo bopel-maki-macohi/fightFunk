@@ -2,6 +2,11 @@ package funkin.maki.fightfunk;
 
 class FightTimeUtil
 {
+	public static function ms_to_s(ms = 0.0)
+	{
+		return ms / 1000;
+	}
+
 	public static function s_to_ms(s = 0.0)
 	{
 		return s * 1000;

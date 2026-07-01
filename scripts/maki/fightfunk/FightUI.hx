@@ -1,5 +1,7 @@
 package funkin.maki.fightfunk;
 
+import funkin.maki.fightfunk.FightTimeUtil;
+import funkin.maki.fightfunk.FightTimeUtil;
 import funkin.maki.fightfunk.FightConfigManager;
 import funkin.maki.fightfunk.FightConfig;
 import funkin.maki.fightfunk.WireframeShader;
@@ -15,6 +17,10 @@ import flixel.text.FlxBitmapText;
 import flixel.text.FlxBitmapFont;
 import funkin.Highscore;
 import flixel.ui.FlxBar;
+import funkin.Conductor;
+import funkin.util.SongSequence;
+import flixel.util.FlxColor;
+import flixel.tweens.FlxTween;
 
 using StringTools;
 
@@ -31,7 +37,7 @@ class FightUI extends Module
 	var fightUIEnabled:Bool = false;
 	var fightUI_visiblePropName:Array<String> = [];
 
-	public var game(get, never):PlayState;
+	var game(get, never):PlayState;
 
 	function get_game():PlayState
 	{
@@ -85,6 +91,9 @@ class FightUI extends Module
 	var statCenter:FlxBitmapText;
 
 	var hpBar:FlxBar;
+	final hpBarDefaultColor:FlxColor = 0xFFFFAA00;
+	var hpBarColor:FlxColor = hpBarDefaultColor;
+	var hpBarColorTween:FlxTween;
 
 	var bfWireframe:WireframeShader;
 	var dadWireframe:WireframeShader;
@@ -96,6 +105,7 @@ class FightUI extends Module
 
 	var playerName:String = 'Victim';
 	var battle:Dynamic;
+	var battleSequence:SongSequence;
 
 	function initFightUI()
 	{
@@ -224,7 +234,8 @@ class FightUI extends Module
 		hpBar = new FlxBar(stat1.x, statBox.y + statBox.height - 40, null, Math.floor(statBox.width * 0.9), 25, game, 'healthLerp', b.min, b.max, false);
 		hpBar.zIndex = stat1.zIndex * 2;
 		hpBar.screenCenter(0x01);
-		hpBar.createFilledBar(0xFF1B0101, 0xFFFFAA00);
+		hpBar.createFilledBar(0xFF3F3F3F, 0xFFFFFFFF);
+		hpBar.color = hpBarColor;
 		hpBar.cameras = stat1.cameras;
 		hpBar.scrollFactor.set();
 		game.add(hpBar);
@@ -272,11 +283,110 @@ class FightUI extends Module
 			}
 		}
 
+		battleSequence = new SongSequence(getBattleSequence());
+		battleSequence.startTime = 0;
+
 		game.currentCameraZoom = FightConfigManager.currentCameraZoom;
 		game.refresh();
 	}
 
-	public var love(get, never):Int;
+	function getBattleSequence()
+	{
+		var roadmap = [
+			{
+				time: 0.0,
+				callback: function() {
+				}
+			}
+		];
+
+		roadmap = [];
+
+		for (event in battle.events)
+		{
+			if (event == null) continue;
+			if (event.step == null) continue;
+
+			var roadmapEntry =
+				{
+					time: FightTimeUtil.ms_to_s(Conductor.instance.getStepTimeInMs(event.step)),
+					callback: null
+				};
+
+			var destinationSteps = event.step + (event.length ?? 16);
+			var destinationEntry =
+				{
+					time: FightTimeUtil.ms_to_s(Conductor.instance.getStepTimeInMs(destinationSteps)),
+					callback: null,
+				};
+
+			switch (event?.type?.toLowerCase())
+			{
+				case 'message':
+					roadmapEntry.callback = function() {
+						statCenter.text = (event?.value ?? 'COOL SWAG').toUpperCase();
+						statCenter.screenCenter(0x01);
+						statCenter.visible = true;
+					};
+
+					destinationEntry.callback = function() {
+						statCenter.visible = false;
+					};
+
+				case 'effect':
+					if (event.value != null && event.value.id != null)
+					{
+						roadmapEntry.callback = function() {
+							activeEffects.push(event.value);
+						};
+
+						destinationEntry.callback = function() {
+							activeEffects.remove(event.value);
+						};
+					}
+			}
+
+			if (roadmapEntry.callback != null) roadmap.push(roadmapEntry);
+			if (destinationEntry.callback != null) roadmap.push(destinationEntry);
+		}
+
+		return roadmap;
+	}
+
+	var activeEffects:Array<Dynamic> = [];
+
+	function onNoteHit(event)
+	{
+		super.onNoteHit(event);
+
+		if (game == null) return;
+
+		var playerStrum = Math.floor(event.note.noteData.data / 4) == 0;
+		var holdNote = event.note.length <= Constants.HOLD_DROP_PENALTY_THRESHOLD_MS;
+
+		for (effect in activeEffects)
+		{
+			if (effect.id == null) continue;
+
+			switch (effect.id?.toLowerCase())
+			{
+				case 'karma', 'kr', 'drain', 'hp-drain', 'hpdrain':
+					final calc = effect.strength * ((holdNote) ? 0.1 : 1);
+
+					if (hpBarColorTween != null)
+					{
+						hpBarColorTween.cancel();
+						hpBarColorTween?.destroy();
+					}
+
+					hpBarColorTween = FlxTween.color(hpBar, 0.5 + (0.05 * FightTimeUtil.ms_to_s(event.note.length)), 0xFFFF00FF, hpBarDefaultColor);
+
+					if (game.health - calc > 0.05 && !playerStrum) game.health -= calc;
+			}
+		}
+	}
+
+	var love(get, never):Int;
 
 	function get_love():Int
 	{
@@ -356,6 +466,7 @@ class FightUI extends Module
 		super.onGameOver(event);
 
 		game.currentStage?.getBoyfriend()?.shader = null;
+		clearObjects();
 	}
 
 	function clearObjects()
@@ -370,6 +481,9 @@ class FightUI extends Module
 			}
 		}
 		noteWireframes = [];
+		strumNoteWireframes = [];
+
+		battleSequence?.destroy();
 	}
 
 	function updateFightUI()
@@ -428,7 +542,6 @@ class FightUI extends Module
 		stat2.text = 'Score : ' + '${Math.floor(game.songScore)}'.toUpperCase();
 		stat3.text = 'Misses : ' + '${Highscore.tallies.bad + Highscore.tallies.shit + Highscore.tallies.missed}' + ''.toUpperCase();
 
-		statCenter.text = 'RANDOM MESSAGE';
 		statCenter.y = statBox.getGraphicMidpoint().y - 10 - (statCenter.height / 2);
 
 		statCenter.screenCenter(0x01);

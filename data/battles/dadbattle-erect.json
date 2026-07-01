@@ -3,11 +3,24 @@
     "camZoomStartOffset": -0.1,
     "events": [
         {
-            "t": 0,
-            "l": 2500,
-            "e": "message",
-            "v": {
-                "message": "DADDY DEAREST INITIATES THE BATTLE!"
+            "step": 0,
+            "length": 32,
+            "type": "message",
+            "value": "\"DADDY\" INITIATES THE BATTLE!"
+        },
+        {
+            "step": 128,
+            "length": 64,
+            "type": "message",
+            "value": "\"DADDY\" USES: \"COMBO\""
+        },
+        {
+            "step": 128,
+            "length": 64,
+            "type": "effect",
+            "value": {
+                "id": "karma",
+                "strength": 0.15
             }
         }
     ]

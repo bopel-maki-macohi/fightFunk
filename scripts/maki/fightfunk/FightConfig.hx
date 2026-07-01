@@ -17,24 +17,18 @@ class FightConfig
 		var battle:Dynamic =
 			{
 				level: 0,
-				events: [
-					{
-						t: 0,
-						e: '',
-						v: Dynamic,
-					}
-				],
+				events: [],
 				camZoomStartOffset: 0.0,
 				camPositionStartOffset: [0.0, 0.0],
 			};
 
 		var path = Paths.json('battles/${songCode.toLowerCase()}');
-        var pathData:Dynamic = null;
+		var pathData:Dynamic = null;
 
-        if (Assets.exists(path))
-        {
-            pathData = Json.parse(Assets.getText(path));
-        }
+		if (Assets.exists(path))
+		{
+			pathData = Json.parse(Assets.getText(path));
+		}
 
 		return pathData ?? battle;
 	}
