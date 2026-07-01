@@ -88,6 +88,7 @@ class FightUI extends Module
 		super.onSongLoaded(event);
 
 		songCode = null;
+		UIEnabled = false;
 
 		if (game != null)
 		{
