@@ -45,7 +45,7 @@
             "type": "camera",
             "value": {
                 "event": "zoom",
-                "instant":true,
+                "instant": true,
                 "increase": 0.2
             }
         },
@@ -63,7 +63,7 @@
             "type": "camera",
             "value": {
                 "event": "zoom",
-                "instant":true,
+                "instant": true,
                 "increase": 0.2
             }
         },
@@ -83,7 +83,7 @@
                 "event": "zoom",
                 "increase": -0.1,
                 "ease": "expoOut",
-                "cancelOthers":true
+                "cancelOthers": true
             }
         },
         {
@@ -92,8 +92,8 @@
             "value": {
                 "event": "zoom",
                 "increase": -0.1,
-                "instant":true,
-                "cancelOthers":true
+                "instant": true,
+                "cancelOthers": true
             }
         },
         {
@@ -104,7 +104,7 @@
                 "event": "zoom",
                 "increase": -0.1,
                 "ease": "expoOut",
-                "cancelOthers":true
+                "cancelOthers": true
             }
         },
         {
@@ -158,8 +158,8 @@
             "type": "camera",
             "value": {
                 "event": "zoom",
-                "increase": -0.25,
-                "ease":"sineIn",
+                "increase": 0.1,
+                "ease": "sineIn",
                 "cancelOthers": true
             }
         },
@@ -169,8 +169,8 @@
             "type": "camera",
             "value": {
                 "event": "zoom",
-                "increase": 0.25,
-                "ease":"sineOut",
+                "increase": -0.1,
+                "ease": "sineOut",
                 "cancelOthers": true
             }
         },
@@ -180,8 +180,8 @@
             "type": "camera",
             "value": {
                 "event": "zoom",
-                "increase": 0.25,
-                "ease":"sineIn",
+                "increase": 0.1,
+                "ease": "sineIn",
                 "cancelOthers": true
             }
         },
@@ -191,8 +191,8 @@
             "type": "camera",
             "value": {
                 "event": "zoom",
-                "increase": 0.25,
-                "ease":"sineOut",
+                "increase": -0.1,
+                "ease": "sineOut",
                 "cancelOthers": true
             }
         },
@@ -202,8 +202,8 @@
             "type": "camera",
             "value": {
                 "event": "zoom",
-                "increase": 0.25,
-                "ease":"sineIn",
+                "increase": 0.1,
+                "ease": "sineIn",
                 "cancelOthers": true
             }
         },
@@ -213,8 +213,8 @@
             "type": "camera",
             "value": {
                 "event": "zoom",
-                "increase": 0.25,
-                "ease":"sineOut",
+                "increase": -0.1,
+                "ease": "sineOut",
                 "cancelOthers": true
             }
         },
@@ -224,8 +224,8 @@
             "type": "camera",
             "value": {
                 "event": "zoom",
-                "increase": 0.25,
-                "ease":"sineIn",
+                "increase": 0.1,
+                "ease": "sineIn",
                 "cancelOthers": true
             }
         },
@@ -235,8 +235,8 @@
             "type": "camera",
             "value": {
                 "event": "zoom",
-                "increase": 0.25,
-                "ease":"sineOut",
+                "increase": -0.1,
+                "ease": "sineOut",
                 "cancelOthers": true
             }
         },
@@ -246,8 +246,80 @@
             "type": "camera",
             "value": {
                 "event": "zoom",
+                "increase": 0.1,
+                "ease": "sineInOut",
+                "cancelOthers": true
+            }
+        },
+        {
+            "step": 928,
+            "length": 64,
+            "type": "camera",
+            "value": {
+                "event": "zoom",
                 "increase": -0.25,
-                "ease":"sineInOut",
+                "ease": "sineInOut",
+                "cancelOthers": true
+            }
+        },
+        {
+            "step": 992,
+            "length": 64,
+            "type": "camera",
+            "value": {
+                "event": "zoom",
+                "increase": 0.3,
+                "ease": "sineInOut",
+                "cancelOthers": true
+            }
+        },
+        {
+            "step": 1020,
+            "length": 4,
+            "type": "camera",
+            "value": {
+                "event": "zoom",
+                "increase": -0.1,
+                "ease": "sineInOut",
+                "cancelOthers": true
+            }
+        },
+        {
+            "step": 1056,
+            "type": "camera",
+            "value": {
+                "event": "reset",
+                "instant": true,
+                "cancelOthers": true
+            }
+        },
+        {
+            "step": 1183,
+            "length": 256,
+            "type": "camera",
+            "value": {
+                "event": "zoom",
+                "increase": 0.25,
+                "cancelOthers": true
+            }
+        },
+        {
+            "step": 1312,
+            "length": 64,
+            "type": "camera",
+            "value": {
+                "event": "zoom",
+                "increase": -0.2,
+                "cancelOthers": true
+            }
+        },
+        {
+            "step": 1376,
+            "length": 256,
+            "type": "camera",
+            "value": {
+                "event": "zoom",
+                "increase": 0.25,
                 "cancelOthers": true
             }
         },
