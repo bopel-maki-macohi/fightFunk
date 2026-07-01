@@ -190,7 +190,7 @@ class FightUI extends Module
 		arrowBox.cameras = [camStrum];
 
 		var i = 0;
-		while (i < 3)
+		while (i < statTextsCount)
 		{
 			addStatText(i);
 			i++;
@@ -299,7 +299,7 @@ class FightUI extends Module
 
 		newLine.ID = i;
 		newLine.x = 10;
-		newLine.y = statBox.y + 10 + (newLine.height * newLine.ID);
+		newLine.y = statBox.y + 10 + (newLine.height * (newLine.ID % 3));
 		newLine.zIndex = statBox.zIndex + 1 + (newLine.height * (newLine.ID + 1));
 
 		game.add(newLine);
@@ -449,8 +449,13 @@ class FightUI extends Module
 
 		for (line in statLines)
 		{
-			line.text = statTexts[line.ID];
+			line.text = statTexts[line.ID] ?? 'line${line.ID}';
 			line.visible = !statCenter.visible;
+			line.updateHitbox();
+			line.screenCenter(0x01);
+
+			line.x = 10;
+			if (line.ID >= 3) line.x = (statLines[line.ID - 3].x * 2) + (statLines[line.ID - 3].width * 1.1);
 		}
 	}
 }
