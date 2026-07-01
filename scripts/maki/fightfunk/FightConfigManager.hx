@@ -6,11 +6,10 @@ import funkin.play.PlayState;
 class FightConfigManager
 {
 	public static var currentCameraZoom:Float = 0.5;
+	public static final defaultCurrentCameraZoom:Float = 0.5;
 
 	public static function loadConfig(songCode:String, event)
 	{
-		currentCameraZoom = 0.5;
-
 		trace('songCode: $songCode');
 
 		var iterations = 10;

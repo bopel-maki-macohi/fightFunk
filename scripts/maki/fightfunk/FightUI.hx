@@ -52,8 +52,8 @@ class FightUI extends Module
 
 			if (fightSongs.contains(songCode) && !game.isMinimalMode)
 			{
-				initFightUI();
 				event = FightConfigManager.loadConfig(songCode, event);
+				initFightUI();
 			}
 		}
 	}
@@ -256,6 +256,8 @@ class FightUI extends Module
 
 		battle = FightConfig.getSongBattle(songCode);
 
+		FightConfigManager.currentCameraZoom = FightConfigManager.defaultCurrentCameraZoom;
+
 		if (battle != null)
 		{
 			if (battle.camPositionStartOffset != null)
@@ -270,6 +272,7 @@ class FightUI extends Module
 			}
 		}
 
+		game.currentCameraZoom = FightConfigManager.currentCameraZoom;
 		game.refresh();
 	}
 
