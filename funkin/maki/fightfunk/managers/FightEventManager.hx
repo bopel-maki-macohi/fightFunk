@@ -121,6 +121,8 @@ class FightEventManager
 	{
 		if (ui.game == null) return;
 
+		FlxG.camera.filters = [];
+
 		var daddy = ui.game?.currentStage?.getDad();
 		var gf = ui.game?.currentStage?.getGirlfriend();
 
