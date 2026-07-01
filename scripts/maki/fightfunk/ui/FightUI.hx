@@ -454,8 +454,8 @@ class FightUI extends Module
 			line.updateHitbox();
 			line.screenCenter(0x01);
 
-			line.x = 10;
-			if (line.ID >= 3) line.x = (statLines[line.ID - 3].x * 2) + (statLines[line.ID - 3].width * 1.1);
+			// line.x = 10;
+			// if (line.ID >= 3) line.x = (statLines[line.ID - 3].x * 2) + (statLines[line.ID - 3].width * 1.1);
 		}
 	}
 }
