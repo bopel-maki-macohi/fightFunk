@@ -1,6 +1,5 @@
-package funkin.maki.fightfunk;
+package funkin.maki.fightfunk.config;
 
-import funkin.maki.fightfunk.FightTimeUtil;
 import funkin.play.PlayState;
 
 class FightConfigManager

@@ -1,10 +1,5 @@
-package funkin.maki.fightfunk;
+package funkin.maki.fightfunk.ui;
 
-import funkin.maki.fightfunk.FightTimeUtil;
-import funkin.maki.fightfunk.FightTimeUtil;
-import funkin.maki.fightfunk.FightConfigManager;
-import funkin.maki.fightfunk.FightConfig;
-import funkin.maki.fightfunk.WireframeShader;
 import funkin.modding.module.Module;
 import funkin.play.PlayState;
 import funkin.play.components.HealthIcon;
@@ -26,16 +21,12 @@ using StringTools;
 
 class FightUI extends Module
 {
-	override public function new()
-	{
-		super('FightUI');
+	final tab = '    ';
 
-		middleScroll = false;
-	}
+	var middleScroll = false;
 
-	var fightSongs = ['dadbattle-erect'];
-	var fightUIEnabled:Bool = false;
-	var fightUI_visiblePropName:Array<String> = [];
+	var UIEnabled:Bool = false;
+	var visiblePropNames:Array<String> = [];
 
 	var game(get, never):PlayState;
 
@@ -45,6 +36,38 @@ class FightUI extends Module
 	}
 
 	var songCode:String;
+
+	var elapsedTotal:Float = 0;
+
+	override public function new()
+	{
+		super('FightUI');
+
+		middleScroll = false;
+	}
+
+	function onCreate(event:ScriptEvent):Void
+	{
+		super.onCreate(event);
+
+		middleScroll = false;
+	}
+
+	function onDestroy(event:ScriptEvent):Void
+	{
+		super.onDestroy(event);
+		middleScroll = false;
+
+		clearObjects();
+	}
+
+	function onGameOver(event:ScriptEvent):Void
+	{
+		super.onGameOver(event);
+
+		game.currentStage?.getBoyfriend()?.shader = null;
+		clearObjects();
+	}
 
 	function onSongLoaded(event)
 	{
@@ -56,7 +79,7 @@ class FightUI extends Module
 		{
 			songCode = '${game.currentSong.id}-${game.currentVariation}'.toLowerCase();
 
-			if (fightSongs.contains(songCode) && !game.isMinimalMode)
+			if (FightConfig.fightSongs.contains(songCode) && !game.isMinimalMode)
 			{
 				event = FightConfigManager.loadConfig(songCode, event);
 				initFightUI();
@@ -64,22 +87,20 @@ class FightUI extends Module
 		}
 	}
 
-	var elapsedTotal:Float = 0;
-
 	function onUpdate(event)
 	{
 		super.onUpdate(event);
 
 		elapsedTotal += event.elapsed;
 
-		if (!game?.isInCutscene && fightUIEnabled && game != null) updateFightUI();
+		if (!game?.isInCutscene && UIEnabled && game != null) updateFightUI();
 	}
 
-	var boxBGPlayer:FlxBackdrop;
-	var boxBGOpponent:FlxBackdrop;
+	var boxBGPlayer:FightBoxBG;
+	var boxBGOpponent:FightBoxBG;
 
-	var arrowBox:FunkinSprite;
-	var statBox:FunkinSprite;
+	var arrowBox:FightBoxUI;
+	var statBox:FightBoxUI;
 
 	var camStrum:FunkinCamera;
 	var camStrumYOffsets:Float = -25;
@@ -104,8 +125,11 @@ class FightUI extends Module
 	var noteWireframes:Array<WireframeShader> = [];
 
 	var playerName:String = 'Victim';
+
 	var battle:Dynamic;
 	var battleSequence:SongSequence;
+
+	var activeEffects:Array<Dynamic> = [];
 
 	function initFightUI()
 	{
@@ -115,7 +139,7 @@ class FightUI extends Module
 			&& !ControlsHandler.hasExternalInputDevice)
 			|| #end Preferences.downscroll;
 
-		fightUIEnabled = true;
+		UIEnabled = true;
 
 		game.remove(game.scoreText);
 		game.remove(game.comboPopUps);
@@ -124,51 +148,25 @@ class FightUI extends Module
 		game.remove(game.iconP1);
 		game.remove(game.iconP2);
 
-		boxBGPlayer = new FlxBackdrop(Paths.image('ui/fight/box'));
+		boxBGPlayer = new FightBoxBG(0xff31ff87);
 		boxBGPlayer.zIndex = 10;
-		boxBGPlayer.color = 0xff00ff6a;
-		boxBGPlayer.velocity.set(20, -20);
-		boxBGPlayer.scale.set(2, 2);
-		boxBGPlayer.updateHitbox();
-
-		boxBGPlayer.blend = 0;
-
 		game.add(boxBGPlayer);
 
-		boxBGOpponent = new FlxBackdrop(Paths.image('ui/fight/box'));
+		boxBGOpponent = new FightBoxBG(0xffff1d5a);
 		boxBGOpponent.zIndex = 0;
-		boxBGOpponent.color = 0xffff0000;
-		boxBGOpponent.velocity.set(-40, -40);
-		boxBGOpponent.scale.set(2, 2);
-		boxBGOpponent.updateHitbox();
-
-		boxBGOpponent.blend = 0;
 		game.add(boxBGOpponent);
 
-		game.currentStage.zIndex = 300;
-
-		arrowBox = FunkinSprite.create(0, 0, 'ui/fight/box');
-		arrowBox.antialiasing = false;
-		arrowBox.scale.set(FlxG.width * 1.1 / arrowBox.width, 3);
-		arrowBox.updateHitbox();
+		arrowBox = new FightBoxUI();
 		arrowBox.zIndex = game.healthBarBG.zIndex * (4 * 0.5);
 		arrowBox.cameras = [game.camHUD];
-		arrowBox.screenCenter(0x01);
 		arrowBox.y = (isDownscroll) ? FlxG.height - arrowBox.height + 10 + camStrumYOffsets : -10 - camStrumYOffsets;
 		game.add(arrowBox);
 
-		statBox = FunkinSprite.create(0, 0, 'ui/fight/box');
-		statBox.antialiasing = false;
-		statBox.scale.set(FlxG.width * 1.1 / statBox.width, 3);
-		statBox.updateHitbox();
+		statBox = new FightBoxUI();
 		statBox.zIndex = game.healthBarBG.zIndex * (4 * 0.75);
 		statBox.cameras = [game.camHUD];
-		statBox.screenCenter(0x01);
 		statBox.y = (isDownscroll) ? -10 : FlxG.height - statBox.height + 10;
 		game.add(statBox);
-
-		game.playerStrumline.zIndex = arrowBox.zIndex + 100;
-		game.playerStrumline.background.visible = false;
 
 		camStrum = new FunkinCamera('playStateCamStrum');
 		camStrum.bgColor = game.camHUD.bgColor;
@@ -176,29 +174,6 @@ class FightUI extends Module
 		camStrum.y = camStrumYOffsets;
 
 		arrowBox.cameras = [camStrum];
-		game.playerStrumline.cameras = [camStrum];
-
-		#if !mobile
-		game.playerStrumline.setNoteSpacing(((FlxG.height / FlxG.width) * 2.8) * ((FlxG.width / FlxG.height) / (FlxG.initialWidth / FlxG.initialHeight)));
-		#end
-
-		var i = 0;
-		for (strumlineNote in game.playerStrumline.strumlineNotes)
-		{
-			var strumNoteWireframe = new WireframeShader();
-			strumNoteWireframe.setOutlineColor(noteColors[i]);
-			strumNoteWireframe.setFillingColor(0xFFFFFFFF);
-
-			var noteWireframe = new WireframeShader();
-			noteWireframe.setOutlineColor(noteColors[i]);
-			noteWireframe.setFillingColor(noteColors[i]);
-
-			strumNoteWireframes.push(strumNoteWireframe);
-			noteWireframes.push(noteWireframe);
-
-			strumlineNote.shader = strumNoteWireframe;
-			i++;
-		}
 
 		stat1 = makeExtraUIText(stat1);
 		game.add(stat1);
@@ -240,16 +215,13 @@ class FightUI extends Module
 		hpBar.scrollFactor.set();
 		game.add(hpBar);
 
-		bfWireframe = new WireframeShader();
-		bfWireframe.setOutlineColor(0xFF00FF00);
+		bfWireframe = new WireframeShader(0xFF00FF00);
 		game.currentStage?.getBoyfriend()?.shader = bfWireframe;
 
-		dadWireframe = new WireframeShader();
-		dadWireframe.setOutlineColor(0xFFFF0000);
+		dadWireframe = new WireframeShader(0xFFFF0000);
 		game.currentStage?.getDad()?.shader = dadWireframe;
 
 		damselWireframe = new WireframeShader();
-		damselWireframe.setOutlineColor(0xFFFFFFFF);
 		game.currentStage?.getGirlfriend()?.shader = damselWireframe;
 
 		for (char in [
@@ -257,18 +229,13 @@ class FightUI extends Module
 			game.currentStage?.getDad(),
 			game.currentStage?.getGirlfriend(),
 		])
-		{
 			if (char?._data.renderType?.contains('atlas')) char?.useRenderTexture = true;
-		}
 
 		var baseName = (game.currentStage?.getBoyfriend()?.characterName ?? 'Victim').split('(')[0];
-
 		playerName = FightConfig.nameShortcuts.get(baseName.toLowerCase()) ?? baseName ?? 'Victim';
-
 		battle = FightConfig.getSongBattle(songCode);
 
 		FightConfigManager.currentCameraZoom = FightConfigManager.defaultCurrentCameraZoom;
-
 		if (battle != null)
 		{
 			if (battle.camPositionStartOffset != null)
@@ -277,83 +244,45 @@ class FightUI extends Module
 				game.cameraFollowPoint.y += battle.camPositionStartOffset[1] ?? 0;
 			}
 
-			if (battle.camZoomStartOffset != null)
-			{
-				FightConfigManager.currentCameraZoom += battle?.camZoomStartOffset ?? 0.0;
-			}
+			if (battle.camZoomStartOffset != null) FightConfigManager.currentCameraZoom += battle?.camZoomStartOffset ?? 0.0;
 		}
 
-		battleSequence = new SongSequence(getBattleSequence());
+		battleSequence = new SongSequence(FightEventManager.getBattleSequence(battle.events));
 		battleSequence.startTime = 0;
 
 		game.currentCameraZoom = FightConfigManager.currentCameraZoom;
-		game.refresh();
-	}
 
-	function getBattleSequence()
-	{
-		var roadmap = [
-			{
-				time: 0.0,
-				callback: function() {
-				}
-			}
-		];
+		game.currentStage.zIndex = 300;
 
-		roadmap = [];
+		game.playerStrumline.zIndex = arrowBox.zIndex + 100;
+		game.playerStrumline.background.visible = false;
 
-		for (event in battle.events)
+		#if !mobile
+		game.playerStrumline.setNoteSpacing(((FlxG.height / FlxG.width) * 2.8) * ((FlxG.width / FlxG.height) / (FlxG.initialWidth / FlxG.initialHeight)));
+		#end
+
+		game.playerStrumline.cameras = [camStrum];
+
+		var i = 0;
+		for (strumlineNote in game.playerStrumline.strumlineNotes)
 		{
-			if (event == null) continue;
-			if (event.step == null) continue;
+			var strumNoteWireframe = new WireframeShader();
+			strumNoteWireframe.setOutlineColor(noteColors[i]);
+			strumNoteWireframe.setFillingColor(0xFFFFFFFF);
 
-			var roadmapEntry =
-				{
-					time: FightTimeUtil.ms_to_s(Conductor.instance.getStepTimeInMs(event.step)),
-					callback: null
-				};
+			var noteWireframe = new WireframeShader();
+			noteWireframe.setOutlineColor(noteColors[i]);
+			noteWireframe.setFillingColor(noteColors[i]);
 
-			var destinationSteps = event.step + (event.length ?? 16);
-			var destinationEntry =
-				{
-					time: FightTimeUtil.ms_to_s(Conductor.instance.getStepTimeInMs(destinationSteps)),
-					callback: null,
-				};
+			strumNoteWireframes.push(strumNoteWireframe);
+			noteWireframes.push(noteWireframe);
 
-			switch (event?.type?.toLowerCase())
-			{
-				case 'message':
-					roadmapEntry.callback = function() {
-						statCenter.text = (event?.value ?? 'COOL SWAG').toUpperCase();
-						statCenter.screenCenter(0x01);
-						statCenter.visible = true;
-					};
-
-					destinationEntry.callback = function() {
-						statCenter.visible = false;
-					};
-
-				case 'effect':
-					if (event.value != null && event.value.id != null)
-					{
-						roadmapEntry.callback = function() {
-							activeEffects.push(event.value);
-						};
-
-						destinationEntry.callback = function() {
-							activeEffects.remove(event.value);
-						};
-					}
-			}
-
-			if (roadmapEntry.callback != null) roadmap.push(roadmapEntry);
-			if (destinationEntry.callback != null) roadmap.push(destinationEntry);
+			strumlineNote.shader = strumNoteWireframe;
+			i++;
 		}
 
-		return roadmap;
+		game.refresh();
 	}
-
-	var activeEffects:Array<Dynamic> = [];
 
 	function onNoteHit(event)
 	{
@@ -386,13 +315,6 @@ class FightUI extends Module
 		}
 	}
 
-	var love(get, never):Int;
-
-	function get_love():Int
-	{
-		return battle?.level ?? 1;
-	}
-
 	// base: https://github.com/bopel-maki-macohi/funk_mondays_vslice/blob/develop/scripts/mondays/util/MondayUI.hx#L96C1-L121C3
 	function makeExtraUIText(baseText:FlxBitmapText)
 	{
@@ -422,13 +344,8 @@ class FightUI extends Module
 	function hideOpponentStrumline()
 	{
 		var opponentStrumline:FlxSprite = game.opponentStrumline;
-		if (opponentStrumline != null)
-		{
-			for (arrow in opponentStrumline.members)
-			{
-				arrow.visible = false;
-			}
-		}
+		if (opponentStrumline != null) for (arrow in opponentStrumline.members)
+			arrow.visible = false;
 	}
 
 	function centerPlayerStrumline()
@@ -438,35 +355,7 @@ class FightUI extends Module
 		if (Preferences.controlsScheme == "Arrows" && !ControlsHandler.usingExternalInputDevice) return;
 
 		var playerStrumline:FlxSprite = game.playerStrumline;
-		if (playerStrumline != null)
-		{
-			playerStrumline.x = FlxG.width / 2 - playerStrumline.width / 2;
-		}
-	}
-
-	var middleScroll = false;
-
-	function onCreate(event:ScriptEvent):Void
-	{
-		super.onCreate(event);
-
-		middleScroll = false;
-	}
-
-	function onDestroy(event:ScriptEvent):Void
-	{
-		super.onDestroy(event);
-		middleScroll = false;
-
-		clearObjects();
-	}
-
-	function onGameOver(event:ScriptEvent):Void
-	{
-		super.onGameOver(event);
-
-		game.currentStage?.getBoyfriend()?.shader = null;
-		clearObjects();
+		if (playerStrumline != null) playerStrumline.x = FlxG.width / 2 - playerStrumline.width / 2;
 	}
 
 	function clearObjects()
@@ -517,7 +406,7 @@ class FightUI extends Module
 
 		for (name => prop in game.currentStage?.namedProps)
 		{
-			if (fightUI_visiblePropName.contains(name)) prop.active = prop.visible = true;
+			if (visiblePropNames.contains(name)) prop.active = prop.visible = true;
 		}
 
 		if (!middleScroll)
@@ -538,7 +427,7 @@ class FightUI extends Module
 				note.shader = noteWireframes[note.noteDirection ?? note.direction];
 		}
 
-		stat1.text = '${playerName} ${tab} LV : ${love}'.toUpperCase();
+		stat1.text = '${playerName} ${tab} LV : ${battle.level}'.toUpperCase();
 		stat2.text = 'Score : ' + '${Math.floor(game.songScore)}'.toUpperCase();
 		stat3.text = 'Misses : ' + '${Highscore.tallies.bad + Highscore.tallies.shit + Highscore.tallies.missed}' + ''.toUpperCase();
 
@@ -548,6 +437,4 @@ class FightUI extends Module
 
 		stat1.visible = stat2.visible = stat3.visible = !statCenter.visible;
 	}
-
-	final tab = '    ';
 }

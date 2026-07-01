@@ -1,13 +1,15 @@
-package funkin.maki.fightfunk;
+package funkin.maki.fightfunk.config;
 
 import haxe.Json;
 import flixel.math.FlxPoint;
 
 class FightConfig
 {
+	public static var fightSongs:Array<String> = ['dadbattle-erect'];
+
 	public static var nameShortcuts:Map<String, String> = [
 		'boyfriend' => 'bf',
-		'daddy dearest' => 'dad',
+		'daddy dearest' => 'daddy',
 		'pico' => 'pico',
 		'girlfriend' => 'gf',
 	];
