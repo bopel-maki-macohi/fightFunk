@@ -135,6 +135,26 @@ class FightUI extends Module
 		if (UIEnabled) event = FightEventManager.onNoteMiss(this, event);
 	}
 
+	function onPause(event)
+	{
+		super.onPause(event);
+
+		for (tween in tweens)
+			if (tween != null) tween.active = false;
+
+		if (hpBarColorTween != null) hpBarColorTween.active = false;
+	}
+
+	function onResume(event)
+	{
+		super.onResume(event);
+
+		for (tween in tweens)
+			if (tween != null) tween.active = true;
+
+		if (hpBarColorTween != null) hpBarColorTween.active = true;
+	}
+
 	public var boxBGPlayer:FlxBackdrop;
 	public var boxBGOpponent:FlxBackdrop;
 
@@ -169,6 +189,9 @@ class FightUI extends Module
 	public var activeEffects:Array<Dynamic> = [];
 
 	public var currentCameraZoom:Float = 0.5;
+	public var defaultCameraZoom:Float = 0.5;
+
+	public var tweens:Array<FlxTween> = [];
 
 	function initFightUI()
 	{
@@ -265,20 +288,10 @@ class FightUI extends Module
 		playerName = FightUtil.nameShortcuts.get(baseName.toLowerCase()) ?? baseName ?? 'Victim';
 		battle = FightUtil.getSongBattle(songCode);
 
-		currentCameraZoom = FightUtil.defaultCameraZoom;
-		if (battle != null)
-		{
-			if (battle.camPositionStartOffset != null)
-			{
-				game.cameraFollowPoint.x += battle.camPositionStartOffset[0] ?? 0;
-				game.cameraFollowPoint.y += battle.camPositionStartOffset[1] ?? 0;
-			}
-
-			if (battle.camZoomStartOffset != null) currentCameraZoom += battle?.camZoomStartOffset ?? 0.0;
-		}
+		resetCamera();
 
 		battleSequence = new SongSequence(FightBattleManager.getBattleSequence(this, battle.events));
-		battleSequence.startTime = 0;
+		battleSequence.startTime = game.startTimestamp;
 
 		game.currentCameraZoom = currentCameraZoom;
 
@@ -314,6 +327,23 @@ class FightUI extends Module
 		FightEventManager.onFightUIInit(this);
 
 		game.refresh();
+	}
+
+	public function resetCamera()
+	{
+		currentCameraZoom = FightUtil.defaultCameraZoom;
+		if (battle != null)
+		{
+			if (battle.camPositionStartOffset != null)
+			{
+				game.cameraFollowPoint.x += battle.camPositionStartOffset[0] ?? 0;
+				game.cameraFollowPoint.y += battle.camPositionStartOffset[1] ?? 0;
+			}
+
+			if (battle.camZoomStartOffset != null) currentCameraZoom += battle?.camZoomStartOffset ?? 0.0;
+		}
+
+		defaultCameraZoom = currentCameraZoom;
 	}
 
 	function addStatText(i)
@@ -389,6 +419,17 @@ class FightUI extends Module
 			}
 
 			array = [];
+		}
+
+		for (tween in tweens)
+		{
+			tweens.remove(tween);
+
+			if (tween != null)
+			{
+				tween.cancel();
+				tween.destroy();
+			}
 		}
 
 		for (object in objs)

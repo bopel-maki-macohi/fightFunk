@@ -1,13 +1,164 @@
 {
     "level": 4,
-    "camZoomStartOffset": 0,
-    "camPositionStartOffset": [100],
+    "camZoomStartOffset": -0.2,
+    "camPositionStartOffset": [
+        100
+    ],
     "events": [
         {
             "step": 0,
             "length": 32,
             "type": "message",
             "value": "THIS WAS A LONG TIME COMING..."
+        },
+        {
+            "step": 0,
+            "length": 128,
+            "type": "camera",
+            "value": {
+                "event": "zoom",
+                "increase": 0.5,
+                "ease": "circIn"
+            }
+        },
+        {
+            "step": 178,
+            "length": 128,
+            "type": "camera",
+            "value": {
+                "event": "zoom",
+                "increase": 0.5,
+                "ease": "circIn"
+            }
+        },
+        {
+            "step": 256,
+            "type": "camera",
+            "value": {
+                "event": "reset",
+                "instant": true,
+                "cancelTweens": true
+            }
+        },
+        {
+            "step": 256.01,
+            "type": "camera",
+            "value": {
+                "event": "zoom",
+                "instant":true,
+                "increase": 0.2
+            }
+        },
+        {
+            "step": 256.02,
+            "type": "camera",
+            "value": {
+                "event": "zoom",
+                "increase": -0.1,
+                "ease": "expoOut"
+            }
+        },
+        {
+            "step": 288,
+            "type": "camera",
+            "value": {
+                "event": "zoom",
+                "instant":true,
+                "increase": 0.2
+            }
+        },
+        {
+            "step": 288.01,
+            "type": "camera",
+            "value": {
+                "event": "zoom",
+                "increase": -0.1,
+                "ease": "expoOut"
+            }
+        },
+        {
+            "step": 492,
+            "type": "camera",
+            "value": {
+                "event": "zoom",
+                "increase": -0.1,
+                "ease": "expoOut",
+                "cancelOthers":true
+            }
+        },
+        {
+            "step": 507,
+            "length": 2,
+            "type": "camera",
+            "value": {
+                "event": "zoom",
+                "increase": -0.03,
+                "ease": "expoOut",
+                "cancelOthers":true
+            }
+        },
+        {
+            "step": 512,
+            "type": "camera",
+            "value": {
+                "event": "reset",
+                "instant": true,
+                "cancelTweens": true
+            }
+        },
+        {
+            "step": 512.01,
+            "length": 256,
+            "type": "camera",
+            "value": {
+                "event": "zoom",
+                "increase": 0.5
+            }
+        },
+        {
+            "step": 636,
+            "type": "camera",
+            "value": {
+                "event": "reset",
+                "instant": true,
+                "cancelOthers": true
+            }
+        },
+        {
+            "step": 636.01,
+            "type": "camera",
+            "value": {
+                "event": "zoom",
+                "increase": 0.1,
+                "cancelOthers": true
+            }
+        },
+        {
+            "step": 124,
+            "type": "camera",
+            "value": {
+                "event": "set",
+                "value": 0.575,
+                "cancelTweens": true
+            }
+        },
+        {
+            "step": 125,
+            "type": "camera",
+            "value": {
+                "event": "set",
+                "value": 0.6
+            }
+        },
+        {
+            "step": 128,
+            "length": 32,
+            "type": "camera",
+            "value": {
+                "event": "reset",
+                "ease": "sineInOut",
+                "cancelOthers": true
+            }
         },
         {
             "step": 107,
