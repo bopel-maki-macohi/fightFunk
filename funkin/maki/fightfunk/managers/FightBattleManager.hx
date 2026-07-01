@@ -202,7 +202,7 @@ class FightBattleManager
 					{
 						time: roadmapEntry.time,
 						callback: function() {
-							trace('Roadmap Entry: ${roadmapStr}');
+							trace('\nRoadmap Entry: ${roadmapStr}');
 						}
 					});
 				sequence.push(roadmapEntry);
@@ -213,7 +213,7 @@ class FightBattleManager
 					{
 						time: destinationEntry.time,
 						callback: function() {
-							trace('Destination Entry: ${destinationStr}');
+							trace('\nDestination Entry: ${destinationStr}');
 						}
 					});
 				sequence.push(destinationEntry);

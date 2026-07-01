@@ -31,6 +31,8 @@ class FightUI extends Module
 	public var middleScroll = false;
 
 	public var UIEnabled:Bool = false;
+	public var DebugUIEnabled:Bool = false;
+
 	public var visibleProps:Array<Dynamic> = [];
 	public var visiblePropNames:Array<String> = [];
 
@@ -518,10 +520,26 @@ class FightUI extends Module
 			statCenter.screenCenter(0x01);
 		}
 
-		statTexts[0] = '${playerName} ${tab} LV : ${battle?.level ?? 1}'.toUpperCase();
-		statTexts[1] = 'Score : ' + '${Math.floor(game.songScore)}'.toUpperCase();
-		statTexts[2] = 'Combo Breaks : ' + '${Highscore.tallies.bad + Highscore.tallies.shit + Highscore.tallies.missed}' + ''.toUpperCase();
+		if (FlxG.keys.justPressed.COMMA) DebugUIEnabled = !DebugUIEnabled;
 
+		if (DebugUIEnabled)
+		{
+			statTexts = [
+				'Song Time: ' + ((Conductor.instance.songPosition < 0) ? '-' : '') + '${FlxMath.roundDecimal(FightTimeUtil.ms_to_s(Conductor.instance.songPosition), 0)}'.lpad('0', '0000'.length).replace('-', '') + 's',
+				'Step: ${Conductor.instance.currentStep}',
+				'Beat: ${Conductor.instance.currentBeat}',
+			];
+
+			if (statCenter.visible) statCenter.visible = false;
+		}
+		else
+		{
+			statTexts = [
+				'${playerName} ${tab} LV : ${battle?.level ?? 1}'.toUpperCase(),
+				'Score : ' + '${Math.floor(game.songScore)}'.toUpperCase(),
+				'Combo Breaks : ' + '${Highscore.tallies.bad + Highscore.tallies.shit + Highscore.tallies.missed}' + ''.toUpperCase(),
+			];
+		}
 		for (line in statLines)
 		{
 			line.text = statTexts[line.ID] ?? 'line${line.ID}';

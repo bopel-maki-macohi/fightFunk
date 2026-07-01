@@ -88,11 +88,21 @@
         },
         {
             "step": 507,
-            "length": 2,
             "type": "camera",
             "value": {
                 "event": "zoom",
-                "increase": -0.03,
+                "increase": -0.1,
+                "instant":true,
+                "cancelOthers":true
+            }
+        },
+        {
+            "step": 507.01,
+            "length": 32,
+            "type": "camera",
+            "value": {
+                "event": "zoom",
+                "increase": -0.1,
                 "ease": "expoOut",
                 "cancelOthers":true
             }
