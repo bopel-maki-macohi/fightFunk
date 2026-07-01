@@ -1,0 +1,13 @@
+{
+    "level": 4,
+    "camZoomStartOffset": 0,
+    "camPositionStartOffset": [100],
+    "events": [
+        {
+            "step": 0,
+            "length": 32,
+            "type": "message",
+            "value": "\"DARNELL\" INITIATES THE BATTLE!"
+        }
+    ]
+}
