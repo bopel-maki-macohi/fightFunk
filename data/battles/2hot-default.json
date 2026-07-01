@@ -144,6 +144,114 @@
             }
         },
         {
+            "step": 636.01,
+            "type": "camera",
+            "value": {
+                "event": "zoom",
+                "increase": 0.1,
+                "cancelOthers": true
+            }
+        },
+        {
+            "step": 672,
+            "length": 16,
+            "type": "camera",
+            "value": {
+                "event": "zoom",
+                "increase": -0.25,
+                "ease":"sineIn",
+                "cancelOthers": true
+            }
+        },
+        {
+            "step": 688,
+            "length": 16,
+            "type": "camera",
+            "value": {
+                "event": "zoom",
+                "increase": 0.25,
+                "ease":"sineOut",
+                "cancelOthers": true
+            }
+        },
+        {
+            "step": 704,
+            "length": 16,
+            "type": "camera",
+            "value": {
+                "event": "zoom",
+                "increase": 0.25,
+                "ease":"sineIn",
+                "cancelOthers": true
+            }
+        },
+        {
+            "step": 720,
+            "length": 16,
+            "type": "camera",
+            "value": {
+                "event": "zoom",
+                "increase": 0.25,
+                "ease":"sineOut",
+                "cancelOthers": true
+            }
+        },
+        {
+            "step": 736,
+            "length": 16,
+            "type": "camera",
+            "value": {
+                "event": "zoom",
+                "increase": 0.25,
+                "ease":"sineIn",
+                "cancelOthers": true
+            }
+        },
+        {
+            "step": 752,
+            "length": 16,
+            "type": "camera",
+            "value": {
+                "event": "zoom",
+                "increase": 0.25,
+                "ease":"sineOut",
+                "cancelOthers": true
+            }
+        },
+        {
+            "step": 768,
+            "length": 16,
+            "type": "camera",
+            "value": {
+                "event": "zoom",
+                "increase": 0.25,
+                "ease":"sineIn",
+                "cancelOthers": true
+            }
+        },
+        {
+            "step": 784,
+            "length": 16,
+            "type": "camera",
+            "value": {
+                "event": "zoom",
+                "increase": 0.25,
+                "ease":"sineOut",
+                "cancelOthers": true
+            }
+        },
+        {
+            "step": 800,
+            "length": 64,
+            "type": "camera",
+            "value": {
+                "event": "zoom",
+                "increase": -0.25,
+                "ease":"sineInOut",
+                "cancelOthers": true
+            }
+        },
+        {
             "step": 124,
             "type": "camera",
             "value": {
