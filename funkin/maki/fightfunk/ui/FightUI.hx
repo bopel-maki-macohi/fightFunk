@@ -41,7 +41,7 @@ class FightUI extends Module
 		return PlayState.instance;
 	}
 
-	public var songCode:String;
+	public static var songCode:String = '';
 
 	public var elapsedTotal:Float = 0;
 

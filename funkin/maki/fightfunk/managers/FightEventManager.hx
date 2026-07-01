@@ -1,6 +1,7 @@
 package funkin.maki.fightfunk.managers;
 
 import funkin.maki.fightfunk.util.FightTimeUtil;
+import funkin.maki.fightfunk.ui.FightUI;
 import funkin.Conductor;
 import funkin.graphics.FunkinSprite;
 import flixel.util.FlxTimer;
@@ -19,21 +20,36 @@ class FightEventManager
 
 	public static function onNoteMiss(ui, event)
 	{
-		if (ui.game != null) switch (event?.note?.kind)
+		if (ui.game != null)
 		{
-			case "weekend-1-cockgun": // lol
-				weekend1_cock = false;
-			case "weekend-1-firegun":
-				weekend1_cock = false;
+			switch (event?.note?.kind)
+			{
+				case "weekend-1-lightcan":
+					if (FightUI.songCode.startsWith('2hot')) FunkinSound.playOnce(Paths.sound('Darnell_Lighter'), 1.0);
 
-				var splode:FunkinSprite;
-				splode = weekend1_explosion_hit(function(explodeEZ) {
-					ui.game?.currentStage?.remove(explodeEZ);
-					weekend1_explosions.remove(splode);
-				});
+				case "weekend-1-kickcan":
+					if (FightUI.songCode.startsWith('2hot')) FunkinSound.playOnce(Paths.sound('Kick_Can_UP'), 1.0);
 
-				weekend1_explosions.push(splode);
-				ui.game?.currentStage?.add(splode);
+				case "weekend-1-kneecan":
+					if (FightUI.songCode.startsWith('2hot')) FunkinSound.playOnce(Paths.sound('Kick_Can_FORWARD'), 1.0);
+
+				case "weekend-1-cockgun": // lol
+					if (FightUI.songCode.startsWith('2hot')) weekend1_cock = false;
+				case "weekend-1-firegun":
+					if (FightUI.songCode.startsWith('2hot'))
+					{
+						weekend1_cock = false;
+
+						var splode:FunkinSprite;
+						splode = weekend1_explosion_hit(function(explodeEZ) {
+							ui.game?.currentStage?.remove(explodeEZ);
+							weekend1_explosions.remove(splode);
+						});
+
+						weekend1_explosions.push(splode);
+						ui.game?.currentStage?.add(splode);
+					}
+			}
 		}
 
 		return event;
@@ -44,38 +60,44 @@ class FightEventManager
 		if (ui.game != null) switch (event?.note?.kind)
 		{
 			case "weekend-1-cockgun": // lol
-				weekend1_cock = true;
-				new FlxTimer().start(1.0, function() {
-					weekend1_cock = false;
-				});
-			case "weekend-1-firegun":
-				if (weekend1_cock)
+				if (FightUI.songCode.startsWith('2hot'))
 				{
-					trace('Firing gun!');
-
-					var splode:FunkinSprite;
-					splode = weekend1_explosion_shot(function(explodeEZ) {
-						ui.game?.currentStage?.remove(explodeEZ);
-						weekend1_explosions.remove(splode);
+					weekend1_cock = true;
+					new FlxTimer().start(1.0, function() {
+						weekend1_cock = false;
 					});
-
-					weekend1_explosions.push(splode);
-					ui.game?.currentStage?.add(splode);
 				}
-				else
+			case "weekend-1-firegun":
+				if (FightUI.songCode.startsWith('2hot'))
 				{
-					trace('Cannot fire gun!');
-					// The player cannot hit this note.
-					event.cancelEvent();
+					if (weekend1_cock)
+					{
+						trace('Firing gun!');
 
-					var splode:FunkinSprite;
-					splode = weekend1_explosion_hit(function(explodeEZ) {
-						ui.game?.currentStage?.remove(explodeEZ);
-						weekend1_explosions.remove(splode);
-					});
+						var splode:FunkinSprite;
+						splode = weekend1_explosion_shot(function(explodeEZ) {
+							ui.game?.currentStage?.remove(explodeEZ);
+							weekend1_explosions.remove(splode);
+						});
 
-					weekend1_explosions.push(splode);
-					ui.game?.currentStage?.add(splode);
+						weekend1_explosions.push(splode);
+						ui.game?.currentStage?.add(splode);
+					}
+					else
+					{
+						trace('Cannot fire gun!');
+						// The player cannot hit this note.
+						event.cancelEvent();
+
+						var splode:FunkinSprite;
+						splode = weekend1_explosion_hit(function(explodeEZ) {
+							ui.game?.currentStage?.remove(explodeEZ);
+							weekend1_explosions.remove(splode);
+						});
+
+						weekend1_explosions.push(splode);
+						ui.game?.currentStage?.add(splode);
+					}
 				}
 		}
 
