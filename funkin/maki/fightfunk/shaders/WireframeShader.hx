@@ -1,4 +1,4 @@
-package funkin.maki.fightfunk;
+package funkin.maki.fightfunk.shaders;
 
 import flixel.addons.display.FlxRuntimeShader;
 

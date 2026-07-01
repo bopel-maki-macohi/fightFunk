@@ -1,5 +1,6 @@
-package funkin.maki.fightfunk;
+package funkin.maki.fightfunk.managers;
 
+import funkin.maki.fightfunk.util.FightTimeUtil;
 import funkin.Conductor;
 
 class FightEventManager

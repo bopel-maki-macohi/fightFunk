@@ -1,5 +1,7 @@
-package funkin.maki.fightfunk;
+package funkin.maki.fightfunk.managers;
 
+import funkin.maki.fightfunk.util.FightUtil;
+import funkin.maki.fightfunk.util.FightTimeUtil;
 import flixel.tweens.FlxTween;
 
 class FightBattleManager
@@ -28,7 +30,7 @@ class FightBattleManager
 							ui.hpBarColorTween?.destroy();
 						}
 
-						ui.hpBarColorTween = FlxTween.color(ui.hpBar, 0.5 + (0.05 * FightTimeUtil.ms_to_s(event.note.length)), 0xFFFF00FF, ui.hpBarDefaultColor);
+						ui.hpBarColorTween = FlxTween.color(ui.hpBar, 0.5 + (0.05 * FightTimeUtil.ms_to_s(event.note.length)), FightUtil.hpBarKarmaColor, FightUtil.hpBarDefaultColor);
 
 						if (ui.game.health - calc > 0.05) ui.game.health -= calc;
 					}

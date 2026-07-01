@@ -1,13 +1,10 @@
-package funkin.maki.fightfunk.config;
+package funkin.maki.fightfunk.managers;
 
 import funkin.play.PlayState;
 
-class FightConfigManager
+class FightChartManager
 {
-	public static var currentCameraZoom:Float = 0.5;
-	public static final defaultCurrentCameraZoom:Float = 0.5;
-
-	public static function loadConfig(songCode:String, event)
+	public static function cleanse(songCode:String, event)
 	{
 		trace('songCode: $songCode');
 

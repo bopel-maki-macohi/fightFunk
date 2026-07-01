@@ -1,4 +1,4 @@
-package funkin.maki.fightfunk;
+package funkin.maki.fightfunk.util;
 
 class FightTimeUtil
 {

@@ -1,5 +1,10 @@
 package funkin.maki.fightfunk.ui;
 
+import funkin.maki.fightfunk.shaders.WireframeShader;
+import funkin.maki.fightfunk.managers.FightBattleManager;
+import funkin.maki.fightfunk.managers.FightChartManager;
+import funkin.maki.fightfunk.managers.FightEventManager;
+import funkin.maki.fightfunk.util.FightUtil;
 import funkin.modding.module.Module;
 import funkin.play.PlayState;
 import funkin.play.components.HealthIcon;
@@ -86,11 +91,11 @@ class FightUI extends Module
 
 		if (game != null)
 		{
-			songCode = '${game.currentSong.id}-${game.currentVariation}'.toLowerCase();
+			songCode = '${game.currentSong.id}-${game.currentVariation}'.toLowerCase().trim();
 
-			if (FightConfig.fightSongs.contains(songCode) && !game.isMinimalMode)
+			if (FightUtil.isFightSong(songCode) && !game.isMinimalMode)
 			{
-				event = FightConfigManager.loadConfig(songCode, event);
+				event = FightChartManager.cleanse(songCode, event);
 				initFightUI();
 			}
 		}
@@ -121,8 +126,6 @@ class FightUI extends Module
 	public var statCenter:FlxBitmapText;
 
 	public var hpBar:FlxBar;
-	public final hpBarDefaultColor:FlxColor = 0xFFFFAA00;
-	public var hpBarColor:FlxColor = hpBarDefaultColor;
 	public var hpBarColorTween:FlxTween;
 
 	public var bfWireframe:WireframeShader;
@@ -140,6 +143,8 @@ class FightUI extends Module
 
 	public var activeEffects:Array<Dynamic> = [];
 
+	public var currentCameraZoom:Float = 0.5;
+
 	function initFightUI()
 	{
 		var j = 10;
@@ -150,9 +155,8 @@ class FightUI extends Module
 			j--;
 		}
 
-		final isDownscroll:Bool = #if mobile (Preferences.controlsScheme == FunkinHitboxControlSchemes.Arrows
-			&& !ControlsHandler.hasExternalInputDevice)
-			|| #end Preferences.downscroll;
+		final isDownscroll:Bool = (Preferences.controlsScheme == "Arrows" && !ControlsHandler.hasExternalInputDevice)
+			|| Preferences.downscroll;
 
 		UIEnabled = true;
 
@@ -211,7 +215,7 @@ class FightUI extends Module
 		hpBar.zIndex = (statBox.zIndex + 1) * 2;
 		hpBar.screenCenter(0x01);
 		hpBar.createFilledBar(0xFF3F3F3F, 0xFFFFFFFF);
-		hpBar.color = hpBarColor;
+		hpBar.color = FightUtil.hpBarDefaultColor;
 		hpBar.cameras = statBox.cameras;
 		hpBar.scrollFactor.set();
 		game.add(hpBar);
@@ -233,10 +237,10 @@ class FightUI extends Module
 			if (char?._data.renderType?.contains('atlas')) char?.useRenderTexture = true;
 
 		var baseName = (game.currentStage?.getBoyfriend()?.characterName ?? 'Victim').split('(')[0];
-		playerName = FightConfig.nameShortcuts.get(baseName.toLowerCase()) ?? baseName ?? 'Victim';
-		battle = FightConfig.getSongBattle(songCode);
+		playerName = FightUtil.nameShortcuts.get(baseName.toLowerCase()) ?? baseName ?? 'Victim';
+		battle = FightUtil.getSongBattle(songCode);
 
-		FightConfigManager.currentCameraZoom = FightConfigManager.defaultCurrentCameraZoom;
+		currentCameraZoom = FightUtil.defaultCameraZoom;
 		if (battle != null)
 		{
 			if (battle.camPositionStartOffset != null)
@@ -245,13 +249,13 @@ class FightUI extends Module
 				game.cameraFollowPoint.y += battle.camPositionStartOffset[1] ?? 0;
 			}
 
-			if (battle.camZoomStartOffset != null) FightConfigManager.currentCameraZoom += battle?.camZoomStartOffset ?? 0.0;
+			if (battle.camZoomStartOffset != null) currentCameraZoom += battle?.camZoomStartOffset ?? 0.0;
 		}
 
 		battleSequence = new SongSequence(FightEventManager.getBattleSequence(this, battle.events));
 		battleSequence.startTime = 0;
 
-		game.currentCameraZoom = FightConfigManager.currentCameraZoom;
+		game.currentCameraZoom = currentCameraZoom;
 
 		game.currentStage.zIndex = 300;
 
@@ -397,7 +401,7 @@ class FightUI extends Module
 		boxBGPlayer.alpha = boxBGPlayer.alpha * .25;
 		boxBGOpponent.alpha = boxBGOpponent.alpha * .25;
 
-		game.currentCameraZoom = FightConfigManager.currentCameraZoom;
+		game.currentCameraZoom = currentCameraZoom;
 		game.defaultHUDCameraZoom = 1;
 		game.hudCameraZoomIntensity = 0;
 
