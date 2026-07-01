@@ -65,6 +65,7 @@ class FightUI extends Module
 	{
 		super.onGameOver(event);
 
+		UIEnabled = false;
 		game.currentStage?.getBoyfriend()?.shader = null;
 		clearObjects();
 	}

@@ -27,11 +27,110 @@
             "step": 287,
             "length": 32,
             "type": "message",
-            "value": "\"DADDY\" USES: \"HEALTH DRAIN\""
+            "value": "\"DADDY\" USES: \"HEALTH DRAIN  (2x)\"!"
         },
         {
             "step": 287,
             "length": 32,
+            "type": "effect",
+            "value": {
+                "id": "karma",
+                "strength": 0.3
+            }
+        },
+        {
+            "step": 480,
+            "length": 32,
+            "type": "message",
+            "value": "\"DADDY\" GROWS MAD"
+        },
+        {
+            "step": 512,
+            "length": 64,
+            "type": "message",
+            "value": "\"DADDY\" USES: \"HEALTH DRAIN (2x)\"!"
+        },
+        {
+            "step": 512,
+            "length": 128,
+            "type": "effect",
+            "value": {
+                "id": "karma",
+                "strength": 0.3
+            }
+        },
+        {
+            "step": 751,
+            "length": 32,
+            "type": "message",
+            "value": "He's pissed."
+        },
+        {
+            "step": 767,
+            "length": 64,
+            "type": "message",
+            "value": "\"DADDY\" USES: \"HEALTH DRAIN (4x)\""
+        },
+        {
+            "step": 767,
+            "length": 128,
+            "type": "effect",
+            "value": {
+                "id": "karma",
+                "strength": 0.6
+            }
+        },
+        {
+            "step": 865,
+            "length": 64,
+            "type": "message",
+            "value": "\"DADDY\" GROWS TIRED..."
+        },
+        {
+            "step": 960,
+            "length": 32,
+            "type": "message",
+            "value": "FREESTYLE B)"
+        },
+        {
+            "step": 1407,
+            "length": 64,
+            "type": "message",
+            "value": "\"DADDY\" USES: \"HEALTH DRAIN (2x)\""
+        },
+        {
+            "step": 1407,
+            "length": 128,
+            "type": "effect",
+            "value": {
+                "id": "karma",
+                "strength": 0.3
+            }
+        },
+        {
+            "step": 1407,
+            "length": 64,
+            "type": "message",
+            "value": "\"DADDY\" USES: \"HEALTH DRAIN (2x)\""
+        },
+        {
+            "step": 1407,
+            "length": 128,
+            "type": "effect",
+            "value": {
+                "id": "karma",
+                "strength": 0.3
+            }
+        },
+        {
+            "step": 1535,
+            "length": 64,
+            "type": "message",
+            "value": "\"DADDY\" USES: \"HEALTH DRAIN\" ONE LAST TIME"
+        },
+        {
+            "step": 1535,
+            "length": 128,
             "type": "effect",
             "value": {
                 "id": "karma",

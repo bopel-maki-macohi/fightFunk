@@ -18,17 +18,20 @@ class FightBattleManager
 			switch (effect.id?.toLowerCase())
 			{
 				case 'karma', 'kr', 'drain', 'hp-drain', 'hpdrain':
-					final calc = effect.strength * ((holdNote) ? 0.1 : 1);
-
-					if (ui.hpBarColorTween != null)
+					if (!playerStrum)
 					{
-						ui.hpBarColorTween.cancel();
-						ui.hpBarColorTween?.destroy();
+						final calc = effect.strength * ((holdNote) ? 0.1 : 1);
+
+						if (ui.hpBarColorTween != null)
+						{
+							ui.hpBarColorTween.cancel();
+							ui.hpBarColorTween?.destroy();
+						}
+
+						ui.hpBarColorTween = FlxTween.color(ui.hpBar, 0.5 + (0.05 * FightTimeUtil.ms_to_s(event.note.length)), 0xFFFF00FF, ui.hpBarDefaultColor);
+
+						if (ui.game.health - calc > 0.05) ui.game.health -= calc;
 					}
-
-					ui.hpBarColorTween = FlxTween.color(ui.hpBar, 0.5 + (0.05 * FightTimeUtil.ms_to_s(event.note.length)), 0xFFFF00FF, ui.hpBarDefaultColor);
-
-					if (ui.game.health - calc > 0.05 && !playerStrum) ui.game.health -= calc;
 			}
 		}
 	}
