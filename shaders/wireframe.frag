@@ -11,20 +11,15 @@ void main()
     vec4 color = texture2D(bitmap, openfl_TextureCoordv);
 
     float average = (color.r + color.g + color.b) / 3.0;
-    float ogA = color.a;
 
     color.rgb = outline;
 
     if (average > threshold) {
-        color.a = 0.0;
+        color.rgb = filling;
     }
 
-    if (ogA > 0.0){
-        if (color.a == 0) {
-            color.a = ogA;
-            color.rgb = filling;
-        }
-        
+    if (color.a > 0.0)
+    {
         gl_FragColor = color;
     }
 }
