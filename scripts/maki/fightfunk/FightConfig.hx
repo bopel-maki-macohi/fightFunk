@@ -1,64 +1,41 @@
 package funkin.maki.fightfunk;
 
-import funkin.maki.fightfunk.FightTimeUtil;
-import funkin.play.PlayState;
+import haxe.Json;
+import flixel.math.FlxPoint;
 
 class FightConfig
 {
-	public static var currentCameraZoom:Float = 0.5;
+	public static var nameShortcuts:Map<String, String> = [
+		'boyfriend' => 'bf',
+		'daddy dearest' => 'dad',
+		'pico' => 'pico',
+		'girlfriend' => 'gf',
+	];
 
-	public static function loadConfig(songCode:String, event)
+	public static function getSongBattle(songCode:String):Dynamic
 	{
-		currentCameraZoom = 0.5;
+		var battle:Dynamic =
+			{
+				level: 0,
+				events: [
+					{
+						t: 0,
+						e: '',
+						v: Dynamic,
+					}
+				],
+				camZoomStartOffset: 0.0,
+				camPositionStartOffset: [0.0, 0.0],
+			};
 
-		trace('songCode: $songCode');
+		var path = Paths.json('battles/${songCode.toLowerCase()}');
+        var pathData:Dynamic = null;
 
-		var iterations = 10;
+        if (Assets.exists(path))
+        {
+            pathData = Json.parse(Assets.getText(path));
+        }
 
-		while (iterations > 0)
-		{
-			event.events = cleanseCamStuffs(event.events);
-			iterations--;
-		}
-
-		event = songStuff(songCode, event);
-
-		trace(event.events.length);
-
-		return event;
-	}
-
-	static function songStuff(songCode:String, event)
-	{
-		var game = PlayState.instance;
-
-		if (game == null || game.isMinimalMode)
-		{
-			return event;
-		}
-
-		var gf = game.currentStage?.getGirlfriend();
-
-		if (gf != null && gf.cameraFocusPoint != null)
-		{
-			game.cameraFollowPoint.setPosition(gf.cameraFocusPoint.x, gf.cameraFocusPoint.y);
-		}
-
-		return event;
-	}
-
-	static function cleanseCamStuffs(events)
-	{
-		var camEvents = ['focuscamera', 'zoomcamera', 'setcamerabop',];
-
-		for (eventCls in events)
-		{
-			var eventStr = eventCls.eventKind.toLowerCase();
-
-			if (camEvents.contains(eventStr)) events.remove(eventCls);
-			else trace(eventStr);
-		}
-
-		return events;
+		return pathData ?? battle;
 	}
 }

@@ -1,5 +1,7 @@
 package funkin.maki.fightfunk;
 
+import funkin.maki.fightfunk.FightConfigManager;
+import funkin.maki.fightfunk.FightConfig;
 import funkin.maki.fightfunk.WireframeShader;
 import funkin.modding.module.Module;
 import funkin.play.PlayState;
@@ -36,18 +38,22 @@ class FightUI extends Module
 		return PlayState.instance;
 	}
 
+	var songCode:String;
+
 	function onSongLoaded(event)
 	{
 		super.onSongLoaded(event);
 
+		songCode = null;
+
 		if (game != null)
 		{
-			var songCode = '${game.currentSong.id}-${game.currentVariation}'.toLowerCase();
+			songCode = '${game.currentSong.id}-${game.currentVariation}'.toLowerCase();
 
 			if (fightSongs.contains(songCode) && !game.isMinimalMode)
 			{
 				initFightUI();
-				event = FightConfig.loadConfig(songCode, event);
+				event = FightConfigManager.loadConfig(songCode, event);
 			}
 		}
 	}
@@ -86,6 +92,9 @@ class FightUI extends Module
 	var noteColors = [0xFFC24B99, 0xFF00FFFF, 0xFF12FA05, 0xFFF9393F];
 	var strumNoteWireframes:Array<WireframeShader> = [];
 	var noteWireframes:Array<WireframeShader> = [];
+
+	var playerName:String = 'Victim';
+	var battle:Dynamic;
 
 	function initFightUI()
 	{
@@ -233,7 +242,34 @@ class FightUI extends Module
 			if (char?._data.renderType?.contains('atlas')) char?.useRenderTexture = true;
 		}
 
+		var baseName = (game.currentStage?.getBoyfriend()?.characterName ?? 'Victim').split('(')[0];
+
+		playerName = FightConfig.nameShortcuts.get(baseName.toLowerCase()) ?? baseName ?? 'Victim';
+
+		battle = FightConfig.getSongBattle(songCode);
+
+		if (battle != null)
+		{
+			if (battle.camPositionStartOffset != null)
+			{
+				game.cameraFollowPoint.x += battle.camPositionStartOffset[0] ?? 0;
+				game.cameraFollowPoint.y += battle.camPositionStartOffset[1] ?? 0;
+			}
+
+			if (battle.camZoomStartOffset != null)
+			{
+				FightConfigManager.currentCameraZoom += battle?.camZoomStartOffset ?? 0.0;
+			}
+		}
+
 		game.refresh();
+	}
+
+	public var love(get, never):Int;
+
+	function get_love():Int
+	{
+		return battle?.level ?? 1;
 	}
 
 	// base: https://github.com/bopel-maki-macohi/funk_mondays_vslice/blob/develop/scripts/mondays/util/MondayUI.hx#L96C1-L121C3
@@ -339,7 +375,7 @@ class FightUI extends Module
 		boxBGPlayer.alpha = boxBGPlayer.alpha * .25;
 		boxBGOpponent.alpha = boxBGOpponent.alpha * .25;
 
-		game.currentCameraZoom = FightConfig.currentCameraZoom;
+		game.currentCameraZoom = FightConfigManager.currentCameraZoom;
 		game.defaultHUDCameraZoom = 1;
 		game.hudCameraZoomIntensity = 0;
 
@@ -377,8 +413,8 @@ class FightUI extends Module
 				note.shader = noteWireframes[note.noteDirection ?? note.direction];
 		}
 
-		stat1.text = ((game.currentStage?.getBoyfriend()?.characterName ?? 'Victim').split('(')[0]).toUpperCase();
-		stat2.text = 'Combo : ${Highscore.tallies.combo} | Max Combo : ${Highscore.tallies.maxCombo}'.toUpperCase();
+		stat1.text = '${playerName} LV. ${love}'.toUpperCase();
+		stat2.text = 'Combo : ${Highscore.tallies.combo}'.toUpperCase();
 
 		statCenter.text = 'RANDOM MESSAGE';
 
@@ -387,4 +423,6 @@ class FightUI extends Module
 
 		stat1.visible = stat2.visible = !statCenter.visible;
 	}
+
+	final tab = '    ';
 }
