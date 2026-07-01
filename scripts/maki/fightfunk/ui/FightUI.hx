@@ -23,21 +23,21 @@ class FightUI extends Module
 {
 	final tab = '    ';
 
-	var middleScroll = false;
+	public var middleScroll = false;
 
-	var UIEnabled:Bool = false;
-	var visiblePropNames:Array<String> = [];
+	public var UIEnabled:Bool = false;
+	public var visiblePropNames:Array<String> = [];
 
-	var game(get, never):PlayState;
+	public var game(get, never):PlayState;
 
 	function get_game():PlayState
 	{
 		return PlayState.instance;
 	}
 
-	var songCode:String;
+	public var songCode:String;
 
-	var elapsedTotal:Float = 0;
+	public var elapsedTotal:Float = 0;
 
 	override public function new()
 	{
@@ -96,40 +96,39 @@ class FightUI extends Module
 		if (!game?.isInCutscene && UIEnabled && game != null) updateFightUI();
 	}
 
-	var boxBGPlayer:FightBoxBG;
-	var boxBGOpponent:FightBoxBG;
+	public var boxBGPlayer:FlxBackdrop;
+	public var boxBGOpponent:FlxBackdrop;
 
-	var arrowBox:FightBoxUI;
-	var statBox:FightBoxUI;
+	public var arrowBox:FightBoxUI;
+	public var statBox:FightBoxUI;
 
-	var camStrum:FunkinCamera;
-	var camStrumYOffsets:Float = -25;
+	public var camStrum:FunkinCamera;
+	public var camStrumYOffsets:Float = -25;
 
-	var stat1:FlxBitmapText;
-	var stat2:FlxBitmapText;
-	var stat3:FlxBitmapText;
+	public var statTexts:Array<String> = ['', '', '',];
+	public var statLines:Array<FlxBitmapText> = [];
 
-	var statCenter:FlxBitmapText;
+	public var statCenter:FlxBitmapText;
 
-	var hpBar:FlxBar;
-	final hpBarDefaultColor:FlxColor = 0xFFFFAA00;
-	var hpBarColor:FlxColor = hpBarDefaultColor;
-	var hpBarColorTween:FlxTween;
+	public var hpBar:FlxBar;
+	public final hpBarDefaultColor:FlxColor = 0xFFFFAA00;
+	public var hpBarColor:FlxColor = hpBarDefaultColor;
+	public var hpBarColorTween:FlxTween;
 
-	var bfWireframe:WireframeShader;
-	var dadWireframe:WireframeShader;
-	var damselWireframe:WireframeShader;
+	public var bfWireframe:WireframeShader;
+	public var dadWireframe:WireframeShader;
+	public var damselWireframe:WireframeShader;
 
-	var noteColors = [0xFFC24B99, 0xFF00FFFF, 0xFF12FA05, 0xFFF9393F];
-	var strumNoteWireframes:Array<WireframeShader> = [];
-	var noteWireframes:Array<WireframeShader> = [];
+	public var noteColors = [0xFFC24B99, 0xFF00FFFF, 0xFF12FA05, 0xFFF9393F];
+	public var strumNoteWireframes:Array<WireframeShader> = [];
+	public var noteWireframes:Array<WireframeShader> = [];
 
-	var playerName:String = 'Victim';
+	public var playerName:String = 'Victim';
 
-	var battle:Dynamic;
-	var battleSequence:SongSequence;
+	public var battle:Dynamic;
+	public var battleSequence:SongSequence;
 
-	var activeEffects:Array<Dynamic> = [];
+	public var activeEffects:Array<Dynamic> = [];
 
 	function initFightUI()
 	{
@@ -148,11 +147,11 @@ class FightUI extends Module
 		game.remove(game.iconP1);
 		game.remove(game.iconP2);
 
-		boxBGPlayer = new FightBoxBG(0xff31ff87);
+		boxBGPlayer = FightBoxBG.create(0xff31ff87);
 		boxBGPlayer.zIndex = 10;
 		game.add(boxBGPlayer);
 
-		boxBGOpponent = new FightBoxBG(0xffff1d5a);
+		boxBGOpponent = FightBoxBG.create(0xffff1d5a);
 		boxBGOpponent.zIndex = 0;
 		game.add(boxBGOpponent);
 
@@ -175,43 +174,30 @@ class FightUI extends Module
 
 		arrowBox.cameras = [camStrum];
 
-		stat1 = makeExtraUIText(stat1);
-		game.add(stat1);
+		var i = statTexts.length;
 
-		stat1.x = 10;
-		stat1.y = statBox.y + 10;
-		stat1.zIndex = statBox.zIndex + 1;
+		while (i > 0)
+		{
+			addStatText();
+			i--;
+		}
 
-		stat2 = makeExtraUIText(stat2);
-		game.add(stat2);
-
-		stat2.x = stat1.x;
-		stat2.y = stat1.y + stat1.height + 10;
-		stat2.zIndex = stat1.zIndex + 1;
-
-		stat3 = makeExtraUIText(stat3);
-		game.add(stat3);
-
-		stat3.x = stat2.x;
-		stat3.y = stat2.y + stat2.height + 10;
-		stat3.zIndex = stat2.zIndex + 1;
-
-		statCenter = makeExtraUIText(statCenter);
-		game.add(statCenter);
-
+		statCenter = makeUIText(statCenter);
 		statCenter.screenCenter(0x01);
-		statCenter.zIndex = stat3.zIndex + 1;
+		statCenter.zIndex = statBox.zIndex * 2;
 
 		statCenter.visible = false;
 
+		game.add(statCenter);
+
 		final b = game.healthBar;
 
-		hpBar = new FlxBar(stat1.x, statBox.y + statBox.height - 40, null, Math.floor(statBox.width * 0.9), 25, game, 'healthLerp', b.min, b.max, false);
-		hpBar.zIndex = stat1.zIndex * 2;
+		hpBar = new FlxBar(10, statBox.y + statBox.height - 40, null, Math.floor(statBox.width * 0.9), 25, game, 'healthLerp', b.min, b.max, false);
+		hpBar.zIndex = (statBox.zIndex + 1) * 2;
 		hpBar.screenCenter(0x01);
 		hpBar.createFilledBar(0xFF3F3F3F, 0xFFFFFFFF);
 		hpBar.color = hpBarColor;
-		hpBar.cameras = stat1.cameras;
+		hpBar.cameras = statBox.cameras;
 		hpBar.scrollFactor.set();
 		game.add(hpBar);
 
@@ -247,7 +233,7 @@ class FightUI extends Module
 			if (battle.camZoomStartOffset != null) FightConfigManager.currentCameraZoom += battle?.camZoomStartOffset ?? 0.0;
 		}
 
-		battleSequence = new SongSequence(FightEventManager.getBattleSequence(battle.events));
+		battleSequence = new SongSequence(FightEventManager.getBattleSequence(this, battle.events));
 		battleSequence.startTime = 0;
 
 		game.currentCameraZoom = FightConfigManager.currentCameraZoom;
@@ -288,35 +274,26 @@ class FightUI extends Module
 	{
 		super.onNoteHit(event);
 
-		if (game == null) return;
+		FightBattleManager.processNoteHit(this, event);
+	}
 
-		var playerStrum = Math.floor(event.note.noteData.data / 4) == 0;
-		var holdNote = event.note.length <= Constants.HOLD_DROP_PENALTY_THRESHOLD_MS;
+	function addStatText()
+	{
+		var newLine:FlxBitmapText;
+		newLine = makeUIText(newLine);
+		newLine.text = '_';
 
-		for (effect in activeEffects)
-		{
-			if (effect.id == null) continue;
+		newLine.ID = statLines.length;
+		newLine.x = 10;
+		newLine.y = statBox.y + 10 + (newLine.height * newLine.ID);
+		newLine.zIndex = statBox.zIndex + 1 + (newLine.height * (newLine.ID + 1));
 
-			switch (effect.id?.toLowerCase())
-			{
-				case 'karma', 'kr', 'drain', 'hp-drain', 'hpdrain':
-					final calc = effect.strength * ((holdNote) ? 0.1 : 1);
-
-					if (hpBarColorTween != null)
-					{
-						hpBarColorTween.cancel();
-						hpBarColorTween?.destroy();
-					}
-
-					hpBarColorTween = FlxTween.color(hpBar, 0.5 + (0.05 * FightTimeUtil.ms_to_s(event.note.length)), 0xFFFF00FF, hpBarDefaultColor);
-
-					if (game.health - calc > 0.05 && !playerStrum) game.health -= calc;
-			}
-		}
+		game.add(newLine);
+		statLines.push(newLine);
 	}
 
 	// base: https://github.com/bopel-maki-macohi/funk_mondays_vslice/blob/develop/scripts/mondays/util/MondayUI.hx#L96C1-L121C3
-	function makeExtraUIText(baseText:FlxBitmapText)
+	function makeUIText(baseText:FlxBitmapText)
 	{
 		var newText = baseText;
 
@@ -360,7 +337,12 @@ class FightUI extends Module
 
 	function clearObjects()
 	{
-		for (object in [boxBGPlayer, boxBGOpponent, arrowBox, statBox, stat1, hpBar])
+		var objs = [boxBGPlayer, boxBGOpponent, arrowBox, statBox, hpBar];
+
+		for (line in statLines)
+			objs.push(line);
+
+		for (object in objs)
 		{
 			if (object != null)
 			{
@@ -369,6 +351,7 @@ class FightUI extends Module
 				object = null;
 			}
 		}
+
 		noteWireframes = [];
 		strumNoteWireframes = [];
 
@@ -397,6 +380,8 @@ class FightUI extends Module
 
 		for (member in game.currentStage?.members)
 		{
+			if (!member.visible) continue;
+
 			if (game.currentStage?.getBoyfriend() != member) if (game.currentStage?.getDad() != member) if (game.currentStage?.getGirlfriend() != member)
 			{
 				member.active = false;
@@ -406,6 +391,7 @@ class FightUI extends Module
 
 		for (name => prop in game.currentStage?.namedProps)
 		{
+			if (prop.visible) continue;
 			if (visiblePropNames.contains(name)) prop.active = prop.visible = true;
 		}
 
@@ -427,14 +413,20 @@ class FightUI extends Module
 				note.shader = noteWireframes[note.noteDirection ?? note.direction];
 		}
 
-		stat1.text = '${playerName} ${tab} LV : ${battle.level}'.toUpperCase();
-		stat2.text = 'Score : ' + '${Math.floor(game.songScore)}'.toUpperCase();
-		stat3.text = 'Misses : ' + '${Highscore.tallies.bad + Highscore.tallies.shit + Highscore.tallies.missed}' + ''.toUpperCase();
+		if (statCenter != null)
+		{
+			statCenter.y = statBox.getGraphicMidpoint().y - 10 - (statCenter.height / 2);
+			statCenter.screenCenter(0x01);
+		}
 
-		statCenter.y = statBox.getGraphicMidpoint().y - 10 - (statCenter.height / 2);
+		statTexts[0] = '${playerName} ${tab} LV : ${battle?.level ?? 1}'.toUpperCase();
+		statTexts[1] = 'Score : ' + '${Math.floor(game.songScore)}'.toUpperCase();
+		statTexts[2] = 'Misses : ' + '${Highscore.tallies.bad + Highscore.tallies.shit + Highscore.tallies.missed}' + ''.toUpperCase();
 
-		statCenter.screenCenter(0x01);
-
-		stat1.visible = stat2.visible = stat3.visible = !statCenter.visible;
+		for (line in statLines)
+		{
+			line.text = statTexts[line.ID];
+			line.visible = !statCenter.visible;
+		}
 	}
 }

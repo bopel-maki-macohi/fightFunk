@@ -1,12 +1,14 @@
 package funkin.maki.fightfunk;
 
+import funkin.Conductor;
+
 class FightEventManager
 {
-	public static function getBattleSequence(events:Array<Dynamic>)
+	public static function getBattleSequence(ui:FightUI, events:Array<Dynamic>)
 	{
 		var sequence = [];
 
-		for (event in events)
+		if (ui != null) for (event in events)
 		{
 			if (event == null) continue;
 			if (event.step == null) continue;
@@ -28,24 +30,24 @@ class FightEventManager
 			{
 				case 'message':
 					roadmapEntry.callback = function() {
-						statCenter.text = (event?.value ?? 'COOL SWAG').toUpperCase();
-						statCenter.screenCenter(0x01);
-						statCenter.visible = true;
+						ui.statCenter.text = (event?.value ?? 'COOL SWAG').toUpperCase();
+						ui.statCenter.screenCenter(0x01);
+						ui.statCenter.visible = true;
 					};
 
 					destinationEntry.callback = function() {
-						statCenter.visible = false;
+						ui.statCenter.visible = false;
 					};
 
 				case 'effect':
 					if (event.value != null && event.value.id != null)
 					{
 						roadmapEntry.callback = function() {
-							activeEffects.push(event.value);
+							ui.activeEffects.push(event.value);
 						};
 
 						destinationEntry.callback = function() {
-							activeEffects.remove(event.value);
+							ui.activeEffects.remove(event.value);
 						};
 					}
 			}

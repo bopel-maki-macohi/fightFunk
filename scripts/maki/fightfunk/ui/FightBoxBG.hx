@@ -3,18 +3,18 @@ package funkin.maki.fightfunk.ui;
 import flixel.addons.display.FlxBackdrop;
 import flixel.util.FlxColor;
 
-class FightBoxBG extends FlxBackdrop
+class FightBoxBG
 {
-	override public function new(color:FlxColor)
-	{
-		super(Paths.image('ui/fight/box'));
+    public static function create(newColor:FlxColor):FlxBackdrop
+    {
+        var bg = new FlxBackdrop(Paths.image('ui/fight/box'));
+        bg.color = newColor ?? 0xFFFFFFFF;
 
-		this.color = color;
-		this.velocity.set(20, -20);
-        
-		this.scale.set(2, 2);
-		this.updateHitbox();
-        
-		this.blend = 0;
-	}
+		bg.scale.set(2, 2);
+		bg.updateHitbox();
+
+		bg.blend = 0;
+
+        return bg;
+    }
 }

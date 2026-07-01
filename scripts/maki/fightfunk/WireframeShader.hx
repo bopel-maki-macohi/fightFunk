@@ -7,7 +7,7 @@ import flixel.addons.display.FlxRuntimeShader;
 **/
 class WireframeShader extends FlxRuntimeShader
 {
-	public function new(outlineColor:Int)
+	public function new(?outlineColor:Int)
 	{
 		var fragText:String = Assets.getText(Paths.frag('wireframe'));
 		super(fragText);
