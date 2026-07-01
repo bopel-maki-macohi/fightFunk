@@ -439,7 +439,7 @@ class FightUI extends Module
 
 		if (statCenter != null)
 		{
-			statCenter.y = statBox.getGraphicMidpoint().y - 10 - (statCenter.height / 2);
+			statCenter.y = statBox.getGraphicMidpoint().y - (statCenter.height / 1) - 10;
 			statCenter.screenCenter(0x01);
 		}
 
