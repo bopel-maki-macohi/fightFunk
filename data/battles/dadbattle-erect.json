@@ -1,4 +1,14 @@
 {
     "level": 1,
-    "camZoomStartOffset": -0.1
+    "camZoomStartOffset": -0.1,
+    "events": [
+        {
+            "t": 0,
+            "l": 2500,
+            "e": "message",
+            "v": {
+                "message": "DADDY DEAREST INITIATES THE BATTLE!"
+            }
+        }
+    ]
 }
