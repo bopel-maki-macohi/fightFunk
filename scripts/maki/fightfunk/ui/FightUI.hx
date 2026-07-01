@@ -69,6 +69,14 @@ class FightUI extends Module
 		clearObjects();
 	}
 
+	function onSongRetry(event:ScriptEvent):Void
+	{
+		super.onSongRetry(event);
+
+		clearObjects();
+		if (UIEnabled) initFightUI();
+	}
+
 	function onSongLoaded(event)
 	{
 		super.onSongLoaded(event);
@@ -133,7 +141,13 @@ class FightUI extends Module
 
 	function initFightUI()
 	{
-		clearObjects();
+		var j = 10;
+
+		while (j > 0)
+		{
+			clearObjects();
+			j--;
+		}
 
 		final isDownscroll:Bool = #if mobile (Preferences.controlsScheme == FunkinHitboxControlSchemes.Arrows
 			&& !ControlsHandler.hasExternalInputDevice)
@@ -175,12 +189,11 @@ class FightUI extends Module
 
 		arrowBox.cameras = [camStrum];
 
-		var i = statTextsCount;
-
-		while (i > 0)
+		var i = 0;
+		while (i < 3)
 		{
-			addStatText();
-			i--;
+			addStatText(i);
+			i++;
 		}
 
 		statCenter = makeUIText(statCenter);
@@ -278,13 +291,13 @@ class FightUI extends Module
 		FightBattleManager.processNoteHit(this, event);
 	}
 
-	function addStatText()
+	function addStatText(i)
 	{
 		var newLine:FlxBitmapText;
 		newLine = makeUIText(newLine);
 		newLine.text = '_';
 
-		newLine.ID = statLines.length;
+		newLine.ID = i;
 		newLine.x = 10;
 		newLine.y = statBox.y + 10 + (newLine.height * newLine.ID);
 		newLine.zIndex = statBox.zIndex + 1 + (newLine.height * (newLine.ID + 1));
@@ -339,9 +352,19 @@ class FightUI extends Module
 	function clearObjects()
 	{
 		var objs = [boxBGPlayer, boxBGOpponent, arrowBox, statBox, hpBar];
+		var objArrays = [statLines];
 
-		for (line in statLines)
-			objs.push(line);
+		for (array in objArrays)
+		{
+			for (obj in array)
+			{
+				array.remove(obj);
+				game?.remove(obj);
+				obj.destroy();
+			}
+
+			array = [];
+		}
 
 		for (object in objs)
 		{
