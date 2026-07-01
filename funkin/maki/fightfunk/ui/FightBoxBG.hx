@@ -15,6 +15,8 @@ class FightBoxBG
 
 		bg.blend = 0;
 
+        bg.alpha = 0;
+
         return bg;
     }
 }

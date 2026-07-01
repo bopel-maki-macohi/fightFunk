@@ -31,6 +31,7 @@ class FightUI extends Module
 	public var middleScroll = false;
 
 	public var UIEnabled:Bool = false;
+	public var visibleProps:Array<Dynamic> = [];
 	public var visiblePropNames:Array<String> = [];
 
 	public var game(get, never):PlayState;
@@ -108,7 +109,30 @@ class FightUI extends Module
 
 		elapsedTotal += event.elapsed;
 
-		if (!game?.isInCutscene && UIEnabled && game != null) updateFightUI();
+		if (UIEnabled && game != null)
+		{
+			event = FightEventManager.onUpdate(this, event);
+			if (!game?.isInCutscene)
+			{
+				updateFightUI();
+				FightEventManager.onUpdateFightUI(this);
+			}
+		}
+	}
+
+	function onNoteHit(event)
+	{
+		super.onNoteHit(event);
+
+		if (UIEnabled) event = FightEventManager.onNoteHit(this, FightBattleManager.processNoteHit(this, event));
+	}
+
+	function onNoteMiss(event)
+	{
+		super.onNoteMiss(event);
+
+		// if (UIEnabled) event = FightEventManager.onNoteMiss(this, FightBattleManager.processNoteHit(this, event));
+		if (UIEnabled) event = FightEventManager.onNoteMiss(this, event);
 	}
 
 	public var boxBGPlayer:FlxBackdrop;
@@ -253,7 +277,7 @@ class FightUI extends Module
 			if (battle.camZoomStartOffset != null) currentCameraZoom += battle?.camZoomStartOffset ?? 0.0;
 		}
 
-		battleSequence = new SongSequence(FightEventManager.getBattleSequence(this, battle.events));
+		battleSequence = new SongSequence(FightBattleManager.getBattleSequence(this, battle.events));
 		battleSequence.startTime = 0;
 
 		game.currentCameraZoom = currentCameraZoom;
@@ -287,14 +311,9 @@ class FightUI extends Module
 			i++;
 		}
 
+		FightEventManager.onFightUIInit(this);
+
 		game.refresh();
-	}
-
-	function onNoteHit(event)
-	{
-		super.onNoteHit(event);
-
-		FightBattleManager.processNoteHit(this, event);
 	}
 
 	function addStatText(i)
@@ -390,17 +409,24 @@ class FightUI extends Module
 
 	function updateFightUI()
 	{
-		boxBGPlayer.velocity.x = 40 * (Math.cos(elapsedTotal) * (14 * 0.25));
-		boxBGPlayer.velocity.y = 40 * (Math.sin(elapsedTotal) * (25 * 0.25));
+		var playerAlpha = (game?.healthBar.value / 2) * .25;
+		var opAlpha = (1 - (playerAlpha * 4)) * .25;
 
-		boxBGOpponent.velocity.x = -40 * (Math.sin(elapsedTotal) * (5 * 0.25));
-		boxBGOpponent.velocity.y = -40 * (Math.cos(elapsedTotal) * (7 * 0.25));
+		if (boxBGPlayer != null)
+		{
+			boxBGPlayer.velocity.x = 40 * (Math.cos(elapsedTotal) * (14 * 0.25));
+			boxBGPlayer.velocity.y = 40 * (Math.sin(elapsedTotal) * (25 * 0.25));
 
-		boxBGPlayer.alpha = (game.healthBar.value / 2);
-		boxBGOpponent.alpha = 1 - boxBGPlayer.alpha;
+			boxBGPlayer.alpha = FlxMath.lerp(boxBGPlayer.alpha, playerAlpha, .15);
+		}
 
-		boxBGPlayer.alpha = boxBGPlayer.alpha * .25;
-		boxBGOpponent.alpha = boxBGOpponent.alpha * .25;
+		if (boxBGOpponent != null)
+		{
+			boxBGOpponent.velocity.x = -40 * (Math.sin(elapsedTotal) * (5 * 0.25));
+			boxBGOpponent.velocity.y = -40 * (Math.cos(elapsedTotal) * (7 * 0.25));
+
+			boxBGOpponent.alpha = FlxMath.lerp(boxBGOpponent.alpha, opAlpha, .15);
+		}
 
 		game.currentCameraZoom = currentCameraZoom;
 		game.defaultHUDCameraZoom = 1;
@@ -410,7 +436,9 @@ class FightUI extends Module
 
 		for (member in game.currentStage?.members)
 		{
+			if (member == null) continue;
 			if (!member.visible) continue;
+			if (visibleProps.contains(member)) continue;
 
 			if (game.currentStage?.getBoyfriend() != member) if (game.currentStage?.getDad() != member) if (game.currentStage?.getGirlfriend() != member)
 			{

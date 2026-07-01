@@ -7,7 +7,43 @@
             "step": 0,
             "length": 32,
             "type": "message",
-            "value": "\"DARNELL\" INITIATES THE BATTLE!"
+            "value": "THIS WAS A LONG TIME COMING..."
+        },
+        {
+            "step": 107,
+            "length": 16,
+            "type": "message",
+            "value": "\"DARNELL\" PREPS A CAN!"
+        },
+        {
+            "step": 490,
+            "length": 16,
+            "type": "message",
+            "value": "GET READY..."
+        },
+        {
+            "step": 619,
+            "length": 16,
+            "type": "message",
+            "value": "GET READY..."
+        },
+        {
+            "step": 972,
+            "length": 16,
+            "type": "message",
+            "value": "GET READY..."
+        },
+        {
+            "step": 1035,
+            "length": 16,
+            "type": "message",
+            "value": "GET READY..."
+        },
+        {
+            "step": 1420,
+            "length": 16,
+            "type": "message",
+            "value": "GET READY..."
         }
     ]
 }
