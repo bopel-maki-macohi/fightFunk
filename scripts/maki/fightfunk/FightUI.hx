@@ -80,6 +80,7 @@ class FightUI extends Module
 
 	var stat1:FlxBitmapText;
 	var stat2:FlxBitmapText;
+	var stat3:FlxBitmapText;
 
 	var statCenter:FlxBitmapText;
 
@@ -203,11 +204,18 @@ class FightUI extends Module
 		stat2.y = stat1.y + stat1.height + 10;
 		stat2.zIndex = stat1.zIndex + 1;
 
+		stat3 = makeExtraUIText(stat3);
+		game.add(stat3);
+
+		stat3.x = stat2.x;
+		stat3.y = stat2.y + stat2.height + 10;
+		stat3.zIndex = stat2.zIndex + 1;
+
 		statCenter = makeExtraUIText(statCenter);
 		game.add(statCenter);
 
 		statCenter.screenCenter(0x01);
-		statCenter.zIndex = stat2.zIndex + 1;
+		statCenter.zIndex = stat3.zIndex + 1;
 
 		statCenter.visible = false;
 
@@ -413,15 +421,16 @@ class FightUI extends Module
 				note.shader = noteWireframes[note.noteDirection ?? note.direction];
 		}
 
-		stat1.text = '${playerName} LV. ${love}'.toUpperCase();
-		stat2.text = 'Combo : ${Highscore.tallies.combo}'.toUpperCase();
+		stat1.text = '${playerName} ${tab} LV : ${love}'.toUpperCase();
+		stat2.text = 'Score : ' + '${Math.floor(game.songScore)}'.toUpperCase();
+		stat3.text = 'Misses : ' + '${Highscore.tallies.bad + Highscore.tallies.shit + Highscore.tallies.missed}' + ''.toUpperCase();
 
 		statCenter.text = 'RANDOM MESSAGE';
-
-		statCenter.screenCenter(0x01);
 		statCenter.y = statBox.getGraphicMidpoint().y - 10 - (statCenter.height / 2);
 
-		stat1.visible = stat2.visible = !statCenter.visible;
+		statCenter.screenCenter(0x01);
+
+		stat1.visible = stat2.visible = stat3.visible = !statCenter.visible;
 	}
 
 	final tab = '    ';
