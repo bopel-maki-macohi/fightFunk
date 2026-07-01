@@ -421,7 +421,7 @@ class FightUI extends Module
 
 		statTexts[0] = '${playerName} ${tab} LV : ${battle?.level ?? 1}'.toUpperCase();
 		statTexts[1] = 'Score : ' + '${Math.floor(game.songScore)}'.toUpperCase();
-		statTexts[2] = 'Misses : ' + '${Highscore.tallies.bad + Highscore.tallies.shit + Highscore.tallies.missed}' + ''.toUpperCase();
+		statTexts[2] = 'Combo Breaks : ' + '${Highscore.tallies.bad + Highscore.tallies.shit + Highscore.tallies.missed}' + ''.toUpperCase();
 
 		for (line in statLines)
 		{
