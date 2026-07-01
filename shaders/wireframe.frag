@@ -2,9 +2,9 @@
 
 #pragma header
 
-uniform vec3 filling = vec3(0.0, 0.0, 0.0);
-uniform vec3 outline = vec3(1.0, 1.0, 1.0);
-uniform float threshold = 0.1;
+uniform vec3 filling;
+uniform vec3 outline;
+uniform float threshold;
 
 void main()
 {
