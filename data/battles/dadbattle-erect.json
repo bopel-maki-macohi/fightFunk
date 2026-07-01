@@ -12,7 +12,7 @@
             "step": 128,
             "length": 64,
             "type": "message",
-            "value": "\"DADDY\" USES: \"COMBO\""
+            "value": "\"DADDY\" USES: \"HEALTH DRAIN\""
         },
         {
             "step": 128,
@@ -21,6 +21,21 @@
             "value": {
                 "id": "karma",
                 "strength": 0.15
+            }
+        },
+        {
+            "step": 287,
+            "length": 32,
+            "type": "message",
+            "value": "\"DADDY\" USES: \"HEALTH DRAIN\""
+        },
+        {
+            "step": 287,
+            "length": 32,
+            "type": "effect",
+            "value": {
+                "id": "karma",
+                "strength": 0.3
             }
         }
     ]
