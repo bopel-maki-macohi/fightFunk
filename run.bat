@@ -1,3 +1,3 @@
 @echo off
-updateBuild.bat
+updateBuild.bat %*
 cd ../.. && cls && funkin && cd mods/fightFunk
