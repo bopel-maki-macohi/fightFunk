@@ -315,8 +315,7 @@ class FightUI extends Module
 		resetCamera();
 
 		battleSequence = new SongSequence(FightBattleManager.getBattleSequence(this, battle.events), 1, false);
-		battleSequence.startTime = 0;
-		game.startTimestamp = battleSequence.startTime;
+		battleSequence.startTime = game.startTimestamp;
 
 		game.currentCameraZoom = currentCameraZoom;
 

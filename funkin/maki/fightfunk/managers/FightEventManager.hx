@@ -348,7 +348,6 @@ class FightEventManager
 								ease: FlxEase.expoOut,
 							}));
 
-
 						ui.tweens.push(FlxTween.tween(gf, {alpha: damsel_ogAlpha}, 2,
 							{
 								ease: FlxEase.expoOut,
