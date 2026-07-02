@@ -1,5 +1,6 @@
 {
 	"camZoomStartOffset": -0.15,
+	"camPositionStartOffset": [0,100],
 	"events": [
 		{
 			"step": 0,
@@ -16,6 +17,12 @@
 				"increase": 0.25,
 				"ease": "expoIn"
 			}
+		},
+		{
+			"step": 512,
+			"length": 256,
+			"type": "message",
+			"value": ""
 		},
 		{
 			"step": 512,
