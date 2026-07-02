@@ -17,7 +17,7 @@ class FightEventManager
 	static var weekend1_explosions = [];
 	static var weekend1_canWireframe:WireframeShader;
 
-	static function weekend1_applyShaders(ui)
+	static function weekend1_2hot_applyShaders(ui)
 	{
 		for (can in ui.game?.currentSong?.spawnedCans)
 		{
@@ -106,15 +106,15 @@ class FightEventManager
 		if (ui.game != null) switch (event?.note?.kind)
 		{
 			case "weekend-1-lightcan":
-				weekend1_applyShaders(ui);
+				weekend1_2hot_applyShaders(ui);
 				FunkinSound.playOnce(Paths.sound('Darnell_Lighter'), 1.0);
 
 			case "weekend-1-kickcan":
-				weekend1_applyShaders(ui);
+				weekend1_2hot_applyShaders(ui);
 				FunkinSound.playOnce(Paths.sound('Kick_Can_UP'), 1.0);
 
 			case "weekend-1-kneecan":
-				weekend1_applyShaders(ui);
+				weekend1_2hot_applyShaders(ui);
 				FunkinSound.playOnce(Paths.sound('Kick_Can_FORWARD'), 1.0);
 			case "weekend-1-cockgun": // lol
 				weekend1_cock = true;
@@ -174,7 +174,7 @@ class FightEventManager
 
 		if (ui.game?.currentSong?.id == '2hot')
 		{
-			weekend1_applyShaders(ui);
+			weekend1_2hot_applyShaders(ui);
 		}
 	}
 
@@ -196,7 +196,12 @@ class FightEventManager
 			ui.visibleProps.push(gf.abotViz);
 		}
 
-		if (PlayStatePlaylist.campaignId == 'weekend1')
+		if (ui.game.currentStage.id == 'phillyTrainErect')
+		{
+			ui.game?.currentStage.trainsEnabled = false;
+		}
+
+		if (ui.game.currentStage.id == 'phillyStreets')
 		{
 			weekend1_canWireframe = new WireframeShader(0xFFFF0000);
 			weekend1_canWireframe.setFillingColor(0xFFFF0000);
