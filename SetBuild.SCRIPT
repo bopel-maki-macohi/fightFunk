@@ -68,6 +68,8 @@ class GitShit
 			}
 		}
 
+		trace(output);
+
 		// Generates a string expression
 		return macro $v{output.length > 0};
 	}
