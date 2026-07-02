@@ -2,16 +2,10 @@
 	"camZoomStartOffset": -0.15,
 	"events": [
 		{
-			"length": 37,
-			"step": -5,
+			"length": 32,
+			"step": 0,
 			"type": "message",
 			"value": "It's somebody you used to know..."
-		},
-		{
-			"step": 0,
-			"length": 0,
-			"type": "",
-			"value": null
 		}
 	],
 	"level": 2
