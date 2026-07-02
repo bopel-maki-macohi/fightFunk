@@ -9,7 +9,7 @@ class SetBuild
 		var build = GitShit.getGitCommitNumber() + (localChanges ? 1 : 0);
 
 		trace('localChanges: $localChanges');
-		trace('build: $build');
+		trace('commit number: $build');
 
 		var meta = Json.parse(File.getContent('_polymod_meta.json'));
 
