@@ -162,6 +162,7 @@ class FightUI extends Module
 		for (tween in tweens)
 			if (tween != null) tween.active = false;
 
+		if (playerBGBoxTween != null) playerBGBoxTween.active = false;
 		if (hpBarColorTween != null) hpBarColorTween.active = false;
 	}
 
@@ -172,10 +173,13 @@ class FightUI extends Module
 		for (tween in tweens)
 			if (tween != null) tween.active = true;
 
+		if (playerBGBoxTween != null) playerBGBoxTween.active = true;
 		if (hpBarColorTween != null) hpBarColorTween.active = true;
 	}
 
 	public var boxBGPlayer:FlxBackdrop;
+	public var playerBGBoxTween:FlxTween;
+
 	public var boxBGOpponent:FlxBackdrop;
 
 	public var arrowBox:FightBoxUI;

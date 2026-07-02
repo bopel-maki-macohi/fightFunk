@@ -19,6 +19,8 @@ using StringTools;
 
 class FightEventManager
 {
+	static var blammed_emotionalMoment = false;
+
 	static var weekend1_cock = false;
 	static var weekend1_explosions = [];
 	static var weekend1_canWireframe:WireframeShader;
@@ -82,8 +84,36 @@ class FightEventManager
 
 	static var nene_wireframeFilled:WireframeShader;
 
+	static function flashPlayerBG(tempColor, ui)
+	{
+		if (ui == null) return;
+		if (ui.boxBGPlayer == null) return;
+
+		if (ui.playerBGBoxTween != null)
+		{
+			ui.playerBGBoxTween.cancel();
+			ui.playerBGBoxTween.destroy();
+		}
+
+		ui.playerBGBoxTween = FlxTween.color(ui.boxBGPlayer, 0.15, tempColor, ui.boxBGPlayer.color,
+			{
+				startDelay: .25,
+				ease: FlxEase.expoOut,
+
+				onComplete: function(tween) {
+					ui.playerBGBoxTween.cancel();
+					ui.playerBGBoxTween?.destroy();
+				}
+			});
+	}
+
 	public static function onNoteMiss(ui, event)
 	{
+		var playerStrum = Math.floor(event.note.noteData.data / 4) == 0;
+
+		var tempColor = 0xFF6C8CFD;
+		// if (playerStrum && !blammed_emotionalMoment) flashPlayerBG(tempColor, ui);
+
 		if (ui.game != null)
 		{
 			switch (event?.note?.kind)
@@ -111,53 +141,74 @@ class FightEventManager
 
 	public static function onNoteHit(ui, event)
 	{
-		if (ui.game != null) switch (event?.note?.kind)
+		var tempColor = 0xFFFFFD5C;
+
+		switch (event.judgement?.toLowerCase())
 		{
-			case "weekend-1-lightcan":
-				weekend1_2hot_applyShaders(ui);
-				FunkinSound.playOnce(Paths.sound('Darnell_Lighter'), 1.0);
+			case 'sick':
+				tempColor = 0xFFFFAFFF;
+			case 'good':
+				tempColor = 0xFFFFFFBC;
+			// tempColor = 0xFFFCFFFF;
+			case 'bad':
+				tempColor = 0xFFFFAB86;
+			case 'shit':
+				tempColor = 0xFF6C8CFD;
+		}
 
-			case "weekend-1-kickcan":
-				weekend1_2hot_applyShaders(ui);
-				FunkinSound.playOnce(Paths.sound('Kick_Can_UP'), 1.0);
+		var playerStrum = Math.floor(event.note.noteData.data / 4) == 0;
+		// if (playerStrum && !blammed_emotionalMoment) flashPlayerBG(tempColor, ui);
 
-			case "weekend-1-kneecan":
-				weekend1_2hot_applyShaders(ui);
-				FunkinSound.playOnce(Paths.sound('Kick_Can_FORWARD'), 1.0);
-			case "weekend-1-cockgun": // lol
-				weekend1_cock = true;
-				new FlxTimer().start(1.0, function() {
-					weekend1_cock = false;
-				});
-			case "weekend-1-firegun":
-				if (weekend1_cock)
-				{
-					trace('Firing gun!');
+		if (ui.game != null)
+		{
+			switch (event?.note?.kind)
+			{
+				case "weekend-1-lightcan":
+					weekend1_2hot_applyShaders(ui);
+					FunkinSound.playOnce(Paths.sound('Darnell_Lighter'), 1.0);
 
-					var splode:FunkinSprite;
-					splode = weekend1_explosion_shot(function(explodeEZ) {
-						ui.game?.currentStage?.remove(explodeEZ);
-						weekend1_explosions.remove(splode);
+				case "weekend-1-kickcan":
+					weekend1_2hot_applyShaders(ui);
+					FunkinSound.playOnce(Paths.sound('Kick_Can_UP'), 1.0);
+
+				case "weekend-1-kneecan":
+					weekend1_2hot_applyShaders(ui);
+					FunkinSound.playOnce(Paths.sound('Kick_Can_FORWARD'), 1.0);
+				case "weekend-1-cockgun": // lol
+					weekend1_cock = true;
+					new FlxTimer().start(1.0, function() {
+						weekend1_cock = false;
 					});
+				case "weekend-1-firegun":
+					if (weekend1_cock)
+					{
+						trace('Firing gun!');
 
-					weekend1_explosions.push(splode);
-					ui.game?.currentStage?.add(splode);
-				}
-				else
-				{
-					trace('Cannot fire gun!');
-					// The player cannot hit this note.
-					event.cancelEvent();
+						var splode:FunkinSprite;
+						splode = weekend1_explosion_shot(function(explodeEZ) {
+							ui.game?.currentStage?.remove(explodeEZ);
+							weekend1_explosions.remove(splode);
+						});
 
-					var splode:FunkinSprite;
-					splode = weekend1_explosion_hit(function(explodeEZ) {
-						ui.game?.currentStage?.remove(explodeEZ);
-						weekend1_explosions.remove(splode);
-					});
+						weekend1_explosions.push(splode);
+						ui.game?.currentStage?.add(splode);
+					}
+					else
+					{
+						trace('Cannot fire gun!');
+						// The player cannot hit this note.
+						event.cancelEvent();
 
-					weekend1_explosions.push(splode);
-					ui.game?.currentStage?.add(splode);
-				}
+						var splode:FunkinSprite;
+						splode = weekend1_explosion_hit(function(explodeEZ) {
+							ui.game?.currentStage?.remove(explodeEZ);
+							weekend1_explosions.remove(splode);
+						});
+
+						weekend1_explosions.push(splode);
+						ui.game?.currentStage?.add(splode);
+					}
+			}
 		}
 
 		return event;
@@ -240,6 +291,7 @@ class FightEventManager
 				{
 					time: Conductor.instance.getStepTimeInMs(512),
 					callback: function() {
+						blammed_emotionalMoment = true;
 						for (ID => charWireframe in [0 => ui.bfWireframe, 1 => ui.damselWireframe, 2 => ui.dadWireframe,])
 						{
 							charWireframe.setOutlineColor(referenceColors[ID]);
@@ -258,6 +310,7 @@ class FightEventManager
 				{
 					time: Conductor.instance.getStepTimeInMs(768),
 					callback: function() {
+						blammed_emotionalMoment = false;
 						for (ID => charWireframe in [0 => ui.bfWireframe, 1 => ui.damselWireframe, 2 => ui.dadWireframe,])
 						{
 							var outlineColor = new FlxSprite();
