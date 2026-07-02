@@ -50,7 +50,6 @@ class GitShit
 
 		var output:String = '';
 		output = branchProcess?.stdout?.readAll().toString() ?? '';
-
 		trace(output);
 
 		// Generates a string expression
