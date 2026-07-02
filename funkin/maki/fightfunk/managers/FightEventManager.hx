@@ -198,7 +198,7 @@ class FightEventManager
 
 		if (ui.game.currentStage.id == 'phillyTrainErect')
 		{
-			ui.game?.currentStage.trainsEnabled = false;
+			ui.game?.currentStage?.trainEnabled = false;
 		}
 
 		if (ui.game.currentStage.id == 'phillyStreets')

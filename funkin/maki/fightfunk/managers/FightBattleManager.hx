@@ -52,27 +52,27 @@ class FightBattleManager
 			switch (event?.type?.toLowerCase())
 			{
 				case 'message':
-					roadmapStr += '_${destinationSteps}-${event.value}';
+					roadmapStr += '_${destinationSteps}-"${event.value}"';
 					roadmapEntry.callback = function() {
 						ui.statCenter.text = '${event.value}'.toUpperCase();
 						ui.statCenter.screenCenter(0x01);
 						ui.statCenter.visible = true;
 					};
 
-					destinationStr = 'message-${event.value}-removed';
+					destinationStr = 'message_remove-"${event.value}"';
 					destinationEntry.callback = function() {
-						ui.statCenter.visible = false;
+						if (ui.statCenter.text == event.value.toUpperCase()) ui.statCenter.visible = false;
 					};
 
 				case 'effect':
 					if (event.value != null && event.value.id != null)
 					{
-						roadmapStr += '_${destinationSteps}-${event.value.id}';
+						roadmapStr += '_${destinationSteps}-"${event.value.id}"';
 						roadmapEntry.callback = function() {
 							ui.activeEffects.push(event.value);
 						};
 
-						destinationStr = 'effect-${event.value.id}-removed';
+						destinationStr = 'effect-"${event.value.id}"-removed';
 						destinationEntry.callback = function() {
 							ui.activeEffects.remove(event.value);
 						};
@@ -97,6 +97,7 @@ class FightBattleManager
 
 						if (event.value.event?.toLowerCase() == 'set' || event.value.event?.toLowerCase() == 'zoom') roadmapStr += '_${increase}';
 
+						if (!isInstant) roadmapStr += '-"${event.value.ease}"';
 						if (event.value.cancelOthers || event.value.cancelTweens) roadmapStr += '-cancelOthers';
 
 						switch (event.value.event?.toLowerCase())
