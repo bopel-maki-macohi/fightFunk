@@ -235,6 +235,12 @@ class FightEventManager
 		{
 			weekend1_2hot_applyShaders(ui);
 		}
+
+		if (blammed_emotionalMoment)
+		{
+			ui.boxBGPlayer.alpha = 1;
+			ui.boxBGOpponent.alpha = 1;
+		}
 	}
 
 	public static function onFightUIInit(ui)
@@ -303,6 +309,8 @@ class FightEventManager
 
 						ui.boxBGPlayer.color = referenceColors[0];
 						ui.boxBGOpponent.color = referenceColors[2];
+
+						ui.hpBar?.alpha = 0;
 					}
 				});
 
@@ -334,6 +342,12 @@ class FightEventManager
 
 							ui.tweens.push(fillingTwen);
 						}
+
+						ui.tweens.push(FlxTween.tween(ui.hpBar, {alpha: 1}, 2,
+							{
+								ease: FlxEase.expoOut,
+							}));
+
 
 						ui.tweens.push(FlxTween.tween(gf, {alpha: damsel_ogAlpha}, 2,
 							{
