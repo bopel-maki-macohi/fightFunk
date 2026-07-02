@@ -5,7 +5,8 @@ class SetBuild
 {
 	static function main()
 	{
-		var build = GitShit.getGitCommitNumber() + #if debug 1 #else 0 #end;
+		var localChanges = GitShit.getGitHasLocalChanges();
+		var build = GitShit.getGitCommitNumber() + (localChanges ? 1 : 0);
 
 		trace('build: $build');
 
@@ -15,6 +16,9 @@ class SetBuild
 
 		while (mod_versionARRAY.length < 3)
 			mod_versionARRAY.push('0');
+
+		if (mod_versionARRAY[2] != '$build' && !localChanges)
+			build++;
 
 		mod_versionARRAY[2] = '$build';
 
@@ -29,6 +33,49 @@ class SetBuild
 
 class GitShit
 {
+	/**
+	 * Get whether the local Git repository is dirty or not.
+	 */
+	public static macro function getGitHasLocalChanges():haxe.macro.Expr.ExprOf<Bool>
+	{
+		#if !display
+		// Get the current line number.
+		var pos = haxe.macro.Context.currentPos();
+		var branchProcess = new sys.io.Process('git', ['status', '--porcelain']);
+
+		if (branchProcess.exitCode() != 0)
+		{
+			var message = branchProcess.stderr.readAll().toString();
+			haxe.macro.Context.info('[WARN] Could not determine current git commit; is this a proper Git repository?', pos);
+		}
+
+		var output:String = '';
+		try
+		{
+			output = branchProcess.stdout.readLine();
+		}
+		catch (e)
+		{
+			if (e.message == 'Eof')
+			{
+				// Do nothing.
+				// Eof = No output.
+			}
+			else
+			{
+				// Rethrow other exceptions.
+				throw e;
+			}
+		}
+
+		// Generates a string expression
+		return macro $v{output.length > 0};
+		#else
+		// `#if display` is used for code completion. In this case we just assume true.
+		return macro $v{true};
+		#end
+	}
+
 	public static macro function getGitCommitNumber():haxe.macro.Expr.ExprOf<Int>
 	{
 		#if !display
