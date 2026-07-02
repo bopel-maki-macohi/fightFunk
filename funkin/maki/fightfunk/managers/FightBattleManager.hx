@@ -197,6 +197,8 @@ class FightBattleManager
 					}
 			}
 
+			// var startTime = (ui.game.startTimestamp + Conductor.instance.beatLengthMs * -5);
+
 			if (roadmapEntry.callback != null)
 			{
 				if (roadmapStr != null) sequence.push(

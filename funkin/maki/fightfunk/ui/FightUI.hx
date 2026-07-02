@@ -105,6 +105,15 @@ class FightUI extends Module
 		}
 	}
 
+	function onSongStart(event)
+	{
+		super.onSongStart(event);
+
+		battleSequence.running = true;
+
+		trace('BATTLE');
+	}
+
 	function onUpdate(event)
 	{
 		super.onUpdate(event);
@@ -292,8 +301,11 @@ class FightUI extends Module
 
 		resetCamera();
 
-		battleSequence = new SongSequence(FightBattleManager.getBattleSequence(this, battle.events));
-		battleSequence.startTime = game.startTimestamp;
+		battleSequence = new SongSequence(FightBattleManager.getBattleSequence(this, battle.events), 1, true);
+		
+		var startTime = (game.startTimestamp + Conductor.instance.beatLengthMs * -5);
+		// battleSequence.startTime = game.startTimestamp;
+		battleSequence.startTime = startTime;
 
 		game.currentCameraZoom = currentCameraZoom;
 
