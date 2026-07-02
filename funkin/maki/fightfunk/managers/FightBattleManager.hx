@@ -51,6 +51,12 @@ class FightBattleManager
 
 			switch (event?.type?.toLowerCase())
 			{
+				case 'marker':
+					roadmapStr += '-"${event.value}"';
+					roadmapEntry.callback = function() {
+						trace(event.value);
+					};
+
 				case 'message':
 					roadmapStr += '_${destinationSteps}-"${event.value}"';
 					roadmapEntry.callback = function() {

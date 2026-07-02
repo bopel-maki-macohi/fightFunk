@@ -3,6 +3,7 @@ package funkin.maki.fightfunk.util;
 import haxe.Json;
 import funkin.data.song.SongRegistry;
 import funkin.util.assets.DataAssets;
+import funkin.Conductor;
 
 using StringTools;
 
@@ -44,7 +45,7 @@ class FightUtil
 		return Paths.json('battles/$songCode');
 	}
 
-	public static function getSongBattle(songCode:String):Dynamic
+	public static function getSongBattle(songCode:String, songEvent):Dynamic
 	{
 		var battle:Dynamic =
 			{
@@ -60,6 +61,28 @@ class FightUtil
 		if (Assets.exists(path))
 		{
 			pathData = Json.parse(Assets.getText(path));
+
+			for (event in songEvent.events)
+			{
+				trace(event.eventKind);
+				if (event.eventKind == 'FightMarkerEvent')
+				{
+					trace(Conductor.instance.getTimeInSteps(event.time));
+					pathData.events.push(
+						{
+							step: Conductor.instance.getTimeInSteps(event.time),
+							type: 'marker',
+							value: event.value.m ?? 'missing message',
+						});
+					pathData.events.push(
+						{
+							step: Conductor.instance.getTimeInSteps(event.time),
+							length: 32,
+							type: 'message',
+							value: event.value.m ?? 'missing message',
+						});
+				}
+			}
 		}
 
 		return pathData ?? battle;

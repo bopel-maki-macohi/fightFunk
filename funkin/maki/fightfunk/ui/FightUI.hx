@@ -78,12 +78,11 @@ class FightUI extends Module
 		clearObjects();
 	}
 
-	function onSongRetry(event:ScriptEvent):Void
+	function onSongRetry(event):Void
 	{
 		super.onSongRetry(event);
 
 		clearObjects();
-		if (UIEnabled) initFightUI();
 	}
 
 	function onSongLoaded(event)
@@ -100,7 +99,7 @@ class FightUI extends Module
 			if (FightUtil.isFightSong(songCode) && !game.isMinimalMode)
 			{
 				event = FightChartManager.cleanse(songCode, event);
-				initFightUI();
+				initFightUI(event);
 			}
 		}
 	}
@@ -204,7 +203,7 @@ class FightUI extends Module
 
 	public var tweens:Array<FlxTween> = [];
 
-	function initFightUI()
+	function initFightUI(songEvent)
 	{
 		var j = 10;
 
@@ -297,7 +296,7 @@ class FightUI extends Module
 
 		var baseName = (game.currentStage?.getBoyfriend()?.characterName ?? 'Victim').split('(')[0];
 		playerName = FightUtil.nameShortcuts.get(baseName.toLowerCase()) ?? baseName ?? 'Victim';
-		battle = FightUtil.getSongBattle(songCode);
+		battle = FightUtil.getSongBattle(songCode, songEvent);
 
 		resetCamera();
 

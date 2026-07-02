@@ -54,6 +54,19 @@
 		]
 	},
 
+	"Fight Funk : Battle Event : Marker": {
+		"scope": "json,json5,jsonl",
+		"prefix": "battle.event.marker",
+		"description": "Fight Funk Battle Event : Marker",
+		"body": [
+			"{",
+			"\t\"step\": $1,",
+			"\t\"type\": \"marker\",",
+			"\t\"value\": \"\"",
+			"}",
+		]
+	},
+
 	"Fight Funk : Battle Event : Message": {
 		"scope": "json,json5,jsonl",
 		"prefix": "battle.event.message",
