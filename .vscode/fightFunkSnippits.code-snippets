@@ -1,0 +1,199 @@
+{
+	// Place your fightFunk workspace snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and 
+	// description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope 
+	// is left empty or omitted, the snippet gets applied to all languages. The prefix is what is 
+	// used to trigger the snippet and the body will be expanded and inserted. Possible variables are: 
+	// $1, \t for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. 
+	// Placeholders with the same ids are connected.
+	// Example:
+	// "Print to console": {
+	// 	"scope": "javascript,typescript",
+	// 	"prefix": "log",
+	// 	"body": [
+	// 		"console.log('$1');",
+	// 		"\t"
+	// 	],
+	// 	"description": "Log output to console"
+	// }
+	//
+	// You can also restrict snippets to specific files using include/exclude patterns:
+	// "Test snippet": {
+	// 	"scope": "javascript,typescript",
+	// 	"prefix": "test",
+	// 	"body": "test('$1', () => {\n\t$0\n});",
+	// 	"include": ["**/*.test.ts", "*.spec.ts"],
+	// 	"exclude": ["**/temp/*.ts"],
+	// 	"description": "Insert test block"
+	// }
+
+	"Fight Funk : New Battle": {
+		"scope": "json,json5,jsonl",
+		"prefix": "battle.new",
+		"description": "New Fight Funk Battle",
+		"body": [
+			"{",
+			"\t\"level\": $1,",
+			"\t\"camZoomStartOffset\": 0.0,",
+			"\t\"camPositionStartOffset\": [0,0],",
+			"\t\"events\": []",
+			"}",
+		],
+	},
+
+	"Fight Funk : Battle Event : Blank": {
+		"scope": "json,json5,jsonl",
+		"prefix": "battle.event.new",
+		"description": "Fight Funk Battle Event : Blank",
+		"body": [
+			"{",
+			"\t\"step\": $1,",
+			"\t\"length\": 16,",
+			"\t\"type\": \"\",",
+			"\t\"value\": null",
+			"}",
+		]
+	},
+
+	"Fight Funk : Battle Event : Message": {
+		"scope": "json,json5,jsonl",
+		"prefix": "battle.event.message",
+		"description": "Fight Funk Battle Event : Message",
+		"body": [
+			"{",
+			"\t\"step\": $1,",
+			"\t\"length\": 16,",
+			"\t\"type\": \"message\",",
+			"\t\"value\": \"\"",
+			"}",
+		]
+	},
+
+	"Fight Funk : Battle Event : Effect": {
+		"scope": "json,json5,jsonl",
+		"prefix": "battle.event.effect.new",
+		"description": "Fight Funk Battle Event : Effect",
+		"body": [
+			"{",
+			"\t\"step\": $1,",
+			"\t\"length\": 16,",
+			"\t\"type\": \"effect\",",
+			"\t\"value\":",
+			"\t\t{",
+			"\t\t\t\"id\": \"\"",
+			"\t\t}",
+			"}",
+		]
+	},
+
+	"Fight Funk : Battle Event : Effect (HP Drain)": {
+		"scope": "json,json5,jsonl",
+		"prefix": "battle.event.effect.hp.drain",
+		"description": "Fight Funk Battle Event : Effect (HP Drain)",
+		"body": [
+			"{",
+			"\t\"step\": $1,",
+			"\t\"length\": 16,",
+			"\t\"type\": \"effect\",",
+			"\t\"value\":",
+			"\t\t{",
+			"\t\t\t\"id\": \"hp-drain\"",
+			"\t\t\t\"strength\": 0.15",
+			"\t\t}",
+			"}",
+		]
+	},
+
+	"Fight Funk : Battle Event : Effect (Karma)": {
+		"scope": "json,json5,jsonl",
+		"prefix": "battle.event.effect.hp.karma",
+		"description": "Fight Funk Battle Event : Effect (Karma)",
+		"body": [
+			"{",
+			"\t\"step\": $1,",
+			"\t\"length\": 16,",
+			"\t\"type\": \"effect\",",
+			"\t\"value\":",
+			"\t\t{",
+			"\t\t\t\"id\": \"karma\",",
+			"\t\t\t\"strength\": 0.15",
+			"\t\t}",
+			"}",
+		]
+	},
+
+	"Fight Funk : Battle Event : Camera": {
+		"scope": "json,json5,jsonl",
+		"prefix": "battle.event.camera.new",
+		"description": "Fight Funk Battle Event : Camera",
+		"body": [
+			"{",
+			"\t\"step\": $1,",
+			"\t\"length\": 16,",
+			"\t\"type\": \"camera\",",
+			"\t\"value\":",
+			"\t\t{",
+			"\t\t\t\"event\": \"\"",
+			"\t\t}",
+			"}",
+		]
+	},
+
+	"Fight Funk : Battle Event : Camera (Zoom)": {
+		"scope": "json,json5,jsonl",
+		"prefix": "battle.event.camera.zoom",
+		"description": "Fight Funk Battle Event : Camera (Zoom)",
+		"body": [
+			"{",
+			"\t\"step\": $1,",
+			"\t\"length\": 16,",
+			"\t\"type\": \"camera\",",
+			"\t\"value\":",
+			"\t\t{",
+			"\t\t\t\"event\": \"zoom\",",
+			"\t\t\t\"cancelOthers\": true,",
+
+			"\t\t\t\"increase\": 0.0,",
+			"\t\t\t\"instant\": false,",
+			"\t\t\t\"ease\": \"linear\"",
+			"\t\t}",
+			"}",
+		]
+	},
+
+	"Fight Funk : Battle Event : Camera (Set)": {
+		"scope": "json,json5,jsonl",
+		"prefix": "battle.event.camera.set",
+		"description": "Fight Funk Battle Event : Camera (Set)",
+		"body": [
+			"{",
+			"\t\"step\": $1,",
+			"\t\"type\": \"16amera\",",
+			"\t\"value\":",
+			"\t\t{",
+			"\t\t\t\"event\": \"set\",",
+			"\t\t\t\"value\": 0.0,",
+			"\t\t\t\"cancelTweens\": true,",
+			"\t\t}",
+			"}",
+		]
+	},
+
+	"Fight Funk : Battle Event : Camera (Reset)": {
+		"scope": "json,json5,jsonl",
+		"prefix": "battle.event.camera.reset",
+		"description": "Fight Funk Battle Event : Camera (Reset)",
+		"body": [
+			"{",
+			"\t\"step\": $1,",
+			"\t\"length\": 16,",
+			"\t\"type\": \"camera\",",
+			"\t\"value\":",
+			"\t\t{",
+			"\t\t\t\"event\": \"reset\",",
+			"\t\t\t\"instant\": false,",
+			"\t\t\t\"cancelTweens\": true,",
+			"\t\t}",
+			"}",
+		]
+	},
+}

@@ -6,6 +6,12 @@
 			"step": -5,
 			"type": "message",
 			"value": "It's somebody you used to know..."
+		},
+		{
+			"step": 0,
+			"length": 0,
+			"type": "",
+			"value": null
 		}
 	],
 	"level": 2
