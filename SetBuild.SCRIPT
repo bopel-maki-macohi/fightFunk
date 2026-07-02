@@ -38,7 +38,6 @@ class GitShit
 	 */
 	public static macro function getGitHasLocalChanges():haxe.macro.Expr.ExprOf<Bool>
 	{
-		#if !display
 		// Get the current line number.
 		var pos = haxe.macro.Context.currentPos();
 		var branchProcess = new sys.io.Process('git', ['status', '--porcelain']);
@@ -70,15 +69,10 @@ class GitShit
 
 		// Generates a string expression
 		return macro $v{output.length > 0};
-		#else
-		// `#if display` is used for code completion. In this case we just assume true.
-		return macro $v{true};
-		#end
 	}
 
 	public static macro function getGitCommitNumber():haxe.macro.Expr.ExprOf<Int>
 	{
-		#if !display
 		// Get the current line number.
 		var pos = haxe.macro.Context.currentPos();
 
@@ -91,8 +85,5 @@ class GitShit
 
 		// Generates a string expression
 		return macro $v{Std.parseInt(process.stdout.readLine())};
-		#else
-		return macro $v{0};
-		#end
 	}
 }
