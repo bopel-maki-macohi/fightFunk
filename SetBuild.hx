@@ -49,8 +49,7 @@ class GitShit
 		}
 
 		var output:String = '';
-
-		if (branchProcess != null) if (branchProcess.stdout != null) output = branchProcess?.stdout?.readLine() ?? '';
+		output = branchProcess?.stdout?.readAll().toString() ?? '';
 
 		trace(output);
 
