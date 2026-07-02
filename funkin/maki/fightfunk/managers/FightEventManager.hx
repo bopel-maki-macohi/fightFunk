@@ -17,6 +17,63 @@ class FightEventManager
 	static var weekend1_explosions = [];
 	static var weekend1_canWireframe:WireframeShader;
 
+	static function weekend1_applyShaders(ui)
+	{
+		for (can in ui.game?.currentSong?.spawnedCans)
+		{
+			can.active = can.visible = true;
+			can.shader = weekend1_canWireframe;
+		}
+		for (splode in weekend1_explosions)
+		{
+			if (splode != null)
+			{
+				splode.active = splode.visible = true;
+				splode.shader = weekend1_canWireframe;
+			}
+		}
+	}
+
+	static function weekend1_explosion_shot(onDone:Dynamic = null):FunkinSprite
+	{
+		var can = PlayState.instance?.currentSong?.getNextCanWithState(2);
+
+		var explode:FunkinSprite = FunkinSprite.createSparrow(can?.x + 150, can?.y - 300, "SpraypaintExplosion");
+		explode.animation.addByPrefix("idle", "Explosion 1 movie0", 24, false);
+		explode.animation.play("idle");
+
+		explode.zIndex = 1000;
+		PlayState.instance.currentStage.add(explode);
+		PlayState.instance.currentStage.refresh();
+
+		explode.animation.onFinish.add(() -> {
+			explode.kill();
+
+			if (onDone != null) onDone(explode);
+		});
+
+		return explode;
+	}
+
+	static function weekend1_explosion_hit(onDone:Dynamic = null):FunkinSprite
+	{
+		var can = PlayState.instance?.currentSong?.getNextCanWithState(2);
+
+		var explodeEZ:FunkinSprite = FunkinSprite.createSparrow(can.x + 750, can.y - 150, "spraypaintExplosionEZ");
+		explodeEZ.animation.addByPrefix("idle", "explosion round 1 short0", 24, false);
+		explodeEZ.animation.play("idle");
+
+		explodeEZ.zIndex = 1000;
+		PlayState.instance.currentStage.add(explodeEZ);
+		PlayState.instance.currentStage.refresh();
+
+		explodeEZ.animation.finishCallback = () -> {
+			explodeEZ.kill();
+			if (onDone != null) onDone(explodeEZ);
+		};
+		return explodeEZ;
+	}
+
 	static var nene_wireframeFilled:WireframeShader;
 
 	public static function onNoteMiss(ui, event)
@@ -49,12 +106,15 @@ class FightEventManager
 		if (ui.game != null) switch (event?.note?.kind)
 		{
 			case "weekend-1-lightcan":
+				weekend1_applyShaders(ui);
 				FunkinSound.playOnce(Paths.sound('Darnell_Lighter'), 1.0);
 
 			case "weekend-1-kickcan":
+				weekend1_applyShaders(ui);
 				FunkinSound.playOnce(Paths.sound('Kick_Can_UP'), 1.0);
 
 			case "weekend-1-kneecan":
+				weekend1_applyShaders(ui);
 				FunkinSound.playOnce(Paths.sound('Kick_Can_FORWARD'), 1.0);
 			case "weekend-1-cockgun": // lol
 				weekend1_cock = true;
@@ -114,19 +174,7 @@ class FightEventManager
 
 		if (ui.game?.currentSong?.id == '2hot')
 		{
-			for (can in ui.game?.currentSong?.spawnedCans)
-			{
-				can.active = can.visible = true;
-				can.shader = weekend1_canWireframe;
-			}
-			for (splode in weekend1_explosions)
-			{
-				if (splode != null)
-				{
-					splode.active = splode.visible = true;
-					splode.shader = weekend1_canWireframe;
-				}
-			}
+			weekend1_applyShaders(ui);
 		}
 	}
 
@@ -156,45 +204,5 @@ class FightEventManager
 			ui.visiblePropNames.push('spraycanPile');
 			ui.game?.currentStage.getNamedProp('spraycanPile').shader = weekend1_canWireframe;
 		}
-	}
-
-	static function weekend1_explosion_shot(onDone:Dynamic = null):FunkinSprite
-	{
-		var can = PlayState.instance?.currentSong?.getNextCanWithState(2);
-
-		var explode:FunkinSprite = FunkinSprite.createSparrow(can?.x + 150, can?.y - 300, "SpraypaintExplosion");
-		explode.animation.addByPrefix("idle", "Explosion 1 movie0", 24, false);
-		explode.animation.play("idle");
-
-		explode.zIndex = 1000;
-		PlayState.instance.currentStage.add(explode);
-		PlayState.instance.currentStage.refresh();
-
-		explode.animation.onFinish.add(() -> {
-			explode.kill();
-
-			if (onDone != null) onDone(explode);
-		});
-
-		return explode;
-	}
-
-	static function weekend1_explosion_hit(onDone:Dynamic = null):FunkinSprite
-	{
-		var can = PlayState.instance?.currentSong?.getNextCanWithState(2);
-
-		var explodeEZ:FunkinSprite = FunkinSprite.createSparrow(can.x + 750, can.y - 150, "spraypaintExplosionEZ");
-		explodeEZ.animation.addByPrefix("idle", "explosion round 1 short0", 24, false);
-		explodeEZ.animation.play("idle");
-
-		explodeEZ.zIndex = 1000;
-		PlayState.instance.currentStage.add(explodeEZ);
-		PlayState.instance.currentStage.refresh();
-
-		explodeEZ.animation.finishCallback = () -> {
-			explodeEZ.kill();
-			if (onDone != null) onDone(explodeEZ);
-		};
-		return explodeEZ;
 	}
 }
