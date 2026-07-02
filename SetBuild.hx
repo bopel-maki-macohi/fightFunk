@@ -18,8 +18,7 @@ class SetBuild
 		while (mod_versionARRAY.length < 3)
 			mod_versionARRAY.push('0');
 
-		if (mod_versionARRAY[2] != '$build' && !localChanges)
-			build++;
+		if (mod_versionARRAY[2] != '$build' && !localChanges) build++;
 
 		mod_versionARRAY[2] = '$build';
 
@@ -37,56 +36,39 @@ class GitShit
 	/**
 	 * Get whether the local Git repository is dirty or not.
 	 */
-	public static macro function getGitHasLocalChanges():haxe.macro.Expr.ExprOf<Bool>
+	public static function getGitHasLocalChanges()
 	{
 		// Get the current line number.
-		var pos = haxe.macro.Context.currentPos();
 		var branchProcess = new sys.io.Process('git', ['status', '--porcelain']);
 
 		if (branchProcess.exitCode() != 0)
 		{
 			var message = branchProcess.stderr.readAll().toString();
-			haxe.macro.Context.info('[WARN] Could not determine current git commit; is this a proper Git repository?', pos);
+			trace(message);
+			return false;
 		}
 
 		var output:String = '';
-		try
-		{
-			output = branchProcess.stdout.readLine();
-		}
-		catch (e)
-		{
-			if (e.message == 'Eof')
-			{
-				// Do nothing.
-				// Eof = No output.
-			}
-			else
-			{
-				// Rethrow other exceptions.
-				throw e;
-			}
-		}
+		output = branchProcess?.stdout?.readLine() ?? '';
 
 		trace(output);
 
 		// Generates a string expression
-		return macro $v{output.length > 0};
+		return output.length > 0;
 	}
 
-	public static macro function getGitCommitNumber():haxe.macro.Expr.ExprOf<Int>
+	public static function getGitCommitNumber()
 	{
 		// Get the current line number.
-		var pos = haxe.macro.Context.currentPos();
-
 		var process = new sys.io.Process('git', ['rev-list', 'HEAD', '--count']);
 		if (process.exitCode() != 0)
 		{
 			var message = process.stderr.readAll().toString();
-			haxe.macro.Context.info('[WARN] Could not determine current git commit; is this a proper Git repository?', pos);
+			trace(message);
+			return 0;
 		}
 
 		// Generates a string expression
-		return macro $v{Std.parseInt(process.stdout.readLine())};
+		return Std.parseInt(process.stdout.readLine());
 	}
 }
