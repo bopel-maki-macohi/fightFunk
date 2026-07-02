@@ -106,6 +106,42 @@
             }
         },
         {
+            "step": 384,
+            "type": "camera",
+            "value": {
+                "increase": 0.2,
+                "event": "zoom",
+                "instant": true
+            }
+        },
+        {
+            "step": 384.01,
+            "type": "camera",
+            "value": {
+                "increase": -0.1,
+                "ease": "expoOut",
+                "event": "zoom"
+            }
+        },
+        {
+            "step": 416,
+            "type": "camera",
+            "value": {
+                "increase": 0.2,
+                "event": "zoom",
+                "instant": true
+            }
+        },
+        {
+            "step": 416.01,
+            "type": "camera",
+            "value": {
+                "increase": -0.1,
+                "ease": "expoOut",
+                "event": "zoom"
+            }
+        },
+        {
             "length": 16,
             "step": 490,
             "type": "message",
