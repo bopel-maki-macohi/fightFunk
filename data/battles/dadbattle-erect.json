@@ -1,141 +1,141 @@
 {
-    "level": 1,
-    "camZoomStartOffset": -0.1,
-    "events": [
-        {
-            "step": 0,
-            "length": 32,
-            "type": "message",
-            "value": "\"DADDY\" INITIATES THE BATTLE!"
-        },
-        {
-            "step": 128,
-            "length": 64,
-            "type": "message",
-            "value": "\"DADDY\" USES: \"HEALTH DRAIN\""
-        },
-        {
-            "step": 128,
-            "length": 64,
-            "type": "effect",
-            "value": {
-                "id": "karma",
-                "strength": 0.15
-            }
-        },
-        {
-            "step": 287,
-            "length": 32,
-            "type": "message",
-            "value": "\"DADDY\" USES: \"HEALTH DRAIN  (2x)\"!"
-        },
-        {
-            "step": 287,
-            "length": 32,
-            "type": "effect",
-            "value": {
-                "id": "karma",
-                "strength": 0.3
-            }
-        },
-        {
-            "step": 480,
-            "length": 32,
-            "type": "message",
-            "value": "\"DADDY\" GROWS MAD"
-        },
-        {
-            "step": 512,
-            "length": 64,
-            "type": "message",
-            "value": "\"DADDY\" USES: \"HEALTH DRAIN (2x)\"!"
-        },
-        {
-            "step": 512,
-            "length": 128,
-            "type": "effect",
-            "value": {
-                "id": "karma",
-                "strength": 0.3
-            }
-        },
-        {
-            "step": 751,
-            "length": 32,
-            "type": "message",
-            "value": "He's pissed."
-        },
-        {
-            "step": 767,
-            "length": 64,
-            "type": "message",
-            "value": "\"DADDY\" USES: \"HEALTH DRAIN (4x)\""
-        },
-        {
-            "step": 767,
-            "length": 128,
-            "type": "effect",
-            "value": {
-                "id": "karma",
-                "strength": 0.6
-            }
-        },
-        {
-            "step": 865,
-            "length": 64,
-            "type": "message",
-            "value": "\"DADDY\" GROWS TIRED..."
-        },
-        {
-            "step": 960,
-            "length": 32,
-            "type": "message",
-            "value": "FREESTYLE B)"
-        },
-        {
-            "step": 1407,
-            "length": 64,
-            "type": "message",
-            "value": "\"DADDY\" USES: \"HEALTH DRAIN (2x)\""
-        },
-        {
-            "step": 1407,
-            "length": 128,
-            "type": "effect",
-            "value": {
-                "id": "karma",
-                "strength": 0.3
-            }
-        },
-        {
-            "step": 1407,
-            "length": 64,
-            "type": "message",
-            "value": "\"DADDY\" USES: \"HEALTH DRAIN (2x)\""
-        },
-        {
-            "step": 1407,
-            "length": 128,
-            "type": "effect",
-            "value": {
-                "id": "karma",
-                "strength": 0.3
-            }
-        },
-        {
-            "step": 1535,
-            "length": 64,
-            "type": "message",
-            "value": "\"DADDY\" USES: \"HEALTH DRAIN\" ONE LAST TIME"
-        },
-        {
-            "step": 1535,
-            "length": 128,
-            "type": "effect",
-            "value": {
-                "id": "karma",
-                "strength": 0.3
-            }
-        }
-    ]
+	"camZoomStartOffset": -0.1,
+	"events": [
+		{
+			"length": 32,
+			"step": 0,
+			"type": "message",
+			"value": "\"DADDY\" INITIATES THE BATTLE!"
+		},
+		{
+			"length": 64,
+			"step": 128,
+			"type": "message",
+			"value": "\"DADDY\" USES: \"HEALTH DRAIN\""
+		},
+		{
+			"length": 64,
+			"step": 128,
+			"type": "effect",
+			"value": {
+				"strength": 0.15,
+				"id": "karma"
+			}
+		},
+		{
+			"length": 32,
+			"step": 287,
+			"type": "effect",
+			"value": {
+				"strength": 0.3,
+				"id": "karma"
+			}
+		},
+		{
+			"length": 32,
+			"step": 287,
+			"type": "message",
+			"value": "\"DADDY\" USES: \"HEALTH DRAIN  (2x)\"!"
+		},
+		{
+			"length": 32,
+			"step": 480,
+			"type": "message",
+			"value": "\"DADDY\" GROWS MAD"
+		},
+		{
+			"length": 64,
+			"step": 512,
+			"type": "message",
+			"value": "\"DADDY\" USES: \"HEALTH DRAIN (2x)\"!"
+		},
+		{
+			"length": 128,
+			"step": 512,
+			"type": "effect",
+			"value": {
+				"strength": 0.3,
+				"id": "karma"
+			}
+		},
+		{
+			"length": 32,
+			"step": 751,
+			"type": "message",
+			"value": "He's pissed."
+		},
+		{
+			"length": 64,
+			"step": 767,
+			"type": "message",
+			"value": "\"DADDY\" USES: \"HEALTH DRAIN (4x)\""
+		},
+		{
+			"length": 128,
+			"step": 767,
+			"type": "effect",
+			"value": {
+				"strength": 0.6,
+				"id": "karma"
+			}
+		},
+		{
+			"length": 64,
+			"step": 865,
+			"type": "message",
+			"value": "\"DADDY\" GROWS TIRED..."
+		},
+		{
+			"length": 32,
+			"step": 960,
+			"type": "message",
+			"value": "FREESTYLE B)"
+		},
+		{
+			"length": 128,
+			"step": 1407,
+			"type": "effect",
+			"value": {
+				"strength": 0.3,
+				"id": "karma"
+			}
+		},
+		{
+			"length": 64,
+			"step": 1407,
+			"type": "message",
+			"value": "\"DADDY\" USES: \"HEALTH DRAIN (2x)\""
+		},
+		{
+			"length": 128,
+			"step": 1407,
+			"type": "effect",
+			"value": {
+				"strength": 0.3,
+				"id": "karma"
+			}
+		},
+		{
+			"length": 64,
+			"step": 1407,
+			"type": "message",
+			"value": "\"DADDY\" USES: \"HEALTH DRAIN (2x)\""
+		},
+		{
+			"length": 128,
+			"step": 1535,
+			"type": "effect",
+			"value": {
+				"strength": 0.3,
+				"id": "karma"
+			}
+		},
+		{
+			"length": 64,
+			"step": 1535,
+			"type": "message",
+			"value": "\"DADDY\" USES: \"HEALTH DRAIN\" ONE LAST TIME"
+		}
+	],
+	"level": 1
 }

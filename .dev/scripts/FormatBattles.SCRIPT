@@ -1,0 +1,42 @@
+typedef Battle =
+{
+	camZoomStartOffset:Float,
+	events:Array<
+		{
+			length:Float,
+			step:Float,
+			type:String,
+			value:Dynamic,
+		}>,
+	camPositionStartOffset:Array<Float>,
+	level:Float
+}
+
+class FormatBattles
+{
+	static function main()
+	{
+		var path = '../../data/battles/';
+
+		for (file in sys.FileSystem.readDirectory(path))
+		{
+			var j:Battle = haxe.Json.parse(sys.io.File.getContent(path + file));
+
+			j.events.sort(function(a, b) {
+				var Order = -1;
+				var result:Int = 0;
+
+				if (a.step < b.step)
+					result = Order;
+				else if (a.step > b.step)
+					result = -Order;
+
+				return result;
+			});
+
+			trace('Sort $file: ${[for (event in j.events) event.step]}');
+
+			sys.io.File.saveContent(path + file, haxe.Json.stringify(j, '\t'));
+		}
+	}
+}

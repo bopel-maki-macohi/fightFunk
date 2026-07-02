@@ -1,327 +1,27 @@
 {
-    "level": 4,
     "camZoomStartOffset": -0.2,
-    "camPositionStartOffset": [
-        100
-    ],
     "events": [
         {
+            "length": 128,
             "step": 0,
+            "type": "camera",
+            "value": {
+                "increase": 0.5,
+                "ease": "circIn",
+                "event": "zoom"
+            }
+        },
+        {
             "length": 32,
+            "step": 0,
             "type": "message",
             "value": "THIS WAS A LONG TIME COMING..."
         },
         {
-            "step": 0,
-            "length": 128,
-            "type": "camera",
-            "value": {
-                "event": "zoom",
-                "increase": 0.5,
-                "ease": "circIn"
-            }
-        },
-        {
-            "step": 178,
-            "length": 128,
-            "type": "camera",
-            "value": {
-                "event": "zoom",
-                "increase": 0.5,
-                "ease": "circIn"
-            }
-        },
-        {
-            "step": 256,
-            "type": "camera",
-            "value": {
-                "event": "reset",
-                "instant": true,
-                "cancelTweens": true
-            }
-        },
-        {
-            "step": 256.01,
-            "type": "camera",
-            "value": {
-                "event": "zoom",
-                "instant": true,
-                "increase": 0.2
-            }
-        },
-        {
-            "step": 256.02,
-            "type": "camera",
-            "value": {
-                "event": "zoom",
-                "increase": -0.1,
-                "ease": "expoOut"
-            }
-        },
-        {
-            "step": 288,
-            "type": "camera",
-            "value": {
-                "event": "zoom",
-                "instant": true,
-                "increase": 0.2
-            }
-        },
-        {
-            "step": 288.01,
-            "type": "camera",
-            "value": {
-                "event": "zoom",
-                "increase": -0.1,
-                "ease": "expoOut"
-            }
-        },
-        {
-            "step": 492,
-            "type": "camera",
-            "value": {
-                "event": "zoom",
-                "increase": -0.1,
-                "ease": "expoOut",
-                "cancelOthers": true
-            }
-        },
-        {
-            "step": 507,
-            "type": "camera",
-            "value": {
-                "event": "zoom",
-                "increase": -0.1,
-                "instant": true,
-                "cancelOthers": true
-            }
-        },
-        {
-            "step": 507.01,
-            "length": 32,
-            "type": "camera",
-            "value": {
-                "event": "zoom",
-                "increase": -0.1,
-                "ease": "expoOut",
-                "cancelOthers": true
-            }
-        },
-        {
-            "step": 512,
-            "type": "camera",
-            "value": {
-                "event": "reset",
-                "instant": true,
-                "cancelTweens": true
-            }
-        },
-        {
-            "step": 512.01,
-            "length": 256,
-            "type": "camera",
-            "value": {
-                "event": "zoom",
-                "increase": 0.5
-            }
-        },
-        {
-            "step": 636,
-            "type": "camera",
-            "value": {
-                "event": "reset",
-                "instant": true,
-                "cancelOthers": true
-            }
-        },
-        {
-            "step": 636.01,
-            "type": "camera",
-            "value": {
-                "event": "zoom",
-                "increase": 0.1,
-                "cancelOthers": true
-            }
-        },
-        {
-            "step": 636.01,
-            "type": "camera",
-            "value": {
-                "event": "zoom",
-                "increase": 0.1,
-                "cancelOthers": true
-            }
-        },
-        {
-            "step": 672,
             "length": 16,
-            "type": "camera",
-            "value": {
-                "event": "zoom",
-                "increase": 0.1,
-                "ease": "sineIn",
-                "cancelOthers": true
-            }
-        },
-        {
-            "step": 688,
-            "length": 16,
-            "type": "camera",
-            "value": {
-                "event": "zoom",
-                "increase": -0.1,
-                "ease": "sineOut",
-                "cancelOthers": true
-            }
-        },
-        {
-            "step": 704,
-            "length": 16,
-            "type": "camera",
-            "value": {
-                "event": "zoom",
-                "increase": 0.1,
-                "ease": "sineIn",
-                "cancelOthers": true
-            }
-        },
-        {
-            "step": 720,
-            "length": 16,
-            "type": "camera",
-            "value": {
-                "event": "zoom",
-                "increase": -0.1,
-                "ease": "sineOut",
-                "cancelOthers": true
-            }
-        },
-        {
-            "step": 736,
-            "length": 16,
-            "type": "camera",
-            "value": {
-                "event": "zoom",
-                "increase": 0.1,
-                "ease": "sineIn",
-                "cancelOthers": true
-            }
-        },
-        {
-            "step": 752,
-            "length": 16,
-            "type": "camera",
-            "value": {
-                "event": "zoom",
-                "increase": -0.1,
-                "ease": "sineOut",
-                "cancelOthers": true
-            }
-        },
-        {
-            "step": 768,
-            "length": 16,
-            "type": "camera",
-            "value": {
-                "event": "zoom",
-                "increase": 0.1,
-                "ease": "sineIn",
-                "cancelOthers": true
-            }
-        },
-        {
-            "step": 784,
-            "length": 16,
-            "type": "camera",
-            "value": {
-                "event": "zoom",
-                "increase": -0.1,
-                "ease": "sineOut",
-                "cancelOthers": true
-            }
-        },
-        {
-            "step": 800,
-            "length": 64,
-            "type": "camera",
-            "value": {
-                "event": "zoom",
-                "increase": 0.1,
-                "ease": "sineInOut",
-                "cancelOthers": true
-            }
-        },
-        {
-            "step": 928,
-            "length": 64,
-            "type": "camera",
-            "value": {
-                "event": "zoom",
-                "increase": -0.25,
-                "ease": "sineInOut",
-                "cancelOthers": true
-            }
-        },
-        {
-            "step": 992,
-            "length": 64,
-            "type": "camera",
-            "value": {
-                "event": "zoom",
-                "increase": 0.3,
-                "ease": "sineInOut",
-                "cancelOthers": true
-            }
-        },
-        {
-            "step": 1020,
-            "length": 4,
-            "type": "camera",
-            "value": {
-                "event": "zoom",
-                "increase": -0.1,
-                "ease": "sineInOut",
-                "cancelOthers": true
-            }
-        },
-        {
-            "step": 1056,
-            "type": "camera",
-            "value": {
-                "event": "reset",
-                "instant": true,
-                "cancelOthers": true
-            }
-        },
-        {
-            "step": 1183,
-            "length": 256,
-            "type": "camera",
-            "value": {
-                "event": "zoom",
-                "increase": 0.25,
-                "cancelOthers": true
-            }
-        },
-        {
-            "step": 1312,
-            "length": 64,
-            "type": "camera",
-            "value": {
-                "event": "zoom",
-                "increase": -0.2,
-                "cancelOthers": true
-            }
-        },
-        {
-            "step": 1376,
-            "length": 256,
-            "type": "camera",
-            "value": {
-                "event": "zoom",
-                "increase": 0.25,
-                "cancelOthers": true
-            }
+            "step": 107,
+            "type": "message",
+            "value": "\"DARNELL\" PREPS A CAN!"
         },
         {
             "step": 124,
@@ -341,50 +41,350 @@
             }
         },
         {
-            "step": 128,
             "length": 32,
+            "step": 128,
             "type": "camera",
             "value": {
-                "event": "reset",
+                "cancelOthers": true,
                 "ease": "sineInOut",
-                "cancelOthers": true
+                "event": "reset"
             }
         },
         {
-            "step": 107,
-            "length": 16,
-            "type": "message",
-            "value": "\"DARNELL\" PREPS A CAN!"
+            "length": 128,
+            "step": 178,
+            "type": "camera",
+            "value": {
+                "increase": 0.5,
+                "ease": "circIn",
+                "event": "zoom"
+            }
         },
         {
+            "step": 256,
+            "type": "camera",
+            "value": {
+                "event": "reset",
+                "instant": true,
+                "cancelTweens": true
+            }
+        },
+        {
+            "step": 256.01,
+            "type": "camera",
+            "value": {
+                "increase": 0.2,
+                "event": "zoom",
+                "instant": true
+            }
+        },
+        {
+            "step": 256.02,
+            "type": "camera",
+            "value": {
+                "increase": -0.1,
+                "ease": "expoOut",
+                "event": "zoom"
+            }
+        },
+        {
+            "step": 288,
+            "type": "camera",
+            "value": {
+                "increase": 0.2,
+                "event": "zoom",
+                "instant": true
+            }
+        },
+        {
+            "step": 288.01,
+            "type": "camera",
+            "value": {
+                "increase": -0.1,
+                "ease": "expoOut",
+                "event": "zoom"
+            }
+        },
+        {
+            "length": 16,
             "step": 490,
-            "length": 16,
             "type": "message",
             "value": "GET READY..."
         },
         {
+            "step": 492,
+            "type": "camera",
+            "value": {
+                "increase": -0.1,
+                "cancelOthers": true,
+                "ease": "expoOut",
+                "event": "zoom"
+            }
+        },
+        {
+            "step": 507,
+            "type": "camera",
+            "value": {
+                "increase": -0.1,
+                "cancelOthers": true,
+                "event": "zoom",
+                "instant": true
+            }
+        },
+        {
+            "length": 32,
+            "step": 507.01,
+            "type": "camera",
+            "value": {
+                "increase": -0.1,
+                "cancelOthers": true,
+                "ease": "expoOut",
+                "event": "zoom"
+            }
+        },
+        {
+            "step": 512,
+            "type": "camera",
+            "value": {
+                "event": "reset",
+                "instant": true,
+                "cancelTweens": true
+            }
+        },
+        {
+            "length": 256,
+            "step": 512.01,
+            "type": "camera",
+            "value": {
+                "increase": 0.5,
+                "event": "zoom"
+            }
+        },
+        {
+            "length": 16,
             "step": 619,
-            "length": 16,
             "type": "message",
             "value": "GET READY..."
         },
         {
+            "step": 636,
+            "type": "camera",
+            "value": {
+                "cancelOthers": true,
+                "event": "reset",
+                "instant": true
+            }
+        },
+        {
+            "step": 636.01,
+            "type": "camera",
+            "value": {
+                "increase": 0.1,
+                "cancelOthers": true,
+                "event": "zoom"
+            }
+        },
+        {
+            "step": 636.01,
+            "type": "camera",
+            "value": {
+                "increase": 0.1,
+                "cancelOthers": true,
+                "event": "zoom"
+            }
+        },
+        {
+            "length": 16,
+            "step": 672,
+            "type": "camera",
+            "value": {
+                "increase": 0.1,
+                "cancelOthers": true,
+                "ease": "sineIn",
+                "event": "zoom"
+            }
+        },
+        {
+            "length": 16,
+            "step": 688,
+            "type": "camera",
+            "value": {
+                "increase": -0.1,
+                "cancelOthers": true,
+                "ease": "sineOut",
+                "event": "zoom"
+            }
+        },
+        {
+            "length": 16,
+            "step": 704,
+            "type": "camera",
+            "value": {
+                "increase": 0.1,
+                "cancelOthers": true,
+                "ease": "sineIn",
+                "event": "zoom"
+            }
+        },
+        {
+            "length": 16,
+            "step": 720,
+            "type": "camera",
+            "value": {
+                "increase": -0.1,
+                "cancelOthers": true,
+                "ease": "sineOut",
+                "event": "zoom"
+            }
+        },
+        {
+            "length": 16,
+            "step": 736,
+            "type": "camera",
+            "value": {
+                "increase": 0.1,
+                "cancelOthers": true,
+                "ease": "sineIn",
+                "event": "zoom"
+            }
+        },
+        {
+            "length": 16,
+            "step": 752,
+            "type": "camera",
+            "value": {
+                "increase": -0.1,
+                "cancelOthers": true,
+                "ease": "sineOut",
+                "event": "zoom"
+            }
+        },
+        {
+            "length": 16,
+            "step": 768,
+            "type": "camera",
+            "value": {
+                "increase": 0.1,
+                "cancelOthers": true,
+                "ease": "sineIn",
+                "event": "zoom"
+            }
+        },
+        {
+            "length": 16,
+            "step": 784,
+            "type": "camera",
+            "value": {
+                "increase": -0.1,
+                "cancelOthers": true,
+                "ease": "sineOut",
+                "event": "zoom"
+            }
+        },
+        {
+            "length": 64,
+            "step": 800,
+            "type": "camera",
+            "value": {
+                "increase": 0.1,
+                "cancelOthers": true,
+                "ease": "sineInOut",
+                "event": "zoom"
+            }
+        },
+        {
+            "length": 64,
+            "step": 928,
+            "type": "camera",
+            "value": {
+                "increase": -0.25,
+                "cancelOthers": true,
+                "ease": "sineInOut",
+                "event": "zoom"
+            }
+        },
+        {
+            "length": 16,
             "step": 972,
-            "length": 16,
             "type": "message",
             "value": "GET READY..."
         },
         {
+            "length": 64,
+            "step": 992,
+            "type": "camera",
+            "value": {
+                "increase": 0.3,
+                "cancelOthers": true,
+                "ease": "sineInOut",
+                "event": "zoom"
+            }
+        },
+        {
+            "length": 4,
+            "step": 1020,
+            "type": "camera",
+            "value": {
+                "increase": -0.1,
+                "cancelOthers": true,
+                "ease": "sineInOut",
+                "event": "zoom"
+            }
+        },
+        {
+            "length": 16,
             "step": 1035,
-            "length": 16,
             "type": "message",
             "value": "GET READY..."
         },
         {
-            "step": 1420,
+            "step": 1056,
+            "type": "camera",
+            "value": {
+                "cancelOthers": true,
+                "event": "reset",
+                "instant": true
+            }
+        },
+        {
+            "length": 256,
+            "step": 1183,
+            "type": "camera",
+            "value": {
+                "increase": 0.25,
+                "cancelOthers": true,
+                "event": "zoom"
+            }
+        },
+        {
+            "length": 64,
+            "step": 1312,
+            "type": "camera",
+            "value": {
+                "increase": -0.2,
+                "cancelOthers": true,
+                "event": "zoom"
+            }
+        },
+        {
+            "length": 256,
+            "step": 1376,
+            "type": "camera",
+            "value": {
+                "increase": 0.25,
+                "cancelOthers": true,
+                "event": "zoom"
+            }
+        },
+        {
             "length": 16,
+            "step": 1420,
             "type": "message",
             "value": "GET READY..."
         }
-    ]
+    ],
+    "camPositionStartOffset": [
+        100
+    ],
+    "level": 4
 }
