@@ -300,11 +300,9 @@ class FightUI extends Module
 
 		resetCamera();
 
-		battleSequence = new SongSequence(FightBattleManager.getBattleSequence(this, battle.events), 1, true);
-		
-		var startTime = (game.startTimestamp + Conductor.instance.beatLengthMs * -5);
-		// battleSequence.startTime = game.startTimestamp;
-		battleSequence.startTime = startTime;
+		battleSequence = new SongSequence(FightBattleManager.getBattleSequence(this, battle.events), 1, false);
+		battleSequence.startTime = 0;
+		game.startTimestamp = battleSequence.startTime;
 
 		game.currentCameraZoom = currentCameraZoom;
 
@@ -536,7 +534,7 @@ class FightUI extends Module
 		if (DebugUIEnabled)
 		{
 			statTexts = [
-				'Song Time: ' + ((Conductor.instance.songPosition < 0) ? '-' : '') + '${FlxMath.roundDecimal(FightTimeUtil.ms_to_s(Conductor.instance.songPosition), 0)}'.lpad('0', '0000'.length).replace('-', '') + 's',
+				'STT : ${statCenter.text}',
 				'Step: ${Conductor.instance.currentStep}',
 				'Beat: ${Conductor.instance.currentBeat}',
 			];

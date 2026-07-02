@@ -27,6 +27,9 @@ class FightBattleManager
 		var sequence = [];
 		cancelAllCameraTweens(ui);
 
+		// var startPadding = FightTimeUtil.ms_to_s(ui.game.startTimestamp + (Conductor.instance.beatLengthMs * -5));
+		// trace(startPadding);
+
 		if (ui != null) for (event in events)
 		{
 			if (event == null) continue;
@@ -45,7 +48,7 @@ class FightBattleManager
 			var destinationSteps = (event.length ?? 16);
 			var destinationEntry =
 				{
-					time: FightTimeUtil.ms_to_s(Conductor.instance.getStepTimeInMs(event.step + destinationSteps)),
+					time: null,
 					callback: null,
 				};
 
@@ -94,11 +97,14 @@ class FightBattleManager
 
 						var increase:Null<Float> = event.value.increase ?? event.value.value ?? null;
 
-						var length = destinationSteps;
+						var length = (isInstant) ? 0 : destinationSteps;
 						if (length < 0) length = -length;
 
+						destinationSteps = length;
+						length = FightTimeUtil.ms_to_s(Conductor.instance.getStepTimeInMs(event.step + length));
+
 						roadmapStr += '_${event.value.event}';
-						if (!isInstant) roadmapStr += '_${length}';
+						if (!isInstant) roadmapStr += '_${destinationSteps}';
 						roadmapStr += '-${(isInstant) ? 'instant' : 'transition'}';
 
 						if (event.value.event?.toLowerCase() == 'set' || event.value.event?.toLowerCase() == 'zoom') roadmapStr += '_${increase}';
@@ -111,7 +117,6 @@ class FightBattleManager
 							case 'reset':
 								roadmapEntry.callback = function() {
 									if (event.value.cancelOthers || event.value.cancelTweens) cancelAllCameraTweens(ui);
-									destinationSteps = FightTimeUtil.ms_to_s(Conductor.instance.getStepTimeInMs(((event.value.instant) ? 0 : length)));
 
 									var newZoom = ui.defaultCameraZoom;
 
@@ -127,7 +132,7 @@ class FightBattleManager
 												currentCameraZoom: ui.currentCameraZoom
 											};
 
-										var twen = FlxTween.tween(thing, {currentCameraZoom: newZoom}, destinationSteps,
+										var twen = FlxTween.tween(thing, {currentCameraZoom: newZoom}, length,
 											{
 												ease: easeFunction,
 												onUpdate: function(t) {
@@ -153,8 +158,6 @@ class FightBattleManager
 									roadmapEntry.callback = function() {
 										if (event.value.cancelOthers || event.value.cancelTweens) cancelAllCameraTweens(ui);
 
-										destinationSteps = FightTimeUtil.ms_to_s(Conductor.instance.getStepTimeInMs(length));
-
 										var newZoom = ui.currentCameraZoom + increase;
 
 										if (isInstant)
@@ -169,7 +172,7 @@ class FightBattleManager
 													currentCameraZoom: ui.currentCameraZoom
 												};
 
-											var twen = FlxTween.tween(thing, {currentCameraZoom: newZoom}, destinationSteps,
+											var twen = FlxTween.tween(thing, {currentCameraZoom: newZoom}, length,
 												{
 													ease: easeFunction,
 													onUpdate: function(t) {
@@ -203,7 +206,10 @@ class FightBattleManager
 					}
 			}
 
-			// var startTime = (ui.game.startTimestamp + Conductor.instance.beatLengthMs * -5);
+			destinationEntry.time = FightTimeUtil.ms_to_s(Conductor.instance.getStepTimeInMs(event.step + destinationSteps));
+
+			// roadmapEntry.time += startPadding;
+			// destinationEntry.time += startPadding;
 
 			if (roadmapEntry.callback != null)
 			{
@@ -211,7 +217,7 @@ class FightBattleManager
 					{
 						time: roadmapEntry.time,
 						callback: function() {
-							trace('\nRoadmap Entry: ${roadmapStr}');
+							trace('\nRoadmap Entry (@ ${Conductor.instance.currentStep}): ${roadmapStr}');
 						}
 					});
 				sequence.push(roadmapEntry);

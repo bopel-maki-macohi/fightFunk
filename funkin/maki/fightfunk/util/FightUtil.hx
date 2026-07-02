@@ -62,12 +62,12 @@ class FightUtil
 		{
 			pathData = Json.parse(Assets.getText(path));
 
+			var steps:Map<Int, String> = [];
+
 			for (event in songEvent.events)
 			{
-				trace(event.eventKind);
 				if (event.eventKind == 'FightMarkerEvent')
 				{
-					trace(Conductor.instance.getTimeInSteps(event.time));
 					pathData.events.push(
 						{
 							step: Conductor.instance.getTimeInSteps(event.time),
@@ -81,8 +81,12 @@ class FightUtil
 							type: 'message',
 							value: event.value.m ?? 'missing message',
 						});
+					steps.set(Conductor.instance.getTimeInSteps(event.time), event.value.m ?? 'missing message');
 				}
 			}
+
+			for (step => marker in steps)
+				trace('MARKER @ $step : ${marker}');
 		}
 
 		return pathData ?? battle;

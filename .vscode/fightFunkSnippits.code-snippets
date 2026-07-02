@@ -166,8 +166,27 @@
 			"\t\t\t\"cancelOthers\": true,",
 
 			"\t\t\t\"increase\": 0.0,",
-			"\t\t\t\"instant\": false,",
 			"\t\t\t\"ease\": \"linear\"",
+			"\t\t}",
+			"}",
+		]
+	},
+
+	"Fight Funk : Battle Event : Camera (Zoom : Instant)": {
+		"scope": "json,json5,jsonl",
+		"prefix": "battle.event.camera.zoom.instant",
+		"description": "Fight Funk Battle Event : Camera (Zoom : Instant)",
+		"body": [
+			"{",
+			"\t\"step\": $1,",
+			"\t\"type\": \"camera\",",
+			"\t\"value\":",
+			"\t\t{",
+			"\t\t\t\"event\": \"zoom\",",
+			"\t\t\t\"cancelOthers\": true,",
+
+			"\t\t\t\"increase\": 0.0,",
+			"\t\t\t\"instant\": true,",
 			"\t\t}",
 			"}",
 		]
@@ -203,7 +222,25 @@
 			"\t\"value\":",
 			"\t\t{",
 			"\t\t\t\"event\": \"reset\",",
-			"\t\t\t\"instant\": false,",
+			"\t\t\t\"ease\": \"linear\",",
+			"\t\t\t\"cancelTweens\": true",
+			"\t\t}",
+			"}",
+		]
+	},
+
+	"Fight Funk : Battle Event : Camera (Reset : Instant)": {
+		"scope": "json,json5,jsonl",
+		"prefix": "battle.event.camera.reset.instant",
+		"description": "Fight Funk Battle Event : Camera (Reset : Instant)",
+		"body": [
+			"{",
+			"\t\"step\": $1,",
+			"\t\"type\": \"camera\",",
+			"\t\"value\":",
+			"\t\t{",
+			"\t\t\t\"event\": \"reset\",",
+			"\t\t\t\"instant\": true,",
 			"\t\t\t\"cancelTweens\": true",
 			"\t\t}",
 			"}",

@@ -51,7 +51,7 @@ class FightChartManager
 			var eventStr = eventCls.eventKind.toLowerCase();
 
 			if (camEvents.contains(eventStr)) events.remove(eventCls);
-			else trace(eventStr);
+			// else trace(eventStr);
 		}
 
 		return events;
