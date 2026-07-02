@@ -21,25 +21,6 @@
 			"step": 512,
 			"type": "camera",
 			"value": {
-				"event": "set",
-				"cancelTweens": true,
-				"value": 0.5
-			}
-		},
-		{
-			"step": 512.01,
-			"type": "camera",
-			"value": {
-				"event": "zoom",
-				"cancelOthers": true,
-				"increase": 0.1,
-				"instant": true
-			}
-		},
-		{
-			"step": 512.02,
-			"type": "camera",
-			"value": {
 				"event": "zoom",
 				"cancelOthers": true,
 				"increase": -0.05,

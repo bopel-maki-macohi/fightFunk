@@ -8,6 +8,12 @@ import flixel.util.FlxTimer;
 import funkin.play.PlayState;
 import funkin.play.PlayStatePlaylist;
 import funkin.audio.FunkinSound;
+import flixel.tweens.FlxTween;
+import flixel.tweens.FlxEase;
+import funkin.Conductor;
+import funkin.util.ReflectUtil;
+import flixel.FlxSprite;
+import haxe.ds.ArraySort;
 
 using StringTools;
 
@@ -100,6 +106,8 @@ class FightEventManager
 
 		return event;
 	}
+
+	public static var damsel_ogAlpha:Float = 1;
 
 	public static function onNoteHit(ui, event)
 	{
@@ -208,6 +216,99 @@ class FightEventManager
 
 			ui.visiblePropNames.push('spraycanPile');
 			ui.game?.currentStage.getNamedProp('spraycanPile').shader = weekend1_canWireframe;
+		}
+
+		if (damsel_ogAlpha != null) gf?.alpha = damsel_ogAlpha;
+
+		if (ui.songCode == 'blammed-erect')
+		{
+			trace('ola');
+			var referenceColors = [0xFF10FFFF, 0x00000000, 0xFFFE00BA, 0xFF000822, 0x00000000, 0xFF0C001C];
+			var ogColors = [
+				ui.bfWireframe.getOutlineColor(),
+				ui.damselWireframe.getOutlineColor(),
+				ui.dadWireframe.getOutlineColor(),
+
+				ui.bfWireframe.getFillingColor(),
+				ui.damselWireframe.getFillingColor(),
+				ui.dadWireframe.getFillingColor(),
+			];
+			var boxes = [ui.boxBGPlayer, ui.boxBGOpponent,];
+			var ogBoxColors = [ui.boxBGPlayer.color, ui.boxBGOpponent.color,];
+
+			ui.battleSequence.events.push(
+				{
+					time: Conductor.instance.getStepTimeInMs(512),
+					callback: function() {
+						for (ID => charWireframe in [0 => ui.bfWireframe, 1 => ui.damselWireframe, 2 => ui.dadWireframe,])
+						{
+							charWireframe.setOutlineColor(referenceColors[ID]);
+							charWireframe.setFillingColor(referenceColors[ID + 3]);
+						}
+
+						if (damsel_ogAlpha == null) damsel_ogAlpha = gf?.alpha;
+						gf?.alpha = 0;
+
+						ui.boxBGPlayer.color = referenceColors[0];
+						ui.boxBGOpponent.color = referenceColors[2];
+					}
+				});
+
+			ui.battleSequence.events.push(
+				{
+					time: Conductor.instance.getStepTimeInMs(768),
+					callback: function() {
+						for (ID => charWireframe in [0 => ui.bfWireframe, 1 => ui.damselWireframe, 2 => ui.dadWireframe,])
+						{
+							var outlineColor = new FlxSprite();
+							var outlineTwen = FlxTween.color(outlineColor, 2, charWireframe.getOutlineColor(), ogColors[ID],
+								{
+									ease: FlxEase.expoOut,
+									onUpdate: function(tween) {
+										charWireframe.setOutlineColor(outlineColor.color);
+									}
+								});
+							ui.tweens.push(outlineTwen);
+
+							var fillingColor = new FlxSprite();
+							var fillingTwen = FlxTween.color(fillingColor, outlineTwen.duration, charWireframe.getFillingColor(), ogColors[ID + 3],
+								{
+									ease: FlxEase.expoOut,
+									onUpdate: function(tween) {
+										charWireframe.setFillingColor(fillingColor.color);
+									}
+								});
+
+							ui.tweens.push(fillingTwen);
+						}
+
+						ui.tweens.push(FlxTween.tween(gf, {alpha: damsel_ogAlpha}, 2,
+							{
+								ease: FlxEase.expoOut,
+							}));
+
+						ui.tweens.push(FlxTween.color(ui.boxBGPlayer, 0.15, ui.boxBGPlayer.color, ogBoxColors[0],
+							{
+								ease: FlxEase.expoOut,
+								onUpdate: function(tween) {
+									ui.boxBGPlayer.alpha = ui.playerAlpha;
+								},
+							}));
+						ui.tweens.push(FlxTween.color(ui.boxBGOpponent, 0.15, ui.boxBGOpponent.color, ogBoxColors[1],
+							{
+								ease: FlxEase.expoOut,
+								onUpdate: function(tween) {
+									ui.boxBGOpponent.alpha = ui.opAlpha;
+								},
+							}));
+					}
+				});
+
+			ArraySort.sort(ui.battleSequence.events, function(a, b):Int {
+				if (a.time < b.time) return -1;
+				if (a.time > b.time) return 1;
+				return 0;
+			});
 		}
 	}
 }

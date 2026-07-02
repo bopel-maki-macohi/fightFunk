@@ -1,6 +1,7 @@
 package funkin.maki.fightfunk.shaders;
 
 import flixel.addons.display.FlxRuntimeShader;
+import flixel.util.FlxColor;
 
 /**
  * THANK YOU VIRTU I LOVE YOU (no homo)
@@ -33,6 +34,18 @@ class WireframeShader extends FlxRuntimeShader
 		var blue:Float = (color & 0xff) / 255;
 		var targetColorArray:Float = [red, green, blue];
 		this.setFloatArray('filling', targetColorArray);
+	}
+
+	public function getOutlineColor():Int
+	{
+		var outline = this.getFloatArray('outline');
+		return FlxColor.fromRGBFloat(outline[0], outline[1], outline[2]);
+	}
+
+	public function getFillingColor():Int
+	{
+		var filling = this.getFloatArray('filling');
+		return FlxColor.fromRGBFloat(filling[0], filling[1], filling[2]);
 	}
 
 	public function setThreshold(threshold:Float):Float

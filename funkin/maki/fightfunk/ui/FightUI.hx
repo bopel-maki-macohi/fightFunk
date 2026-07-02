@@ -43,7 +43,7 @@ class FightUI extends Module
 		return PlayState.instance;
 	}
 
-	public static var songCode:String = '';
+	public var songCode:String = '';
 
 	public var elapsedTotal:Float = 0;
 
@@ -58,6 +58,7 @@ class FightUI extends Module
 	{
 		super.onCreate(event);
 
+		FightEventManager.damsel_ogAlpha = null;
 		middleScroll = false;
 	}
 
@@ -66,6 +67,7 @@ class FightUI extends Module
 		super.onDestroy(event);
 		middleScroll = false;
 
+		FightEventManager.damsel_ogAlpha = null;
 		clearObjects();
 	}
 
@@ -98,6 +100,8 @@ class FightUI extends Module
 
 			if (FightUtil.isFightSong(songCode) && !game.isMinimalMode)
 			{
+				if (FightEventManager.damsel_ogAlpha == null) FightEventManager.damsel_ogAlpha = game.currentStage?.getGirlfriend().alpha;
+
 				event = FightChartManager.cleanse(songCode, event);
 				initFightUI(event);
 			}
@@ -113,6 +117,9 @@ class FightUI extends Module
 		trace('BATTLE');
 	}
 
+	var playerAlpha:Float = 0;
+	var opAlpha:Float = 0;
+
 	function onUpdate(event)
 	{
 		super.onUpdate(event);
@@ -121,6 +128,9 @@ class FightUI extends Module
 
 		if (UIEnabled && game != null)
 		{
+			playerAlpha = (game?.healthBar?.value / 2) * .25;
+			opAlpha = (1 - (playerAlpha * 4)) * .25;
+
 			event = FightEventManager.onUpdate(this, event);
 			if (!game?.isInCutscene)
 			{
@@ -461,9 +471,6 @@ class FightUI extends Module
 
 	function updateFightUI()
 	{
-		var playerAlpha = (game?.healthBar.value / 2) * .25;
-		var opAlpha = (1 - (playerAlpha * 4)) * .25;
-
 		if (boxBGPlayer != null)
 		{
 			boxBGPlayer.velocity.x = 40 * (Math.cos(elapsedTotal) * (14 * 0.25));
